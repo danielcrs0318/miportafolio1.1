@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Daniel Molina | Fullstack Developer</title>
+  <desc id="desc">Open Graph image for the portfolio</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A0F1E"/>
+      <stop offset="100%" stop-color="#0D1B2A"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00D4FF"/>
+      <stop offset="100%" stop-color="#7B2FBE"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="980" cy="110" r="180" fill="#7B2FBE" opacity="0.16"/>
+  <circle cx="180" cy="520" r="220" fill="#00D4FF" opacity="0.12"/>
+  <rect x="72" y="72" width="1056" height="486" rx="36" fill="rgba(255,255,255,0.03)" stroke="rgba(0,212,255,0.18)"/>
+  <rect x="96" y="96" width="160" height="12" rx="6" fill="url(#accent)"/>
+  <text x="96" y="210" fill="#E8EDF5" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="700">Daniel Molina</text>
+  <text x="96" y="282" fill="#E8EDF5" font-family="Arial, Helvetica, sans-serif" font-size="38">Fullstack Developer | AI Systems | DevOps</text>
+  <text x="96" y="360" fill="#8892A4" font-family="Arial, Helvetica, sans-serif" font-size="28">Portafolio senior con React, Node.js, Docker y Traefik</text>
+  <text x="96" y="438" fill="#00D4FF" font-family="Arial, Helvetica, sans-serif" font-size="24">danielmolina.dev</text>
+  <circle cx="952" cy="315" r="128" fill="none" stroke="url(#accent)" stroke-width="18"/>
+  <circle cx="952" cy="290" r="52" fill="#E8EDF5"/>
+  <path d="M874 438c12-56 55-88 78-88s66 32 78 88" fill="#E8EDF5"/>
+</svg>
