@@ -11,7 +11,7 @@ export const OG_IMAGE_URL = '/assets/og-image.svg';
 
 export const GITHUB_URL = 'https://github.com/danielcrs0318';
 export const LINKEDIN_URL = 'https://linkedin.com/in/daniel-molina';
-export const EMAIL = 'eduardocarias3003@gmail.com';
+export const EMAIL = 'danielmolina3003@gmail.com'; // Debe coincidir con EMAIL_USER del backend
 export const CV_URL = '/assets/Curriculum-Vitae_Daniel_Molina.pdf';
 
 export const TYPEWRITER_PHRASES = [

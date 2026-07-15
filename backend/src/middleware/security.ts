@@ -6,21 +6,38 @@ import helmet from 'helmet';
 import cors from 'cors';
 import { RequestHandler } from 'express';
 
-const ALLOWED_ORIGINS = [
+const DEFAULT_ORIGINS = [
   'http://localhost:5173',
   'http://localhost:4173',
-  'https://danielmolina.dev',
 ];
 
+function getAllowedOrigins(): string[] {
+  const fromEnv = process.env.FRONTEND_URL
+    ?.split(',')
+    .map((url) => url.trim())
+    .filter(Boolean) ?? [];
+
+  return [...new Set([...DEFAULT_ORIGINS, ...fromEnv])];
+}
+
+function isAllowedOrigin(origin: string): boolean {
+  const allowed = getAllowedOrigins();
+  if (allowed.includes(origin)) return true;
+
+  // Previews de Vercel (*.vercel.app)
+  if (origin.endsWith('.vercel.app')) return true;
+
+  return false;
+}
+
 export const helmetMiddleware = helmet({
-  contentSecurityPolicy: false, // SPA no necesita CSP estricto en API
+  contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false,
 });
 
 export const corsMiddleware: RequestHandler = cors({
   origin: (origin, callback) => {
-    // Permitir requests sin origin (Postman, server-to-server) y orígenes permitidos
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+    if (!origin || isAllowedOrigin(origin)) {
       callback(null, true);
     } else {
       callback(new Error(`CORS: Origin ${origin} not allowed`));

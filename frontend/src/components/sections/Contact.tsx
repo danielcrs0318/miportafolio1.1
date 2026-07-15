@@ -17,6 +17,7 @@ const contactSchema = z.object({
   name:    z.string().min(2,  'El nombre debe tener al menos 2 caracteres'),
   email:   z.string().email('Ingresa un correo electrónico válido'),
   message: z.string().min(10, 'El mensaje debe tener al menos 10 caracteres'),
+  website: z.string().optional(),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
@@ -43,7 +44,25 @@ export function Contact() {
           body: JSON.stringify(data),
         }
       );
-      if (!res.ok) throw new Error('Server error');
+
+      const body = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        if (res.status === 429) {
+          toast.error(
+            lang === 'es'
+              ? 'Demasiados intentos. Espera 15 minutos e inténtalo de nuevo.'
+              : 'Too many attempts. Wait 15 minutes and try again.'
+          );
+          return;
+        }
+        if (res.status === 400 && body.message) {
+          toast.error(body.message);
+          return;
+        }
+        throw new Error('Server error');
+      }
+
       toast.success(
         lang === 'es'
           ? 'Mensaje enviado. Te responderé pronto.'
@@ -160,6 +179,16 @@ export function Contact() {
               />
               {errors.email && <span className="form-error">{errors.email.message}</span>}
             </div>
+
+            {/* Honeypot — oculto para usuarios, visible para bots */}
+            <input
+              type="text"
+              {...register('website')}
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0, width: 0 }}
+            />
 
             {/* Message */}
             <div className="form-group">

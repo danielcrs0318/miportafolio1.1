@@ -1,0 +1,20 @@
+# Render Blueprint — Backend API
+# Docs: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: portfolio-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
