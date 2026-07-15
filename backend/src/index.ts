@@ -47,8 +47,8 @@ app.use(helmetMiddleware);
 app.use(corsMiddleware);
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: false }));
-app.use(generalLimiter);
 
+// Health fuera del rate limit — usado por Render y por el warmup del frontend
 app.get('/health', (_req, res) => {
   res.json({
     status: 'ok',
@@ -57,6 +57,7 @@ app.get('/health', (_req, res) => {
   });
 });
 
+app.use(generalLimiter);
 app.use('/api/contact', contactRouter);
 
 app.use((_req, res) => {
