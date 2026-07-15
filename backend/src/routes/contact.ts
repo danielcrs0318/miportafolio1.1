@@ -1,17 +1,12 @@
 // ============================================================
 // Backend — Contact Route
-// POST /api/contact → Zod validation → email (Resend o Gmail)
+// POST /api/contact → Zod validation → Resend
 // ============================================================
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
 import { contactLimiter } from '../middleware/rateLimiter';
 import { escapeHtml } from '../utils/escapeHtml';
-import {
-  sendMail,
-  resetTransporter,
-  getMailErrorInfo,
-  getEmailProvider,
-} from '../utils/mailer';
+import { sendMail, getMailErrorInfo, isResendConfigured } from '../utils/mailer';
 
 const router = Router();
 
@@ -22,20 +17,12 @@ const contactSchema = z.object({
   website: z.string().optional(),
 });
 
-function isAuthError(code: string): boolean {
-  return code === 'EAUTH' || code.startsWith('SMTP_535') || code === 'SMTP_534';
-}
-
 router.get('/status', (_req, res) => {
-  const hasUser = Boolean(process.env.EMAIL_USER?.trim());
-  const hasPass = Boolean(process.env.EMAIL_PASS?.trim());
-  const hasResend = Boolean(process.env.RESEND_API_KEY?.trim());
   res.json({
-    ok: hasResend || (hasUser && hasPass),
-    provider: getEmailProvider(),
-    emailUserConfigured: hasUser,
-    emailPassConfigured: hasPass,
-    resendConfigured: hasResend,
+    ok: isResendConfigured(),
+    provider: 'resend',
+    resendConfigured: Boolean(process.env.RESEND_API_KEY?.trim()),
+    emailToConfigured: Boolean(process.env.EMAIL_TO?.trim()),
   });
 });
 
@@ -57,13 +44,10 @@ router.post('/', contactLimiter, async (req: Request, res: Response) => {
   const safeName = escapeHtml(name);
   const safeEmail = escapeHtml(email);
   const safeMessage = escapeHtml(message);
-  const emailUser = process.env.EMAIL_USER?.trim() || 'onboarding@resend.dev';
-  const emailTo = process.env.EMAIL_TO?.trim() || emailUser;
-  const fromName = `"Portafolio" <${emailUser}>`;
+  const emailTo = process.env.EMAIL_TO!.trim();
 
   try {
     await sendMail({
-      from: fromName,
       to: emailTo,
       replyTo: email,
       subject: `Nuevo mensaje de contacto — ${name}`,
@@ -84,9 +68,10 @@ router.post('/', contactLimiter, async (req: Request, res: Response) => {
       text: `Nuevo mensaje de ${name} <${email}>\n\n${message}`,
     });
 
+    // Auto-reply: en plan free de Resend sin dominio solo llega a EMAIL_TO.
+    // No tumba el envío principal si falla.
     try {
       await sendMail({
-        from: `"Daniel Molina" <${emailUser}>`,
         to: email,
         subject: 'Recibí tu mensaje — Daniel Molina',
         html: `
@@ -113,24 +98,17 @@ router.post('/', contactLimiter, async (req: Request, res: Response) => {
     const info = getMailErrorInfo(error);
     console.error('[Contact] Error sending email:', info.code, info.message);
 
-    resetTransporter();
-
-    if (isAuthError(info.code)) {
+    if (info.code === 'EAUTH' || info.code === 'EENVELOPE') {
       return res.status(503).json({
         success: false,
-        message: 'Error de autenticación del correo. Revisa EMAIL_USER / EMAIL_PASS (o RESEND_API_KEY) en Render.',
+        message: 'Resend no está configurado correctamente. Revisa RESEND_API_KEY y EMAIL_TO.',
         errorCode: info.code,
       });
     }
 
-    // ETIMEDOUT / ECONNECTION = SMTP bloqueado en Render free
-    const smtpBlocked = ['ETIMEDOUT', 'ECONNECTION', 'ESOCKET', 'ECONNREFUSED'].includes(info.code);
-
     return res.status(500).json({
       success: false,
-      message: smtpBlocked
-        ? 'Render bloquea SMTP de Gmail. Configura RESEND_API_KEY en Render (https://resend.com) o revisa EMAIL_PASS.'
-        : `Error al enviar: ${info.message}`,
+      message: `Error al enviar: ${info.message}`,
       errorCode: info.code,
     });
   }
