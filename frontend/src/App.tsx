@@ -9,10 +9,11 @@ import { Footer } from './components/layout/Footer';
 import { Hero } from './components/sections/Hero';
 import { About } from './components/sections/About';
 import { Skills } from './components/sections/Skills';
+import { Certifications } from './components/sections/Certifications';
 import { Projects } from './components/sections/Projects';
 import { DevOps } from './components/sections/DevOps';
 import { Contact } from './components/sections/Contact';
-import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL, OG_IMAGE_URL } from './lib/constants';
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL, OG_IMAGE_URL, FAVICON_URL } from './lib/constants';
 import { useThemeStore } from './store/themeStore';
 import { startEarlyWarmup } from './lib/api';
 
@@ -44,6 +45,8 @@ function App() {
         <meta name="twitter:title" content={SITE_TITLE} />
         <meta name="twitter:description" content={SITE_DESCRIPTION} />
         <link rel="canonical" href={SITE_URL} />
+        <link rel="icon" type="image/png" href={FAVICON_URL} />
+        <link rel="apple-touch-icon" href={FAVICON_URL} />
       </Helmet>
 
       <AnimatePresence mode="wait">
@@ -59,6 +62,7 @@ function App() {
             <Hero />
             <About />
             <Skills />
+            <Certifications />
             <Projects />
             <DevOps />
             <Contact />

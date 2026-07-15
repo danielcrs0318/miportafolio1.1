@@ -2,8 +2,9 @@
 // Section — About Me
 // Descripción + Stats animados + Timeline
 // ============================================================
+import { Fragment } from 'react';
 import { motion } from 'framer-motion';
-import { GraduationCap, Briefcase, MapPin, type LucideIcon } from 'lucide-react';
+import { GraduationCap, Briefcase, MapPin, ChevronRight, type LucideIcon } from 'lucide-react';
 import { SectionTitle } from '../shared/SectionTitle';
 import { useCountUp } from '../../hooks/useCountUp';
 import { useLangStore } from '../../store/langStore';
@@ -106,30 +107,37 @@ export function About() {
           ))}
         </motion.div>
 
-        {/* Timeline */}
+        {/* Timeline — horizontal */}
         <div className="timeline">
           <h3 className="timeline-title">
             <Briefcase size={20} className="text-accent-cyan" />
             {lang === 'es' ? 'Trayectoria' : 'Journey'}
           </h3>
-          {timeline.map((item, i) => (
-            <motion.div
-              key={i}
-              className="timeline-item"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-            >
-              <div className="timeline-dot" />
-              <div className="timeline-content">
-                <span className="timeline-year">{item.year}</span>
-                <h4 className="timeline-role">{item.title}</h4>
-                <span className="timeline-institution">{item.institution}</span>
-                <p className="timeline-desc">{item.description}</p>
-              </div>
-            </motion.div>
-          ))}
+          <div className="timeline-track">
+            {timeline.map((item, i) => (
+              <Fragment key={i}>
+                <motion.div
+                  className="timeline-item"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.45, delay: i * 0.08 }}
+                >
+                  <div className="timeline-content">
+                    <span className="timeline-year">{item.year}</span>
+                    <h4 className="timeline-role">{item.title}</h4>
+                    <span className="timeline-institution">{item.institution}</span>
+                    <p className="timeline-desc">{item.description}</p>
+                  </div>
+                </motion.div>
+                {i < timeline.length - 1 && (
+                  <div className="timeline-connector" aria-hidden="true">
+                    <ChevronRight size={22} strokeWidth={2} />
+                  </div>
+                )}
+              </Fragment>
+            ))}
+          </div>
         </div>
       </div>
     </section>

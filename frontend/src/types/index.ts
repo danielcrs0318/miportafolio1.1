@@ -2,6 +2,14 @@
 // TypeScript Interfaces — Portafolio Daniel Eduardo Molina
 // ============================================================
 
+export interface Certification {
+  id: string;
+  title: string;
+  issuer: string;
+  year?: string;
+  color: string;
+}
+
 export interface Project {
   id: number;
   title: string;

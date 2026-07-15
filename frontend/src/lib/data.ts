@@ -1,7 +1,7 @@
 // ============================================================
 // Portfolio Data — Daniel Eduardo Molina Carias
 // ============================================================
-import type { Project, SkillCategory, TimelineItem, Stat } from '../types';
+import type { Project, SkillCategory, TimelineItem, Stat, Certification } from '../types';
 import { Monitor, Rocket, Hourglass, Zap, Settings2, Database, Cpu, Server, Shield } from 'lucide-react';
 
 // ── Projects ─────────────────────────────────────────────────
@@ -78,6 +78,42 @@ export const projects: Project[] = [
       'Diseño elegante y moderno',
     ],
     github: 'https://github.com/danielcrs0318',
+  },
+  {
+    id: 5,
+    title: 'ShopNova',
+    description: 'Tienda online fullstack con carrito, Stripe y panel admin',
+    longDescription:
+      'E-commerce completo construido con Next.js App Router, Prisma, NextAuth y Stripe. Incluye catálogo, detalle de producto, carrito, checkout, órdenes, direcciones, autenticación y panel de administración para productos, pedidos, envíos y categorías.',
+    stack: ['Next.js', 'TypeScript', 'Prisma', 'PostgreSQL', 'NextAuth', 'Stripe', 'Tailwind CSS'],
+    badge: 'E-Commerce Fullstack',
+    badgeColor: '#22C55E',
+    highlights: [
+      'Catálogo, carrito y checkout con Stripe',
+      'Autenticación con NextAuth (login y registro)',
+      'Panel admin: productos, pedidos, envíos y categorías',
+      'Modelo de datos con Prisma (usuarios, órdenes, pagos)',
+      'Notificaciones de venta y flujo logístico de pedidos',
+    ],
+    github: 'https://github.com/danielcrs0318/e-commerce-darwin',
+  },
+];
+
+// ── Certifications ────────────────────────────────────────────
+export const certifications: Certification[] = [
+  {
+    id: 'github-essentials',
+    title: 'GitHub Essentials',
+    issuer: 'GitHub',
+    year: '2025',
+    color: '#24292F',
+  },
+  {
+    id: 'cisco-cybersecurity',
+    title: 'Fundamentos de Ciberseguridad',
+    issuer: 'Cisco',
+    year: '2025',
+    color: '#049FD9',
   },
 ];
 
@@ -196,14 +232,14 @@ export const timeline: TimelineItem[] = [
 
 // ── Stats ──────────────────────────────────────────────────────
 export const stats: Stat[] = [
-  { value: 2,  suffix: '',  label: 'Sistemas Fullstack',  icon: Monitor },
+  { value: 3,  suffix: '',  label: 'Sistemas Fullstack',  icon: Monitor },
   { value: 2,  suffix: '',  label: 'Landing Pages PYME',  icon: Rocket },
   { value: 1,  suffix: '+', label: 'Años de Experiencia', icon: Hourglass },
-  { value: 10, suffix: '+', label: 'Tecnologías',         icon: Zap },
+  { value: 12, suffix: '+', label: 'Tecnologías',         icon: Zap },
 ];
 
 // ── Docker Compose snippet ─────────────────────────────────────
-export const dockerComposeSnippet = `version: "3.9"
+export const dockerComposeSnippet = `
 services:
   frontend:
     build: ./frontend

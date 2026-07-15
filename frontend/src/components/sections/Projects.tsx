@@ -4,7 +4,7 @@
 // ============================================================
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, X, Check, Sparkles, Toolbox } from 'lucide-react';
+import { ExternalLink, X, ArrowUpRight } from 'lucide-react';
 import { SectionTitle } from '../shared/SectionTitle';
 import { TechBadge } from '../shared/TechBadge';
 import { useLangStore } from '../../store/langStore';
@@ -23,56 +23,47 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
         onClick={onClose}
       >
         <motion.div
-          className="modal-content"
-          initial={{ opacity: 0, scale: 0.85, y: 40 }}
+          className="modal-content modal-content--minimal"
+          initial={{ opacity: 0, scale: 0.96, y: 16 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.85, y: 40 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+          exit={{ opacity: 0, scale: 0.96, y: 16 }}
+          transition={{ duration: 0.25, ease: 'easeOut' }}
           onClick={e => e.stopPropagation()}
         >
-          {/* Header */}
-          <div className="modal-header">
-            <div>
+          <div className="modal-header modal-header--minimal">
+            <div className="modal-header-text">
               <span
-                className="modal-badge"
-                style={{ color: project.badgeColor, borderColor: `${project.badgeColor}55` }}
+                className="modal-badge modal-badge--minimal"
+                style={{ color: project.badgeColor }}
               >
                 {project.badge}
               </span>
-              <h2 className="modal-title">{project.title}</h2>
+              <h2 className="modal-title modal-title--minimal">{project.title}</h2>
             </div>
             <button onClick={onClose} className="modal-close" aria-label="Cerrar">
-              <X size={22} />
+              <X size={20} />
             </button>
           </div>
 
-          {/* Body */}
-          <div className="modal-body">
-            <p className="modal-desc">{project.longDescription}</p>
+          <div className="modal-body modal-body--minimal">
+            <p className="modal-desc modal-desc--minimal">{project.longDescription}</p>
 
-            {/* Highlights */}
-            <div className="modal-highlights">
-              <h3 className="modal-section-title">
-                <Sparkles size={18} className="text-accent-cyan mr-2 inline-block" aria-hidden="true" />
-                {lang === 'es' ? 'Características clave' : 'Key Features'}
-              </h3>
-              <ul className="highlights-list">
+            <div className="modal-block">
+              <p className="modal-label">
+                {lang === 'es' ? 'Características' : 'Features'}
+              </p>
+              <ul className="modal-features">
                 {project.highlights.map((h, i) => (
-                  <li key={i} className="highlight-item">
-                    <Check size={16} className="text-accent-cyan flex-shrink-0 mt-0.5" />
-                    {h}
-                  </li>
+                  <li key={i} className="modal-feature">{h}</li>
                 ))}
               </ul>
             </div>
 
-            {/* Stack */}
-            <div className="modal-stack">
-              <h3 className="modal-section-title">
-                <Toolbox size={18} className="text-accent-cyan mr-2 inline-block" aria-hidden="true" />
-                {lang === 'es' ? 'Stack tecnológico' : 'Tech Stack'}
-              </h3>
-              <div className="flex flex-wrap gap-2 mt-3">
+            <div className="modal-block">
+              <p className="modal-label">
+                {lang === 'es' ? 'Stack' : 'Stack'}
+              </p>
+              <div className="modal-stack-tags">
                 {project.stack.map(t => (
                   <TechBadge key={t} name={t} size="md" color={project.badgeColor} />
                 ))}
@@ -80,31 +71,32 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
             </div>
           </div>
 
-          {/* Footer actions */}
-          <div className="modal-footer">
-            {project.github && (
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary"
-              >
-                <span className="social-btn-text">GH</span>
-                {lang === 'es' ? 'Ver Código' : 'View Code'}
-              </a>
-            )}
-            {project.demo && (
-              <a
-                href={project.demo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-secondary"
-              >
-                <ExternalLink size={18} />
-                Demo Live
-              </a>
-            )}
-          </div>
+          {(project.github || project.demo) && (
+            <div className="modal-footer modal-footer--minimal">
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="modal-link-btn"
+                >
+                  {lang === 'es' ? 'Código' : 'Code'}
+                  <ArrowUpRight size={16} />
+                </a>
+              )}
+              {project.demo && (
+                <a
+                  href={project.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="modal-link-btn modal-link-btn--secondary"
+                >
+                  Demo
+                  <ExternalLink size={16} />
+                </a>
+              )}
+            </div>
+          )}
         </motion.div>
       </motion.div>
     </AnimatePresence>
@@ -130,16 +122,13 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         tabIndex={0}
         onKeyDown={e => e.key === 'Enter' && setOpen(true)}
       >
-        {/* Badge */}
         <div className="project-badge" style={{ color: project.badgeColor }}>
           {project.badge}
         </div>
 
-        {/* Title & description */}
         <h3 className="project-title">{project.title}</h3>
         <p className="project-desc">{project.description}</p>
 
-        {/* Stack preview */}
         <div className="project-stack">
           {project.stack.slice(0, 4).map(t => (
             <TechBadge key={t} name={t} />
@@ -149,7 +138,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           )}
         </div>
 
-        {/* CTA */}
         <div className="project-cta">
           <span className="project-cta-text">
             {lang === 'es' ? 'Ver detalles →' : 'View details →'}

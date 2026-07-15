@@ -23,7 +23,6 @@ export function SectionTitle({ title, subtitle, className, align = 'center' }: S
     >
       <h2 className="section-title">{title}</h2>
       {subtitle && <p className="section-subtitle">{subtitle}</p>}
-      <div className={cn('title-line', align === 'center' ? 'mx-auto' : '')} />
     </motion.div>
   );
 }

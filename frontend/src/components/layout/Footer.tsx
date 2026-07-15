@@ -50,7 +50,10 @@ export function Footer() {
         {/* Copyright */}
         <p className="footer-copy">
           © {year} Daniel Eduardo Molina Carias. Hecho con{' '}
-          <Heart size={14} className="inline text-accent-cyan" fill="currentColor" /> en Honduras.
+          <span className="footer-heart" aria-hidden="true">
+            <Heart size={14} fill="currentColor" strokeWidth={0} />
+          </span>{' '}
+          en Honduras.
         </p>
       </div>
     </footer>
