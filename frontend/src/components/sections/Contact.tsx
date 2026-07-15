@@ -79,8 +79,8 @@ export function Contact() {
         }
         toast.error(
           lang === 'es'
-            ? 'Error al enviar. Inténtalo de nuevo.'
-            : 'Failed to send. Please try again.'
+            ? (result.message || 'Error al enviar. Inténtalo de nuevo.')
+            : (result.message || 'Failed to send. Please try again.')
         );
         return;
       }

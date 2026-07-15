@@ -1,12 +1,17 @@
 // ============================================================
 // Backend — Contact Route
-// POST /api/contact → Zod validation → Nodemailer
+// POST /api/contact → Zod validation → email (Resend o Gmail)
 // ============================================================
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
 import { contactLimiter } from '../middleware/rateLimiter';
 import { escapeHtml } from '../utils/escapeHtml';
-import { getTransporter, resetTransporter } from '../utils/mailer';
+import {
+  sendMail,
+  resetTransporter,
+  getMailErrorInfo,
+  getEmailProvider,
+} from '../utils/mailer';
 
 const router = Router();
 
@@ -17,11 +22,22 @@ const contactSchema = z.object({
   website: z.string().optional(),
 });
 
-function isAuthError(error: unknown): boolean {
-  if (!error || typeof error !== 'object') return false;
-  const err = error as { code?: string; responseCode?: number };
-  return err.code === 'EAUTH' || err.responseCode === 535;
+function isAuthError(code: string): boolean {
+  return code === 'EAUTH' || code.startsWith('SMTP_535') || code === 'SMTP_534';
 }
+
+router.get('/status', (_req, res) => {
+  const hasUser = Boolean(process.env.EMAIL_USER?.trim());
+  const hasPass = Boolean(process.env.EMAIL_PASS?.trim());
+  const hasResend = Boolean(process.env.RESEND_API_KEY?.trim());
+  res.json({
+    ok: hasResend || (hasUser && hasPass),
+    provider: getEmailProvider(),
+    emailUserConfigured: hasUser,
+    emailPassConfigured: hasPass,
+    resendConfigured: hasResend,
+  });
+});
 
 router.post('/', contactLimiter, async (req: Request, res: Response) => {
   if (typeof req.body?.website === 'string' && req.body.website.trim() !== '') {
@@ -41,15 +57,13 @@ router.post('/', contactLimiter, async (req: Request, res: Response) => {
   const safeName = escapeHtml(name);
   const safeEmail = escapeHtml(email);
   const safeMessage = escapeHtml(message);
-  const emailUser = process.env.EMAIL_USER!;
+  const emailUser = process.env.EMAIL_USER?.trim() || 'onboarding@resend.dev';
   const emailTo = process.env.EMAIL_TO?.trim() || emailUser;
+  const fromName = `"Portafolio" <${emailUser}>`;
 
   try {
-    const transporter = getTransporter();
-
-    // 1) Notificación al dueño — crítico
-    await transporter.sendMail({
-      from: `"Portafolio" <${emailUser}>`,
+    await sendMail({
+      from: fromName,
       to: emailTo,
       replyTo: email,
       subject: `Nuevo mensaje de contacto — ${name}`,
@@ -70,9 +84,8 @@ router.post('/', contactLimiter, async (req: Request, res: Response) => {
       text: `Nuevo mensaje de ${name} <${email}>\n\n${message}`,
     });
 
-    // 2) Auto-reply — no crítico (no debe tumbar el envío)
     try {
-      await transporter.sendMail({
+      await sendMail({
         from: `"Daniel Molina" <${emailUser}>`,
         to: email,
         subject: 'Recibí tu mensaje — Daniel Molina',
@@ -84,7 +97,6 @@ router.post('/', contactLimiter, async (req: Request, res: Response) => {
               <p style="color: #8892A4; font-style: italic;">"${safeMessage.slice(0, 200)}${message.length > 200 ? '...' : ''}"</p>
             </div>
             <p style="margin-top: 24px;">Saludos,<br/><strong>Daniel Eduardo Molina Carias</strong></p>
-            <p style="color: #4A5568; font-size: 12px; margin-top: 16px;">${escapeHtml(emailUser)}</p>
           </div>
         `,
         text: `Hola ${name},\n\nGracias por contactarme. Te responderé pronto.\n\nDaniel Molina`,
@@ -98,20 +110,28 @@ router.post('/', contactLimiter, async (req: Request, res: Response) => {
       message: 'Mensaje enviado correctamente.',
     });
   } catch (error) {
-    console.error('[Contact] Error sending email:', error);
+    const info = getMailErrorInfo(error);
+    console.error('[Contact] Error sending email:', info.code, info.message);
 
-    if (isAuthError(error)) {
-      resetTransporter();
+    resetTransporter();
+
+    if (isAuthError(info.code)) {
       return res.status(503).json({
         success: false,
-        message: 'Error de autenticación del correo. Revisa EMAIL_USER y EMAIL_PASS en Render.',
+        message: 'Error de autenticación del correo. Revisa EMAIL_USER / EMAIL_PASS (o RESEND_API_KEY) en Render.',
+        errorCode: info.code,
       });
     }
 
-    resetTransporter();
+    // ETIMEDOUT / ECONNECTION = SMTP bloqueado en Render free
+    const smtpBlocked = ['ETIMEDOUT', 'ECONNECTION', 'ESOCKET', 'ECONNREFUSED'].includes(info.code);
+
     return res.status(500).json({
       success: false,
-      message: 'Error interno al enviar el mensaje. Inténtalo de nuevo en unos segundos.',
+      message: smtpBlocked
+        ? 'Render bloquea SMTP de Gmail. Configura RESEND_API_KEY en Render (https://resend.com) o revisa EMAIL_PASS.'
+        : `Error al enviar: ${info.message}`,
+      errorCode: info.code,
     });
   }
 });

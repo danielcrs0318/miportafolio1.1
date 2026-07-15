@@ -50,10 +50,21 @@ app.use(express.urlencoded({ extended: false }));
 
 // Health fuera del rate limit — usado por Render y por el warmup del frontend
 app.get('/health', (_req, res) => {
+  const hasUser = Boolean(process.env.EMAIL_USER?.trim());
+  const hasPass = Boolean(process.env.EMAIL_PASS?.trim());
+  const hasResend = Boolean(process.env.RESEND_API_KEY?.trim());
+
   res.json({
     status: 'ok',
     service: 'portfolio-api',
     timestamp: new Date().toISOString(),
+    email: {
+      provider: hasResend ? 'resend' : 'gmail',
+      configured: hasResend || (hasUser && hasPass),
+      emailUser: hasUser,
+      emailPass: hasPass,
+      resend: hasResend,
+    },
   });
 });
 
