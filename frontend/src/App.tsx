@@ -14,6 +14,7 @@ import { DevOps } from './components/sections/DevOps';
 import { Contact } from './components/sections/Contact';
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL, OG_IMAGE_URL } from './lib/constants';
 import { useThemeStore } from './store/themeStore';
+import { startEarlyWarmup } from './lib/api';
 
 function App() {
   const { theme } = useThemeStore();
@@ -21,6 +22,11 @@ function App() {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  // Despierta Render free apenas carga el portafolio (antes de llegar a Contacto)
+  useEffect(() => {
+    startEarlyWarmup();
+  }, []);
 
   return (
     <HelmetProvider>

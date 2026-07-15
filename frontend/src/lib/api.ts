@@ -2,21 +2,28 @@
 // API helpers — wakeup Render free tier + contacto
 // ============================================================
 
-export const API_BASE_URL =
-  import.meta.env.VITE_API_URL?.replace(/\/$/, '') || 'http://localhost:4000';
+function resolveApiBase(): string {
+  const raw = import.meta.env.VITE_API_URL?.trim();
+  // Vacío o "same" = same-origin (útil con proxy de Vercel)
+  if (!raw || raw === '/' || raw === 'same') return '';
+  return raw.replace(/\/$/, '');
+}
+
+export const API_BASE_URL = resolveApiBase();
 
 const HEALTH_URL = `${API_BASE_URL}/health`;
 const CONTACT_URL = `${API_BASE_URL}/api/contact`;
 
-/** Render free puede tardar ~50s en despertar */
-const WAKE_TIMEOUT_MS = 90_000;
-const WAKE_RETRY_MS = 2_500;
-const CONTACT_TIMEOUT_MS = 60_000;
+/** Render free puede tardar ~50–90s en despertar */
+const WAKE_TIMEOUT_MS = 120_000;
+const WAKE_RETRY_MS = 3_000;
+const CONTACT_TIMEOUT_MS = 90_000;
+const PING_TIMEOUT_MS = 45_000;
 
 let lastHealthyAt = 0;
 let wakePromise: Promise<boolean> | null = null;
 
-function isRecentlyHealthy(maxAgeMs = 60_000): boolean {
+function isRecentlyHealthy(maxAgeMs = 90_000): boolean {
   return Date.now() - lastHealthyAt < maxAgeMs;
 }
 
@@ -39,8 +46,8 @@ export async function pingBackend(): Promise<boolean> {
   try {
     const res = await fetchWithTimeout(
       HEALTH_URL,
-      { method: 'GET', cache: 'no-store' },
-      20_000
+      { method: 'GET', cache: 'no-store', mode: 'cors' },
+      PING_TIMEOUT_MS
     );
     if (res.ok) {
       lastHealthyAt = Date.now();
@@ -77,6 +84,12 @@ export async function wakeBackend(force = false): Promise<boolean> {
   return wakePromise;
 }
 
+/** Arranca el wakeup en cuanto carga la página (no espera a Contacto) */
+export function startEarlyWarmup(): void {
+  if (typeof window === 'undefined') return;
+  void wakeBackend();
+}
+
 export type ContactPayload = {
   name: string;
   email: string;
@@ -90,7 +103,7 @@ export type ContactResult =
 
 /**
  * Despierta el backend si hace falta y luego envía el formulario.
- * Reintenta una vez si falla por red / cold start.
+ * Reintenta hasta 2 veces si falla por red / cold start / 5xx.
  */
 export async function sendContactMessage(
   data: ContactPayload
@@ -113,6 +126,7 @@ export async function sendContactMessage(
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
+          mode: 'cors',
         },
         CONTACT_TIMEOUT_MS
       );
@@ -127,6 +141,7 @@ export async function sendContactMessage(
         ok: false,
         status: res.status,
         message: body.message || 'Error al enviar el mensaje.',
+        waking: res.status === 503,
       };
     } catch {
       return {
@@ -140,13 +155,12 @@ export async function sendContactMessage(
 
   let result = await attempt();
 
-  // Si el servicio se durmió entre el health y el POST, despertar y reintentar
-  if (!result.ok && (result.status === 0 || result.status >= 500)) {
+  for (let i = 0; i < 2 && !result.ok && (result.status === 0 || result.status >= 500); i++) {
     lastHealthyAt = 0;
     const retried = await wakeBackend(true);
-    if (retried) {
-      result = await attempt();
-    }
+    if (!retried) break;
+    await new Promise((r) => setTimeout(r, 1500));
+    result = await attempt();
   }
 
   return result;

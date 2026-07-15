@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import type { Transporter } from 'nodemailer';
+import type SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 let transporter: Transporter | null = null;
 
@@ -15,12 +16,12 @@ export function assertEmailCredentials(): { user: string; pass: string } {
   const pass = process.env.EMAIL_PASS?.replace(/\s/g, '');
 
   if (!user || !pass) {
-    throw new Error('EMAIL_USER y EMAIL_PASS deben estar configurados en backend/.env');
+    throw new Error('EMAIL_USER y EMAIL_PASS deben estar configurados');
   }
 
   if (PLACEHOLDER_PASSWORDS.includes(pass.toLowerCase()) || pass.length < 16) {
     throw new Error(
-      'EMAIL_PASS es un placeholder o inválido. Crea un App Password en https://myaccount.google.com/apppasswords y pégalo en backend/.env'
+      'EMAIL_PASS inválido. Usa un App Password de https://myaccount.google.com/apppasswords'
     );
   }
 
@@ -32,15 +33,20 @@ export function getTransporter(): Transporter {
 
   const { user, pass } = assertEmailCredentials();
 
-  transporter = nodemailer.createTransport({
-    service: 'gmail',
+  const options: SMTPTransport.Options = {
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: { user, pass },
-  });
+    connectionTimeout: 30_000,
+    greetingTimeout: 30_000,
+    socketTimeout: 60_000,
+  };
 
+  transporter = nodemailer.createTransport(options);
   return transporter;
 }
 
-/** Fuerza recrear el transporter (útil tras cambiar .env en dev) */
 export function resetTransporter(): void {
   transporter = null;
 }

@@ -119,11 +119,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     <>
       <motion.div
         className="project-card"
+        style={{ '--project-color': project.badgeColor } as React.CSSProperties}
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.55, delay: index * 0.1 }}
-        whileHover={{ y: -8, transition: { duration: 0.2 } }}
+        whileHover={{ y: -10, transition: { duration: 0.28, ease: 'easeOut' } }}
         onClick={() => setOpen(true)}
         role="button"
         tabIndex={0}
@@ -155,11 +156,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           </span>
         </div>
 
-        {/* Glow border */}
-        <div
-          className="project-glow-border"
-          style={{ '--project-color': project.badgeColor } as React.CSSProperties}
-        />
+        <div className="project-glow-border" aria-hidden="true" />
+        <div className="project-glow-blob" aria-hidden="true" />
       </motion.div>
 
       {open && <ProjectModal project={project} onClose={() => setOpen(false)} />}
