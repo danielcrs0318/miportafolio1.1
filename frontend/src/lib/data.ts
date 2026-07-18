@@ -2,7 +2,7 @@
 // Portfolio Data — Daniel Eduardo Molina Carias
 // ============================================================
 import type { Project, SkillCategory, TimelineItem, Stat, Certification } from '../types';
-import { Monitor, Rocket, Hourglass, Zap, Settings2, Database, Cpu, Server, Shield } from 'lucide-react';
+import { Monitor, Rocket, Hourglass, Zap, Settings2, Database, Cpu, Server, Shield, GitPullRequest, ShieldCheck } from 'lucide-react';
 
 // ── Projects ─────────────────────────────────────────────────
 export const projects: Project[] = [
@@ -106,7 +106,8 @@ export const certifications: Certification[] = [
     title: 'GitHub Essentials',
     issuer: 'GitHub',
     year: '2025',
-    color: '#24292F',
+    color: '#8B5CF6',
+    icon: GitPullRequest,
   },
   {
     id: 'cisco-cybersecurity',
@@ -114,6 +115,7 @@ export const certifications: Certification[] = [
     issuer: 'Cisco',
     year: '2025',
     color: '#049FD9',
+    icon: ShieldCheck,
   },
 ];
 

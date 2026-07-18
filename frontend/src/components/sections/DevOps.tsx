@@ -9,6 +9,7 @@ import { Shield, Box, Package, Server, Shuffle, GitBranch, Globe, Cpu, MapPin } 
 import { SectionTitle } from '../shared/SectionTitle';
 import { useLangStore } from '../../store/langStore';
 import { dockerComposeSnippet } from '../../lib/data';
+import { DeployPipeline } from './DeployPipeline';
 
 const devopsTools = [
   { name: 'Docker',          icon: Box,      desc: 'Contenedorización completa' },
@@ -45,9 +46,24 @@ export function DevOps() {
             : "Unlike many developers, I don't just build features — I deploy with real architectures. All my projects have a production pipeline configured with Docker, Nginx, and Traefik."}
         </motion.p>
 
+        {/* Deploy Pipeline "video" */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
+          <h3 className="diagram-title" style={{ marginBottom: '1.25rem' }}>
+            <GitBranch size={20} className="text-accent-cyan" aria-hidden="true" />
+            {lang === 'es' ? 'Flujo de Despliegue Automatizado' : 'Automated Deployment Flow'}
+          </h3>
+          <DeployPipeline />
+        </motion.div>
+
         {/* Deploy Diagram */}
         <motion.div
           className="deploy-diagram"
+          style={{ marginTop: '2.5rem' }}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

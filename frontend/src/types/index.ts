@@ -2,12 +2,16 @@
 // TypeScript Interfaces — Portafolio Daniel Eduardo Molina
 // ============================================================
 
+import type { LucideIcon } from 'lucide-react';
+
 export interface Certification {
   id: string;
   title: string;
   issuer: string;
   year?: string;
   color: string;
+  icon: LucideIcon;
+  credentialUrl?: string;
 }
 
 export interface Project {
@@ -29,8 +33,6 @@ export interface SkillItem {
   icon?: string;
   level?: number;
 }
-
-import type { LucideIcon } from 'lucide-react';
 
 export interface SkillCategory {
   id: string;
