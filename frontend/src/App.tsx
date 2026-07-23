@@ -8,7 +8,7 @@ import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { Hero } from './components/sections/Hero';
 import { About } from './components/sections/About';
-import { Skills } from './components/sections/Skills';
+import { Services } from './components/sections/Services';
 import { Certifications } from './components/sections/Certifications';
 import { Projects } from './components/sections/Projects';
 import { DevOps } from './components/sections/DevOps';
@@ -61,7 +61,7 @@ function App() {
           <main id="main-content">
             <Hero />
             <About />
-            <Skills />
+            <Services />
             <Certifications />
             <Projects />
             <DevOps />

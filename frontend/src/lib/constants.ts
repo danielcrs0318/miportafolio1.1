@@ -25,7 +25,7 @@ export const TYPEWRITER_PHRASES = [
 export const NAV_ITEMS = [
   { label: 'Inicio',     labelEn: 'Home',     href: '#hero' },
   { label: 'Sobre mí',  labelEn: 'About',    href: '#about' },
-  { label: 'Skills',    labelEn: 'Skills',   href: '#skills' },
+  { label: 'Servicios', labelEn: 'Services', href: '#services' },
   { label: 'Certificaciones', labelEn: 'Certifications', href: '#certifications' },
   { label: 'Proyectos', labelEn: 'Projects', href: '#projects' },
   { label: 'DevOps',    labelEn: 'DevOps',   href: '#devops' },

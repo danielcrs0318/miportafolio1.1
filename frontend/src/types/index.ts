@@ -12,6 +12,8 @@ export interface Certification {
   color: string;
   icon: LucideIcon;
   credentialUrl?: string;
+  status?: 'completed' | 'in-progress';
+  description?: string;
 }
 
 export interface Project {

@@ -2,7 +2,7 @@
 // Portfolio Data — Daniel Eduardo Molina Carias
 // ============================================================
 import type { Project, SkillCategory, TimelineItem, Stat, Certification } from '../types';
-import { Monitor, Rocket, Hourglass, Zap, Settings2, Database, Cpu, Server, Shield, GitPullRequest, ShieldCheck } from 'lucide-react';
+import { Monitor, Rocket, Hourglass, Zap, Settings2, Database, Cpu, Server, Shield, GitPullRequest, ShieldCheck, Sparkles } from 'lucide-react';
 
 // ── Projects ─────────────────────────────────────────────────
 export const projects: Project[] = [
@@ -108,6 +108,7 @@ export const certifications: Certification[] = [
     year: '2025',
     color: '#8B5CF6',
     icon: GitPullRequest,
+    status: 'completed',
   },
   {
     id: 'cisco-cybersecurity',
@@ -116,6 +117,16 @@ export const certifications: Certification[] = [
     year: '2025',
     color: '#049FD9',
     icon: ShieldCheck,
+    status: 'completed',
+  },
+  {
+    id: 'generative-ai-leader',
+    title: 'Generative AI Leader',
+    issuer: 'Google Cloud',
+    year: '2026',
+    color: '#F9AB00',
+    icon: Sparkles,
+    status: 'in-progress',
   },
 ];
 

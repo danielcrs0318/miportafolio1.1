@@ -128,19 +128,24 @@ export function Hero() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
         >
-          <div className="hero-avatar-ring">
-            <div className="hero-avatar-inner">
-              <img
-                src={avatarImg}
-                alt="Daniel Eduardo Molina Carias"
-                className="hero-avatar-img"
-              />
+          <div className="hero-avatar-frame">
+            <div className="hero-avatar-glow" aria-hidden="true" />
+            <div className="hero-avatar-ring">
+              <div className="hero-avatar-inner">
+                <img
+                  src={avatarImg}
+                  alt="Daniel Eduardo Molina Carias"
+                  className="hero-avatar-img"
+                />
+              </div>
             </div>
-          </div>
-          {/* Status badge */}
-          <div className="hero-status">
-            <span className="status-dot" />
-            {lang === 'es' ? 'Disponible para proyectos' : 'Available for projects'}
+
+            <div className="hero-status">
+              <span className="status-dot" aria-hidden="true" />
+              <span className="hero-status-text">
+                {lang === 'es' ? 'Disponible para proyectos' : 'Available for projects'}
+              </span>
+            </div>
           </div>
         </motion.div>
       </div>

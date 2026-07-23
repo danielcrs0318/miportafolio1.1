@@ -2,7 +2,7 @@
 // Section — Certifications
 // ============================================================
 import { motion } from 'framer-motion';
-import { BadgeCheck } from 'lucide-react';
+import { BadgeCheck, LoaderCircle } from 'lucide-react';
 import { SectionTitle } from '../shared/SectionTitle';
 import { useLangStore } from '../../store/langStore';
 import { certifications } from '../../lib/data';
@@ -16,17 +16,19 @@ export function Certifications() {
         <SectionTitle
           title={lang === 'es' ? 'Certificaciones' : 'Certifications'}
           subtitle={lang === 'es'
-            ? 'Formación continua en herramientas y seguridad'
-            : 'Continuous learning in tools and security'}
+            ? 'Formación continua en herramientas, seguridad e IA'
+            : 'Continuous learning in tools, security, and AI'}
         />
 
         <div className="certifications-grid">
           {certifications.map((cert, i) => {
             const Icon = cert.icon;
+            const inProgress = cert.status === 'in-progress';
+
             return (
               <motion.article
                 key={cert.id}
-                className="cert-card"
+                className={`cert-card${inProgress ? ' cert-card--progress' : ''}`}
                 style={{ '--cert-color': cert.color } as React.CSSProperties}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -42,14 +44,27 @@ export function Certifications() {
                 <div className="cert-card-body">
                   <h3 className="cert-card-title">{cert.title}</h3>
                   <p className="cert-card-issuer">
-                    <BadgeCheck size={14} className="cert-card-check" aria-hidden="true" />
+                    {inProgress ? (
+                      <LoaderCircle size={14} className="cert-card-check cert-card-check--spin" aria-hidden="true" />
+                    ) : (
+                      <BadgeCheck size={14} className="cert-card-check" aria-hidden="true" />
+                    )}
                     {cert.issuer}
                   </p>
+                  {cert.description && (
+                    <p className="cert-card-desc">{cert.description}</p>
+                  )}
                 </div>
 
-                {cert.year && (
-                  <span className="cert-card-year">{cert.year}</span>
-                )}
+                <div className="cert-card-meta">
+                  {inProgress ? (
+                    <span className="cert-card-badge cert-card-badge--progress">
+                      {lang === 'es' ? 'En curso' : 'In progress'}
+                    </span>
+                  ) : (
+                    cert.year && <span className="cert-card-year">{cert.year}</span>
+                  )}
+                </div>
               </motion.article>
             );
           })}
