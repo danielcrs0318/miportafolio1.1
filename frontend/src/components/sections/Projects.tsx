@@ -32,10 +32,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
         >
           <div className="modal-header modal-header--minimal">
             <div className="modal-header-text">
-              <span
-                className="modal-badge modal-badge--minimal"
-                style={{ color: project.badgeColor }}
-              >
+              <span className="modal-badge modal-badge--minimal">
                 {project.badge}
               </span>
               <h2 className="modal-title modal-title--minimal">{project.title}</h2>
@@ -65,7 +62,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
               </p>
               <div className="modal-stack-tags">
                 {project.stack.map(t => (
-                  <TechBadge key={t} name={t} size="md" color={project.badgeColor} />
+                  <TechBadge key={t} name={t} size="md" />
                 ))}
               </div>
             </div>
@@ -111,7 +108,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     <>
       <motion.div
         className="project-card"
-        style={{ '--project-color': project.badgeColor } as React.CSSProperties}
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
@@ -122,7 +118,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         tabIndex={0}
         onKeyDown={e => e.key === 'Enter' && setOpen(true)}
       >
-        <div className="project-badge" style={{ color: project.badgeColor }}>
+        <div className="project-badge">
           {project.badge}
         </div>
 

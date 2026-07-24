@@ -30,13 +30,13 @@ export function Hero() {
           fpsLimit: 60,
           particles: {
             number: { value: 60, density: { enable: true, width: 800 } },
-            color: { value: ['#00D4FF', '#7B2FBE', '#E8EDF5'] },
+            color: { value: ['#3D8BFF', '#5BA0FF', '#E8EDF5'] },
             opacity: { value: { min: 0.05, max: 0.3 }, animation: { enable: true, speed: 0.5 } },
             size: { value: { min: 1, max: 3 } },
             move: { enable: true, speed: 0.4, direction: 'none', random: true, outModes: 'out' },
             links: {
               enable: true,
-              color: '#00D4FF',
+              color: '#3D8BFF',
               opacity: 0.08,
               distance: 140,
             },

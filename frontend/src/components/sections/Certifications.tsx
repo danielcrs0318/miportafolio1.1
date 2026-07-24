@@ -29,7 +29,6 @@ export function Certifications() {
               <motion.article
                 key={cert.id}
                 className={`cert-card${inProgress ? ' cert-card--progress' : ''}`}
-                style={{ '--cert-color': cert.color } as React.CSSProperties}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}

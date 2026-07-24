@@ -2,7 +2,7 @@
 // Section — Services
 // ============================================================
 import { motion } from 'framer-motion';
-import { Layout, Building2, Boxes, Wrench, type LucideIcon } from 'lucide-react';
+import { Layout, Building2, Boxes, Wrench, Container, type LucideIcon } from 'lucide-react';
 import { SectionTitle } from '../shared/SectionTitle';
 import { useLangStore } from '../../store/langStore';
 
@@ -11,7 +11,6 @@ interface Service {
   icon: LucideIcon;
   title: { es: string; en: string };
   description: { es: string; en: string };
-  color: string;
 }
 
 const services: Service[] = [
@@ -23,7 +22,6 @@ const services: Service[] = [
       es: 'Páginas de aterrizaje modernas, rápidas y orientadas a conversión para lanzar productos, campañas o startups.',
       en: 'Modern, fast, conversion-focused landing pages to launch products, campaigns, or startups.',
     },
-    color: '#00D4FF',
   },
   {
     id: 'corporate',
@@ -33,7 +31,6 @@ const services: Service[] = [
       es: 'Sitios institucionales con identidad de marca, secciones claras y presencia profesional para tu empresa.',
       en: 'Institutional sites with brand identity, clear sections, and a professional presence for your business.',
     },
-    color: '#8B5CF6',
   },
   {
     id: 'custom',
@@ -43,7 +40,6 @@ const services: Service[] = [
       es: 'Aplicaciones fullstack hechas a tu medida: paneles, e-commerce, autenticación, APIs y despliegue en producción.',
       en: 'Fullstack apps tailored to your needs: dashboards, e-commerce, auth, APIs, and production deployment.',
     },
-    color: '#22C55E',
   },
   {
     id: 'maintenance',
@@ -53,7 +49,18 @@ const services: Service[] = [
       es: 'Soporte continuo, mejoras, correcciones y actualización de tu sitio o sistema para que siga funcionando al día.',
       en: 'Ongoing support, improvements, fixes, and updates so your site or system stays current and reliable.',
     },
-    color: '#FF6B35',
+  },
+  {
+    id: 'docker-deploy',
+    icon: Container,
+    title: {
+      es: 'Implementación con Docker en servidores Linux',
+      en: 'Docker Deployment on Linux Servers',
+    },
+    description: {
+      es: 'Despliegue y orquestación en producción con Docker Compose, Nginx, Traefik (SSL/HTTPS) y monitoreo con Portainer.io en servidores Linux.',
+      en: 'Production deployment and orchestration with Docker Compose, Nginx, Traefik (SSL/HTTPS), and Portainer.io monitoring on Linux servers.',
+    },
   },
 ];
 
@@ -77,7 +84,6 @@ export function Services() {
               <motion.article
                 key={service.id}
                 className="service-card"
-                style={{ '--service-color': service.color } as React.CSSProperties}
                 initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}

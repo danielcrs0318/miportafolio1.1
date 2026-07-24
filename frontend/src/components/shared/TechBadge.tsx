@@ -6,19 +6,12 @@ import { cn } from '../../lib/utils';
 
 interface TechBadgeProps {
   name: string;
-  color?: string;
   size?: 'sm' | 'md';
 }
 
-export function TechBadge({ name, color, size = 'sm' }: TechBadgeProps) {
+export function TechBadge({ name, size = 'sm' }: TechBadgeProps) {
   return (
-    <span
-      className={cn(
-        'tech-badge',
-        size === 'md' && 'tech-badge--md'
-      )}
-      style={color ? { borderColor: `${color}55`, color } : undefined}
-    >
+    <span className={cn('tech-badge', size === 'md' && 'tech-badge--md')}>
       {name}
     </span>
   );
