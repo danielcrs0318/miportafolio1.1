@@ -1,141 +1,146 @@
 // ============================================================
-// Section — About Me
-// Descripción + Stats animados + Timeline
+// Section — Sobre mí
+// Lead editorial, cifras, disciplinas y trayectoria en texto plano
 // ============================================================
-import { Fragment } from 'react';
 import { motion } from 'framer-motion';
-import { GraduationCap, Briefcase, MapPin, ChevronRight, type LucideIcon } from 'lucide-react';
-import { SectionTitle } from '../shared/SectionTitle';
+import { MapPin, GraduationCap, Briefcase } from 'lucide-react';
+import { SectionHeader } from '../shared/SectionHeader';
 import { useCountUp } from '../../hooks/useCountUp';
 import { useLangStore } from '../../store/langStore';
-import { stats, timeline } from '../../lib/data';
-import avatarImg from '/assets/fotoperfilCV.jpeg';
+import { stats, timeline, skillCategories } from '../../lib/data';
+import type { Stat } from '../../types';
 
-function StatCard({ value, suffix, label, icon }: { value: number; suffix: string; label: string; icon: LucideIcon }) {
-  const { count, ref } = useCountUp(value);
-  const Icon = icon;
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+function Figure({ value, suffix, label }: Stat) {
+  const { count, ref } = useCountUp(value, 1600);
   return (
-    <div ref={ref} className="stat-card">
-      <span className="stat-icon"><Icon size={22} aria-hidden="true" /></span>
-      <span className="stat-value">
-        {count}{suffix}
+    <div ref={ref} className="figure">
+      <span className="figure__n">
+        {count}
+        {suffix && <sup>{suffix}</sup>}
       </span>
-      <span className="stat-label">{label}</span>
+      <span className="figure__l mono">{label}</span>
     </div>
   );
 }
 
 export function About() {
   const { lang } = useLangStore();
+  const es = lang === 'es';
 
   return (
-    <section id="about" className="section">
-      <div className="container">
-        <SectionTitle
-          title={lang === 'es' ? 'Sobre Mí' : 'About Me'}
-          subtitle={lang === 'es'
-            ? 'Conoce mi historia y trayectoria profesional'
-            : 'Get to know my story and professional journey'}
+    <section id="about" className="band">
+      <div className="shell">
+        <SectionHeader
+          index="01"
+          title={es ? 'Sobre mí' : 'About'}
+          note={es
+            ? 'Quién está detrás del código, con qué trabajo y cómo llegué hasta aquí.'
+            : 'Who is behind the code, what I work with, and how I got here.'}
         />
 
-        {/* Main content */}
-        <div className="about-grid">
-          {/* Avatar */}
-          <motion.div
-            className="about-avatar-col"
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+        <div className="about__grid">
+          <motion.p
+            className="about__lead"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.8, ease: EASE }}
           >
-            <div className="about-avatar-frame">
-              <img
-                src={avatarImg}
-                alt="Daniel Eduardo Molina Carias"
-                className="about-avatar-img"
-              />
-              <div className="about-avatar-badge">
-                <GraduationCap size={16} />
-                UNICAH — Ing. Computación
-              </div>
-            </div>
-          </motion.div>
+            {es
+              ? 'Escribo código que termina en producción, no en una carpeta de capturas de pantalla.'
+              : 'I write code that ends up in production, not in a folder full of screenshots.'}
+          </motion.p>
 
-          {/* Text */}
           <motion.div
-            className="about-text-col"
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+            className="about__body"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.8, delay: 0.1, ease: EASE }}
           >
-            <h3 className="about-name">Daniel Eduardo Molina Carias</h3>
-            <p className="about-role text-accent-cyan mb-4">Ingeniero en Ciencias de la Computación</p>
+            <p>
+              {es
+                ? 'Soy Ingeniero en Ciencias de la Computación egresado de UNICAH y trabajo desde Siguatepeque, Honduras. Me muevo cómodo en todo el ciclo: interfaz en React y TypeScript, API en Node.js, base de datos en PostgreSQL y el servidor Linux donde todo eso termina corriendo.'
+                : "I'm a Computer Science Engineer from UNICAH, working out of Siguatepeque, Honduras. I move across the whole cycle: React and TypeScript on the interface, Node.js on the API, PostgreSQL for data, and the Linux server where all of it ends up running."}
+            </p>
+            <p>
+              {es
+                ? 'He construido desde landing pages para PYMES hondureñas hasta sistemas con autenticación, auditoría, búsqueda semántica con IA y despliegue contenerizado. Lo que me diferencia no es la cantidad de frameworks, sino que cada proyecto queda listo para el día en que recibe usuarios reales.'
+                : 'I have built everything from landing pages for Honduran small businesses to systems with authentication, auditing, AI semantic search, and containerized deployment. What sets me apart is not the number of frameworks, but that every project is ready for the day it meets real users.'}
+            </p>
 
-            <div className="about-bio">
-              <p>
-                {lang === 'es'
-                  ? 'Soy un Ingeniero en Ciencias de la Computación egresado de UNICAH, con base en Siguatepeque, Honduras. Me especializo en desarrollo fullstack con React y Node.js, sistemas inteligentes con IA (OpenAI + Pinecone) y despliegue productivo con Docker, Nginx y Traefik.'
-                  : "I'm a Computer Science Engineer from UNICAH, based in Siguatepeque, Honduras. I specialize in fullstack development with React and Node.js, AI-powered systems (OpenAI + Pinecone), and production deployments with Docker, Nginx, and Traefik."}
-              </p>
-              <p className="mt-3">
-                {lang === 'es'
-                  ? 'Construyo soluciones que van desde landing pages para PYMES hasta sistemas empresariales con autenticación, auditoría y gestión de sesiones. Cada proyecto está pensado para producción desde el primer día.'
-                  : 'I build everything from PYME landing pages to enterprise systems with authentication, auditing, and session management. Every project is production-ready from day one.'}
-              </p>
-            </div>
-
-            {/* Location + University */}
-            <div className="about-tags">
-              <span className="info-tag"><MapPin size={14} aria-hidden="true" /> Siguatepeque, Honduras</span>
-              <span className="info-tag"><GraduationCap size={14} aria-hidden="true" /> UNICAH</span>
-              <span className="info-tag"><Briefcase size={14} aria-hidden="true" /> {lang === 'es' ? 'Abierto a oportunidades' : 'Open to opportunities'}</span>
+            <div className="about__tags">
+              <span className="tag tag--md"><MapPin size={12} strokeWidth={1.5} />Siguatepeque, HN</span>
+              <span className="tag tag--md"><GraduationCap size={12} strokeWidth={1.5} />UNICAH</span>
+              <span className="tag tag--md"><Briefcase size={12} strokeWidth={1.5} />Freelance</span>
             </div>
           </motion.div>
         </div>
 
-        {/* Stats */}
-        <motion.div
-          className="stats-grid"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          {stats.map(s => (
-            <StatCard key={s.label} {...s} />
-          ))}
-        </motion.div>
+        <div className="block">
+          <div className="block__label mono">
+            <span>{es ? 'Cifras' : 'Figures'}</span>
+            <span>2026</span>
+          </div>
+          <div className="figures">
+            {stats.map(s => <Figure key={s.label} {...s} />)}
+          </div>
+        </div>
 
-        {/* Timeline — horizontal */}
-        <div className="timeline">
-          <h3 className="timeline-title">
-            <Briefcase size={20} className="text-accent-cyan" />
-            {lang === 'es' ? 'Trayectoria' : 'Journey'}
-          </h3>
-          <div className="timeline-track">
-            {timeline.map((item, i) => (
-              <Fragment key={i}>
+        <div className="block">
+          <div className="block__label mono">
+            <span>{es ? 'Herramientas por disciplina' : 'Tools by discipline'}</span>
+            <span>{skillCategories.length}</span>
+          </div>
+          <div className="disciplines">
+            {skillCategories.map(cat => {
+              const Icon = cat.icon;
+              return (
                 <motion.div
-                  className="timeline-item"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  key={cat.id}
+                  className="disc-row"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
                   viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.45, delay: i * 0.08 }}
+                  transition={{ duration: 0.5 }}
                 >
-                  <div className="timeline-content">
-                    <span className="timeline-year">{item.year}</span>
-                    <h4 className="timeline-role">{item.title}</h4>
-                    <span className="timeline-institution">{item.institution}</span>
-                    <p className="timeline-desc">{item.description}</p>
-                  </div>
+                  <span className="disc-row__k">
+                    <Icon size={15} strokeWidth={1.5} aria-hidden="true" />
+                    {cat.title}
+                  </span>
+                  <span className="disc-row__v">
+                    {cat.skills.map(s => s.name).join(' · ')}
+                  </span>
                 </motion.div>
-                {i < timeline.length - 1 && (
-                  <div className="timeline-connector" aria-hidden="true">
-                    <ChevronRight size={22} strokeWidth={2} />
-                  </div>
-                )}
-              </Fragment>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="block">
+          <div className="block__label mono">
+            <span>{es ? 'Trayectoria' : 'Journey'}</span>
+            <span>2022 — 2026</span>
+          </div>
+          <div className="journey">
+            {timeline.map((item, i) => (
+              <motion.article
+                key={i}
+                className="jrow"
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.6, delay: i * 0.05, ease: EASE }}
+              >
+                <span className="jrow__year mono">{item.year}</span>
+                <div>
+                  <h3 className="jrow__role">{item.title}</h3>
+                  <span className="jrow__org">{item.institution}</span>
+                </div>
+                <p className="jrow__desc">{item.description}</p>
+              </motion.article>
             ))}
           </div>
         </div>

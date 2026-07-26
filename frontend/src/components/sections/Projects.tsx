@@ -1,173 +1,170 @@
 // ============================================================
-// Section — Projects
-// 4 tarjetas glassmorphism + Modal expandible
+// Section — Proyectos
+// Índice de trabajos + ficha técnica expandible
 // ============================================================
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, X, ArrowUpRight } from 'lucide-react';
-import { SectionTitle } from '../shared/SectionTitle';
-import { TechBadge } from '../shared/TechBadge';
+import { ArrowUpRight, X } from 'lucide-react';
+import { SectionHeader } from '../shared/SectionHeader';
 import { useLangStore } from '../../store/langStore';
 import { projects } from '../../lib/data';
 import type { Project } from '../../types';
 
-function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
+const EASE = [0.16, 1, 0.3, 1] as const;
+const num = (i: number) => String(i + 1).padStart(2, '0');
+
+function ProjectSheet({ project, onClose }: { project: Project; onClose: () => void }) {
   const { lang } = useLangStore();
-  return (
-    <AnimatePresence>
-      <motion.div
-        className="modal-overlay"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        onClick={onClose}
-      >
-        <motion.div
-          className="modal-content modal-content--minimal"
-          initial={{ opacity: 0, scale: 0.96, y: 16 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: 16 }}
-          transition={{ duration: 0.25, ease: 'easeOut' }}
-          onClick={e => e.stopPropagation()}
-        >
-          <div className="modal-header modal-header--minimal">
-            <div className="modal-header-text">
-              <span className="modal-badge modal-badge--minimal">
-                {project.badge}
-              </span>
-              <h2 className="modal-title modal-title--minimal">{project.title}</h2>
-            </div>
-            <button onClick={onClose} className="modal-close" aria-label="Cerrar">
-              <X size={20} />
-            </button>
-          </div>
+  const es = lang === 'es';
 
-          <div className="modal-body modal-body--minimal">
-            <p className="modal-desc modal-desc--minimal">{project.longDescription}</p>
-
-            <div className="modal-block">
-              <p className="modal-label">
-                {lang === 'es' ? 'Características' : 'Features'}
-              </p>
-              <ul className="modal-features">
-                {project.highlights.map((h, i) => (
-                  <li key={i} className="modal-feature">{h}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="modal-block">
-              <p className="modal-label">
-                {lang === 'es' ? 'Stack' : 'Stack'}
-              </p>
-              <div className="modal-stack-tags">
-                {project.stack.map(t => (
-                  <TechBadge key={t} name={t} size="md" />
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {(project.github || project.demo) && (
-            <div className="modal-footer modal-footer--minimal">
-              {project.github && (
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="modal-link-btn"
-                >
-                  {lang === 'es' ? 'Código' : 'Code'}
-                  <ArrowUpRight size={16} />
-                </a>
-              )}
-              {project.demo && (
-                <a
-                  href={project.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="modal-link-btn modal-link-btn--secondary"
-                >
-                  Demo
-                  <ExternalLink size={16} />
-                </a>
-              )}
-            </div>
-          )}
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
-  );
-}
-
-function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const [open, setOpen] = useState(false);
-  const { lang } = useLangStore();
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [onClose]);
 
   return (
-    <>
+    <motion.div
+      className="sheet-scrim"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={project.title}
+    >
       <motion.div
-        className="project-card"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-60px' }}
-        transition={{ duration: 0.55, delay: index * 0.1 }}
-        whileHover={{ y: -10, transition: { duration: 0.28, ease: 'easeOut' } }}
-        onClick={() => setOpen(true)}
-        role="button"
-        tabIndex={0}
-        onKeyDown={e => e.key === 'Enter' && setOpen(true)}
+        className="sheet"
+        initial={{ y: 28, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 20, opacity: 0 }}
+        transition={{ duration: 0.45, ease: EASE }}
+        onClick={e => e.stopPropagation()}
       >
-        <div className="project-badge">
-          {project.badge}
+        <div className="sheet__head">
+          <div>
+            <span className="sheet__kicker mono">{project.badge}</span>
+            <h2 className="sheet__title">{project.title}</h2>
+          </div>
+          <button onClick={onClose} className="sheet__close" aria-label={es ? 'Cerrar' : 'Close'}>
+            <X size={16} strokeWidth={1.5} />
+          </button>
         </div>
 
-        <h3 className="project-title">{project.title}</h3>
-        <p className="project-desc">{project.description}</p>
+        <div className="sheet__body">
+          <p className="sheet__p">{project.longDescription}</p>
 
-        <div className="project-stack">
-          {project.stack.slice(0, 4).map(t => (
-            <TechBadge key={t} name={t} />
-          ))}
-          {project.stack.length > 4 && (
-            <span className="tech-badge">+{project.stack.length - 4}</span>
-          )}
+          <div className="sheet__block">
+            <span className="sheet__label mono">{es ? 'Alcance' : 'Scope'}</span>
+            <ul className="sheet__ul">
+              {project.highlights.map((h, i) => (
+                <li key={i} className="sheet__li">
+                  <b>{num(i)}</b>
+                  <span>{h}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="sheet__block">
+            <span className="sheet__label mono">Stack</span>
+            <div className="ix-tags" style={{ marginTop: 0 }}>
+              {project.stack.map(t => (
+                <span key={t} className="tag tag--md">{t}</span>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="project-cta">
-          <span className="project-cta-text">
-            {lang === 'es' ? 'Ver detalles →' : 'View details →'}
-          </span>
-        </div>
-
-        <div className="project-glow-border" aria-hidden="true" />
-        <div className="project-glow-blob" aria-hidden="true" />
+        {(project.github || project.demo) && (
+          <div className="sheet__foot">
+            {project.github && (
+              <a href={project.github} target="_blank" rel="noopener noreferrer" className="btn">
+                <span>{es ? 'Repositorio' : 'Repository'}</span>
+                <ArrowUpRight size={15} strokeWidth={1.5} />
+              </a>
+            )}
+            {project.demo && (
+              <a href={project.demo} target="_blank" rel="noopener noreferrer" className="btn">
+                <span>Demo</span>
+                <ArrowUpRight size={15} strokeWidth={1.5} />
+              </a>
+            )}
+          </div>
+        )}
       </motion.div>
-
-      {open && <ProjectModal project={project} onClose={() => setOpen(false)} />}
-    </>
+    </motion.div>
   );
 }
 
 export function Projects() {
   const { lang } = useLangStore();
+  const es = lang === 'es';
+  const [open, setOpen] = useState<Project | null>(null);
 
   return (
-    <section id="projects" className="section">
-      <div className="container">
-        <SectionTitle
-          title={lang === 'es' ? 'Proyectos' : 'Projects'}
-          subtitle={lang === 'es'
-            ? 'Sistemas reales construidos con propósito'
-            : 'Real systems built with purpose'}
+    <section id="projects" className="band">
+      <div className="shell">
+        <SectionHeader
+          index="04"
+          title={es ? 'Proyectos' : 'Projects'}
+          note={es
+            ? 'Selección de trabajos. Abre cualquiera para ver el alcance y el stack completo.'
+            : 'Selected work. Open any entry to see its scope and full stack.'}
         />
 
-        <div className="projects-grid">
+        <div className="ix">
           {projects.map((project, i) => (
-            <ProjectCard key={project.id} project={project} index={i} />
+            <motion.button
+              key={project.id}
+              type="button"
+              className="ix-row ix-row--link"
+              onClick={() => setOpen(project)}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.6, delay: i * 0.05, ease: EASE }}
+            >
+              <span className="ix-num">{num(i)}</span>
+
+              <div>
+                <div className="ix-head">
+                  <h3 className="ix-title">{project.title}</h3>
+                </div>
+                <span className="ix-kicker">{project.badge}</span>
+              </div>
+
+              <div>
+                <p className="ix-desc">{project.description}</p>
+                <div className="ix-tags">
+                  {project.stack.slice(0, 4).map(t => (
+                    <span key={t} className="tag">{t}</span>
+                  ))}
+                  {project.stack.length > 4 && (
+                    <span className="tag">+{project.stack.length - 4}</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="ix-meta">
+                <span>{es ? 'Ficha' : 'Detail'}</span>
+                <span className="ix-arrow"><ArrowUpRight size={16} strokeWidth={1.5} /></span>
+              </div>
+            </motion.button>
           ))}
         </div>
       </div>
+
+      <AnimatePresence>
+        {open && <ProjectSheet project={open} onClose={() => setOpen(null)} />}
+      </AnimatePresence>
     </section>
   );
 }

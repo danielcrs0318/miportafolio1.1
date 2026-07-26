@@ -180,48 +180,44 @@ export function DeployPipeline() {
   const StageIcon = stage.icon;
 
   return (
-    <div className="pipeline-player" ref={containerRef}>
-      {/* Top bar */}
-      <div className="pipeline-topbar">
-        <div className="pipeline-dots" aria-hidden="true">
-          <span style={{ background: '#FF5F57' }} />
-          <span style={{ background: '#FFBD2E' }} />
-          <span style={{ background: '#28CA41' }} />
+    <div className="pipeline" ref={containerRef}>
+      {/* Barra superior */}
+      <div className="pipeline__bar">
+        <div className="pipeline__dots" aria-hidden="true">
+          <span /><span /><span />
         </div>
-        <span className="pipeline-filename">
-          {stage.file}
-        </span>
-        <span className="pipeline-live">
-          <span className="pipeline-live-dot" />
+        <span className="pipeline__file">{stage.file}</span>
+        <span className="pipeline__live mono">
+          <i className="live-dot" aria-hidden="true" />
           CI/CD
         </span>
       </div>
 
-      {/* Screen */}
-      <div className="pipeline-screen">
+      {/* Pantalla */}
+      <div className="pipeline__screen">
         <AnimatePresence mode="wait">
           <motion.div
             key={stage.id}
-            className="pipeline-stage"
-            initial={{ opacity: 0, y: 12 }}
+            className="pipeline__stage"
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
+            exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.35 }}
           >
-            <div className="pipeline-stage-head">
-              <span className="pipeline-stage-icon"><StageIcon size={20} aria-hidden="true" /></span>
+            <div className="pipeline__head">
+              <StageIcon size={20} strokeWidth={1.5} aria-hidden="true" />
               <div>
-                <h4 className="pipeline-stage-title">{stage.title[lang]}</h4>
-                <p className="pipeline-stage-sub">{stage.subtitle[lang]}</p>
+                <h4 className="pipeline__title">{stage.title[lang]}</h4>
+                <p className="pipeline__sub">{stage.subtitle[lang]}</p>
               </div>
             </div>
 
             {stage.lines && (
-              <div className="pipeline-terminal">
+              <div className="pipeline__term">
                 {stage.lines.map((line, i) => (
                   <motion.div
                     key={i}
-                    className={`pipeline-line pipeline-line--${line.kind ?? 'out'}`}
+                    className={`term-line term-line--${line.kind ?? 'out'}`}
                     initial={{ opacity: 0, x: -6 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.12 + i * 0.13, duration: 0.25 }}
@@ -233,8 +229,8 @@ export function DeployPipeline() {
             )}
 
             {stage.dashboard && (
-              <div className="portainer-panel">
-                <div className="portainer-head">
+              <div className="panel">
+                <div className="panel__head">
                   <span>Container</span>
                   <span>State</span>
                   <span>CPU</span>
@@ -243,29 +239,26 @@ export function DeployPipeline() {
                 {stage.dashboard.map((c, i) => (
                   <motion.div
                     key={c.name}
-                    className="portainer-row"
+                    className="panel__row"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15 + i * 0.12, duration: 0.3 }}
                   >
-                    <div className="portainer-name">
-                      <Boxes size={15} aria-hidden="true" />
-                      <div>
-                        <span className="portainer-cname">{c.name}</span>
-                        <span className="portainer-image">{c.image}</span>
-                      </div>
+                    <div className="panel__name">
+                      <span className="panel__cname">{c.name}</span>
+                      <span className="panel__image">{c.image}</span>
                     </div>
-                    <span className="portainer-state">
-                      <span className="portainer-state-dot" />
+                    <span className="panel__state">
+                      <i className="live-dot" aria-hidden="true" />
                       running
                     </span>
-                    <div className="portainer-metric">
-                      <span>{c.cpu}%</span>
-                      <div className="portainer-bar"><i style={{ width: `${c.cpu}%` }} /></div>
+                    <div className="panel__metric">
+                      <span>{String(c.cpu).padStart(2, '0')}%</span>
+                      <div className="panel__bar"><i style={{ width: `${c.cpu}%` }} /></div>
                     </div>
-                    <div className="portainer-metric">
-                      <span>{c.mem}%</span>
-                      <div className="portainer-bar portainer-bar--mem"><i style={{ width: `${c.mem}%` }} /></div>
+                    <div className="panel__metric">
+                      <span>{String(c.mem).padStart(2, '0')}%</span>
+                      <div className="panel__bar panel__bar--dim"><i style={{ width: `${c.mem}%` }} /></div>
                     </div>
                   </motion.div>
                 ))}
@@ -275,39 +268,41 @@ export function DeployPipeline() {
         </AnimatePresence>
       </div>
 
-      {/* Controls */}
-      <div className="pipeline-controls">
+      {/* Controles */}
+      <div className="pipeline__controls">
         <button
-          className="pipeline-btn"
+          className="pipeline__btn"
           onClick={() => setPlaying((p) => !p)}
           aria-label={playing ? 'Pausar' : 'Reproducir'}
         >
-          {playing ? <Pause size={16} /> : <Play size={16} />}
+          {playing ? <Pause size={14} strokeWidth={1.5} /> : <Play size={14} strokeWidth={1.5} />}
         </button>
-        <button className="pipeline-btn" onClick={restart} aria-label="Reiniciar">
-          <RotateCcw size={15} />
+        <button className="pipeline__btn" onClick={restart} aria-label="Reiniciar">
+          <RotateCcw size={13} strokeWidth={1.5} />
         </button>
 
-        <div className="pipeline-progress">
-          <div className="pipeline-progress-fill" style={{ width: `${progress}%` }} />
+        <div className="pipeline__track">
+          <i style={{ width: `${progress}%` }} />
         </div>
 
-        <span className="pipeline-counter">{active + 1}/{STAGES.length}</span>
+        <span className="pipeline__count">
+          {String(active + 1).padStart(2, '0')} / {String(STAGES.length).padStart(2, '0')}
+        </span>
       </div>
 
-      {/* Stepper */}
-      <div className="pipeline-steps">
+      {/* Etapas */}
+      <div className="pipeline__steps">
         {STAGES.map((s, i) => {
           const Icon = s.icon;
           return (
             <button
               key={s.id}
-              className={`pipeline-step ${i === active ? 'is-active' : ''} ${i < active ? 'is-done' : ''}`}
+              className={`pipeline__step ${i === active ? 'on' : ''} ${i < active ? 'done' : ''}`}
               onClick={() => goTo(i)}
               type="button"
             >
-              <span className="pipeline-step-icon"><Icon size={16} aria-hidden="true" /></span>
-              <span className="pipeline-step-label">{s.title[lang]}</span>
+              <span><Icon size={14} strokeWidth={1.5} aria-hidden="true" /></span>
+              <span className="pipeline__step-label">{s.title[lang]}</span>
             </button>
           );
         })}

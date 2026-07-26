@@ -15,13 +15,6 @@ export const LINKEDIN_URL = 'https://linkedin.com/in/daniel-molina';
 export const EMAIL = 'danielmolina3003@gmail.com'; // Debe coincidir con EMAIL_USER del backend
 export const CV_URL = '/assets/Curriculum-Vitae_Daniel_Molina.pdf';
 
-export const TYPEWRITER_PHRASES = [
-  'Ingeniero en Computación',
-  'Fullstack Developer',
-  'Systems Architect',
-  'AI & DevOps Engineer',
-];
-
 export const NAV_ITEMS = [
   { label: 'Inicio',     labelEn: 'Home',     href: '#hero' },
   { label: 'Sobre mí',  labelEn: 'About',    href: '#about' },

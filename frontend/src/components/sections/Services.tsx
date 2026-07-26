@@ -1,9 +1,10 @@
 // ============================================================
-// Section — Services
+// Section — Servicios
+// Índice numerado: qué hago y con qué se entrega
 // ============================================================
 import { motion } from 'framer-motion';
 import { Layout, Building2, Boxes, Wrench, Container, type LucideIcon } from 'lucide-react';
-import { SectionTitle } from '../shared/SectionTitle';
+import { SectionHeader } from '../shared/SectionHeader';
 import { useLangStore } from '../../store/langStore';
 
 interface Service {
@@ -11,89 +12,106 @@ interface Service {
   icon: LucideIcon;
   title: { es: string; en: string };
   description: { es: string; en: string };
+  stack: string[];
 }
 
 const services: Service[] = [
   {
     id: 'landings',
     icon: Layout,
-    title: { es: 'Landing Pages', en: 'Landing Pages' },
+    title: { es: 'Landing pages', en: 'Landing pages' },
     description: {
-      es: 'Páginas de aterrizaje modernas, rápidas y orientadas a conversión para lanzar productos, campañas o startups.',
-      en: 'Modern, fast, conversion-focused landing pages to launch products, campaigns, or startups.',
+      es: 'Páginas de aterrizaje rápidas y orientadas a conversión para lanzar un producto, una campaña o una startup.',
+      en: 'Fast, conversion-focused landing pages to launch a product, a campaign, or a startup.',
     },
+    stack: ['React', 'Vite', 'Framer Motion'],
   },
   {
     id: 'corporate',
     icon: Building2,
-    title: { es: 'Páginas Web Corporativas', en: 'Corporate Websites' },
+    title: { es: 'Sitios corporativos', en: 'Corporate websites' },
     description: {
-      es: 'Sitios institucionales con identidad de marca, secciones claras y presencia profesional para tu empresa.',
-      en: 'Institutional sites with brand identity, clear sections, and a professional presence for your business.',
+      es: 'Sitios institucionales con identidad de marca, arquitectura de contenido clara y SEO técnico bien resuelto.',
+      en: 'Institutional sites with brand identity, clear content architecture, and solid technical SEO.',
     },
+    stack: ['Next.js', 'SEO', 'CMS'],
   },
   {
     id: 'custom',
     icon: Boxes,
-    title: { es: 'Sistemas a Medida', en: 'Custom Systems' },
+    title: { es: 'Sistemas a medida', en: 'Custom systems' },
     description: {
-      es: 'Aplicaciones fullstack hechas a tu medida: paneles, e-commerce, autenticación, APIs y despliegue en producción.',
-      en: 'Fullstack apps tailored to your needs: dashboards, e-commerce, auth, APIs, and production deployment.',
+      es: 'Aplicaciones fullstack completas: paneles, e-commerce, autenticación, APIs, reportes y roles de usuario.',
+      en: 'Complete fullstack applications: dashboards, e-commerce, authentication, APIs, reporting, and user roles.',
     },
-  },
-  {
-    id: 'maintenance',
-    icon: Wrench,
-    title: { es: 'Mantenimiento y Actualización', en: 'Maintenance & Updates' },
-    description: {
-      es: 'Soporte continuo, mejoras, correcciones y actualización de tu sitio o sistema para que siga funcionando al día.',
-      en: 'Ongoing support, improvements, fixes, and updates so your site or system stays current and reliable.',
-    },
+    stack: ['Node.js', 'PostgreSQL', 'Prisma'],
   },
   {
     id: 'docker-deploy',
     icon: Container,
-    title: {
-      es: 'Implementación con Docker en servidores Linux',
-      en: 'Docker Deployment on Linux Servers',
-    },
+    title: { es: 'Despliegue en servidores Linux', en: 'Linux server deployment' },
     description: {
-      es: 'Despliegue y orquestación en producción con Docker Compose, Nginx, Traefik (SSL/HTTPS) y monitoreo con Portainer.io en servidores Linux.',
-      en: 'Production deployment and orchestration with Docker Compose, Nginx, Traefik (SSL/HTTPS), and Portainer.io monitoring on Linux servers.',
+      es: 'Puesta en producción con Docker Compose, Nginx como proxy, Traefik con SSL automático y monitoreo en Portainer.io.',
+      en: 'Production setup with Docker Compose, Nginx as proxy, Traefik with automatic SSL, and Portainer.io monitoring.',
     },
+    stack: ['Docker', 'Traefik', 'Portainer'],
+  },
+  {
+    id: 'maintenance',
+    icon: Wrench,
+    title: { es: 'Mantenimiento y evolución', en: 'Maintenance & evolution' },
+    description: {
+      es: 'Soporte continuo, correcciones, mejoras de rendimiento y nuevas funciones sobre proyectos que ya están en línea.',
+      en: 'Ongoing support, fixes, performance work, and new features on projects that are already live.',
+    },
+    stack: ['Soporte', 'Performance', 'Auditoría'],
   },
 ];
 
 export function Services() {
   const { lang } = useLangStore();
+  const es = lang === 'es';
 
   return (
-    <section id="services" className="section section--alt">
-      <div className="container">
-        <SectionTitle
-          title={lang === 'es' ? 'Servicios' : 'Services'}
-          subtitle={lang === 'es'
-            ? 'Soluciones digitales pensadas para tu negocio'
-            : 'Digital solutions built for your business'}
+    <section id="services" className="band band--tint">
+      <div className="shell">
+        <SectionHeader
+          index="02"
+          title={es ? 'Servicios' : 'Services'}
+          note={es
+            ? 'Cinco formas concretas de trabajar juntos, de una landing simple a una infraestructura completa.'
+            : 'Five concrete ways to work together, from a simple landing page to full infrastructure.'}
         />
 
-        <div className="services-grid">
+        <div className="ix">
           {services.map((service, i) => {
             const Icon = service.icon;
             return (
               <motion.article
                 key={service.id}
-                className="service-card"
-                initial={{ opacity: 0, y: 28 }}
+                className="ix-row ix-row--trio"
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.45, delay: i * 0.08 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ duration: 0.6, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
               >
-                <div className="service-card-icon" aria-hidden="true">
-                  <Icon size={26} strokeWidth={1.75} />
+                <span className="ix-num">{String(i + 1).padStart(2, '0')}</span>
+
+                <div>
+                  <div className="ix-head">
+                    <Icon size={17} strokeWidth={1.5} aria-hidden="true" />
+                    <h3 className="ix-title">{service.title[lang]}</h3>
+                  </div>
                 </div>
-                <h3 className="service-card-title">{service.title[lang]}</h3>
-                <p className="service-card-desc">{service.description[lang]}</p>
+
+                <div>
+                  <p className="ix-desc">{service.description[lang]}</p>
+                  <div className="ix-tags">
+                    {service.stack.map(t => (
+                      <span key={t} className="tag">{t}</span>
+                    ))}
+                  </div>
+                </div>
               </motion.article>
             );
           })}

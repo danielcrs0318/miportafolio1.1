@@ -6,6 +6,7 @@ import { HelmetProvider, Helmet } from 'react-helmet-async';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
+import { StackReel } from './components/shared/StackReel';
 import { Hero } from './components/sections/Hero';
 import { About } from './components/sections/About';
 import { Services } from './components/sections/Services';
@@ -15,14 +16,22 @@ import { DevOps } from './components/sections/DevOps';
 import { Contact } from './components/sections/Contact';
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL, OG_IMAGE_URL, FAVICON_URL } from './lib/constants';
 import { useThemeStore } from './store/themeStore';
+import { useLangStore } from './store/langStore';
 import { startEarlyWarmup } from './lib/api';
 
 function App() {
   const { theme } = useThemeStore();
+  const { lang } = useLangStore();
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  // El idioma correcto es necesario para que la partición de palabras
+  // del texto justificado use el diccionario adecuado
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   // Despierta Render free apenas carga el portafolio (antes de llegar a Contacto)
   useEffect(() => {
@@ -54,12 +63,14 @@ function App() {
           key="portfolio"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.4 }}
-          className="portfolio-root"
+          transition={{ duration: 0.5 }}
+          className="page"
         >
+          <div className="grain" aria-hidden="true" />
           <Navbar />
           <main id="main-content">
             <Hero />
+            <StackReel />
             <About />
             <Services />
             <Certifications />

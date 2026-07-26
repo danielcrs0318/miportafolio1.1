@@ -1,26 +1,29 @@
 // ============================================================
-// Section — Certifications
+// Section — Certificaciones
+// Registro de formación: emisor, año y estado
 // ============================================================
 import { motion } from 'framer-motion';
-import { BadgeCheck, LoaderCircle } from 'lucide-react';
-import { SectionTitle } from '../shared/SectionTitle';
+import { LoaderCircle } from 'lucide-react';
+import { SectionHeader } from '../shared/SectionHeader';
 import { useLangStore } from '../../store/langStore';
 import { certifications } from '../../lib/data';
 
 export function Certifications() {
   const { lang } = useLangStore();
+  const es = lang === 'es';
 
   return (
-    <section id="certifications" className="section">
-      <div className="container">
-        <SectionTitle
-          title={lang === 'es' ? 'Certificaciones' : 'Certifications'}
-          subtitle={lang === 'es'
-            ? 'Formación continua en herramientas, seguridad e IA'
-            : 'Continuous learning in tools, security, and AI'}
+    <section id="certifications" className="band">
+      <div className="shell">
+        <SectionHeader
+          index="03"
+          title={es ? 'Certificaciones' : 'Certifications'}
+          note={es
+            ? 'Formación verificable en control de versiones, seguridad e inteligencia artificial.'
+            : 'Verifiable training in version control, security, and artificial intelligence.'}
         />
 
-        <div className="certifications-grid">
+        <div className="ix">
           {certifications.map((cert, i) => {
             const Icon = cert.icon;
             const inProgress = cert.status === 'in-progress';
@@ -28,40 +31,30 @@ export function Certifications() {
             return (
               <motion.article
                 key={cert.id}
-                className={`cert-card${inProgress ? ' cert-card--progress' : ''}`}
-                initial={{ opacity: 0, y: 24 }}
+                className="ix-row ix-row--pair"
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.45, delay: i * 0.08 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ duration: 0.6, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
               >
-                <div className="cert-card-glow" aria-hidden="true" />
+                <span className="ix-num">{String(i + 1).padStart(2, '0')}</span>
 
-                <div className="cert-card-icon" aria-hidden="true">
-                  <Icon size={28} strokeWidth={1.75} />
+                <div>
+                  <div className="ix-head">
+                    <Icon size={17} strokeWidth={1.5} aria-hidden="true" />
+                    <h3 className="ix-title">{cert.title}</h3>
+                  </div>
+                  <span className="ix-kicker">{cert.issuer}</span>
                 </div>
 
-                <div className="cert-card-body">
-                  <h3 className="cert-card-title">{cert.title}</h3>
-                  <p className="cert-card-issuer">
-                    {inProgress ? (
-                      <LoaderCircle size={14} className="cert-card-check cert-card-check--spin" aria-hidden="true" />
-                    ) : (
-                      <BadgeCheck size={14} className="cert-card-check" aria-hidden="true" />
-                    )}
-                    {cert.issuer}
-                  </p>
-                  {cert.description && (
-                    <p className="cert-card-desc">{cert.description}</p>
-                  )}
-                </div>
-
-                <div className="cert-card-meta">
+                <div className="ix-meta">
                   {inProgress ? (
-                    <span className="cert-card-badge cert-card-badge--progress">
-                      {lang === 'es' ? 'En curso' : 'In progress'}
+                    <span className="ix-status">
+                      <LoaderCircle size={13} strokeWidth={1.5} className="animate-spin" aria-hidden="true" />
+                      {es ? 'En curso' : 'In progress'}
                     </span>
                   ) : (
-                    cert.year && <span className="cert-card-year">{cert.year}</span>
+                    <span>{cert.year}</span>
                   )}
                 </div>
               </motion.article>

@@ -250,24 +250,3 @@ export const stats: Stat[] = [
   { value: 1,  suffix: '+', label: 'Años de Experiencia', icon: Hourglass },
   { value: 12, suffix: '+', label: 'Tecnologías',         icon: Zap },
 ];
-
-// ── Docker Compose snippet ─────────────────────────────────────
-export const dockerComposeSnippet = `
-services:
-  frontend:
-    build: ./frontend
-    ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/app
-    environment:
-      - VITE_API_URL=http://localhost:4000
-
-  backend:
-    build: ./backend
-    ports:
-      - "4000:4000"
-    environment:
-      - PORT=4000
-      - EMAIL_USER=\${EMAIL_USER}
-      - EMAIL_PASS=\${EMAIL_PASS}`;
