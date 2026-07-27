@@ -15,7 +15,6 @@ export function DevOps() {
     <section id="devops" className="band band--tint">
       <div className="shell">
         <SectionHeader
-          index="05"
           title={es ? 'Del commit al contenedor' : 'From commit to container'}
           note={es
             ? 'La parte del trabajo que casi nunca se muestra en un portafolio.'

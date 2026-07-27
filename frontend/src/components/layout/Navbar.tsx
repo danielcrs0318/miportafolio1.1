@@ -11,7 +11,6 @@ import { useThemeStore } from '../../store/themeStore';
 import { NAV_ITEMS } from '../../lib/constants';
 import { cn } from '../../lib/utils';
 
-const pad = (n: number) => String(n + 1).padStart(2, '0');
 const SECTION_IDS = NAV_ITEMS.map(item => item.href);
 
 export function Navbar() {
@@ -49,7 +48,7 @@ export function Navbar() {
         </button>
 
         <ul className="nav__list">
-          {NAV_ITEMS.map((item, i) => {
+          {NAV_ITEMS.map(item => {
             const on = activeId === item.href;
             return (
               <li key={item.href}>
@@ -57,7 +56,6 @@ export function Navbar() {
                   onClick={() => goTo(item.href)}
                   className={cn('nav__link', on && 'nav__link--on')}
                 >
-                  <span className="nav__num">{pad(i)}</span>
                   {lang === 'es' ? item.label : item.labelEn}
                   {on && <motion.span layoutId="nav-underline" className="nav__mark-line" />}
                 </button>
@@ -104,13 +102,12 @@ export function Navbar() {
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="nav__sheet-inner">
-              {NAV_ITEMS.map((item, i) => (
+              {NAV_ITEMS.map(item => (
                 <button
                   key={item.href}
                   onClick={() => goTo(item.href)}
                   className={cn('nav__sheet-link', activeId === item.href && 'nav__sheet-link--on')}
                 >
-                  <span className="nav__num">{pad(i)}</span>
                   {lang === 'es' ? item.label : item.labelEn}
                 </button>
               ))}

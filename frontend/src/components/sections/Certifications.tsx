@@ -1,6 +1,5 @@
 // ============================================================
 // Section — Certificaciones
-// Registro de formación: emisor, año y estado
 // ============================================================
 import { motion } from 'framer-motion';
 import { LoaderCircle } from 'lucide-react';
@@ -16,7 +15,6 @@ export function Certifications() {
     <section id="certifications" className="band">
       <div className="shell">
         <SectionHeader
-          index="03"
           title={es ? 'Certificaciones' : 'Certifications'}
           note={es
             ? 'Formación verificable en control de versiones, seguridad e inteligencia artificial.'
@@ -37,8 +35,6 @@ export function Certifications() {
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ duration: 0.6, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
               >
-                <span className="ix-num">{String(i + 1).padStart(2, '0')}</span>
-
                 <div>
                   <div className="ix-head">
                     <Icon size={17} strokeWidth={1.5} aria-hidden="true" />

@@ -58,7 +58,10 @@ export function Footer() {
           </div>
         </div>
 
-        <span className="foot__word" aria-hidden="true">Daniel Molina</span>
+        <span className="foot__word" aria-hidden="true">
+          <span>Daniel</span>
+          <span>Molina</span>
+        </span>
 
         <div className="foot__bottom mono">
           <span>© {year} Daniel Eduardo Molina Carias</span>

@@ -1,6 +1,5 @@
 // ============================================================
 // Section — Servicios
-// Índice numerado: qué hago y con qué se entrega
 // ============================================================
 import { motion } from 'framer-motion';
 import { Layout, Building2, Boxes, Wrench, Container, type LucideIcon } from 'lucide-react';
@@ -76,7 +75,6 @@ export function Services() {
     <section id="services" className="band band--tint">
       <div className="shell">
         <SectionHeader
-          index="02"
           title={es ? 'Servicios' : 'Services'}
           note={es
             ? 'Cinco formas concretas de trabajar juntos, de una landing simple a una infraestructura completa.'
@@ -95,16 +93,12 @@ export function Services() {
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ duration: 0.6, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
               >
-                <span className="ix-num">{String(i + 1).padStart(2, '0')}</span>
-
-                <div>
-                  <div className="ix-head">
-                    <Icon size={17} strokeWidth={1.5} aria-hidden="true" />
-                    <h3 className="ix-title">{service.title[lang]}</h3>
-                  </div>
+                <div className="ix-head">
+                  <Icon size={17} strokeWidth={1.5} aria-hidden="true" />
+                  <h3 className="ix-title">{service.title[lang]}</h3>
                 </div>
 
-                <div>
+                <div className="ix-copy">
                   <p className="ix-desc">{service.description[lang]}</p>
                   <div className="ix-tags">
                     {service.stack.map(t => (

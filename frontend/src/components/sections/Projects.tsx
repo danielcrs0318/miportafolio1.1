@@ -11,7 +11,7 @@ import { projects } from '../../lib/data';
 import type { Project } from '../../types';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
-const num = (i: number) => String(i + 1).padStart(2, '0');
+const pad = (i: number) => String(i + 1).padStart(2, '0');
 
 function ProjectSheet({ project, onClose }: { project: Project; onClose: () => void }) {
   const { lang } = useLangStore();
@@ -66,7 +66,7 @@ function ProjectSheet({ project, onClose }: { project: Project; onClose: () => v
             <ul className="sheet__ul">
               {project.highlights.map((h, i) => (
                 <li key={i} className="sheet__li">
-                  <b>{num(i)}</b>
+                  <b>{pad(i)}</b>
                   <span>{h}</span>
                 </li>
               ))}
@@ -113,7 +113,6 @@ export function Projects() {
     <section id="projects" className="band">
       <div className="shell">
         <SectionHeader
-          index="04"
           title={es ? 'Proyectos' : 'Projects'}
           note={es
             ? 'Selección de trabajos. Abre cualquiera para ver el alcance y el stack completo.'
@@ -132,8 +131,6 @@ export function Projects() {
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.6, delay: i * 0.05, ease: EASE }}
             >
-              <span className="ix-num">{num(i)}</span>
-
               <div>
                 <div className="ix-head">
                   <h3 className="ix-title">{project.title}</h3>
@@ -141,7 +138,7 @@ export function Projects() {
                 <span className="ix-kicker">{project.badge}</span>
               </div>
 
-              <div>
+              <div className="ix-copy">
                 <p className="ix-desc">{project.description}</p>
                 <div className="ix-tags">
                   {project.stack.slice(0, 4).map(t => (

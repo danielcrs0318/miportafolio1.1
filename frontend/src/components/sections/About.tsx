@@ -33,7 +33,6 @@ export function About() {
     <section id="about" className="band">
       <div className="shell">
         <SectionHeader
-          index="01"
           title={es ? 'Sobre mí' : 'About'}
           note={es
             ? 'Quién está detrás del código, con qué trabajo y cómo llegué hasta aquí.'

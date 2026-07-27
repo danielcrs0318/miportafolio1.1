@@ -113,7 +113,6 @@ export function Contact() {
       <Toaster position="bottom-right" theme="dark" />
       <div className="shell">
         <SectionHeader
-          index="06"
           title={es ? 'Contacto' : 'Contact'}
           note={es
             ? 'Cuéntame qué necesitas construir. Respondo personalmente en menos de 24 horas.'
@@ -164,36 +163,46 @@ export function Contact() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
+            noValidate
           >
+            <div className="form__head">
+              <h3 className="form__title">{es ? 'Enviar un mensaje' : 'Send a message'}</h3>
+              <p className="form__hint">
+                {es
+                  ? 'Completa los campos y te responderé lo antes posible.'
+                  : 'Fill in the fields and I will get back to you as soon as possible.'}
+              </p>
+            </div>
+
             <div className="field">
-              <label className="field__label mono" htmlFor="contact-name">
-                <span>{es ? '01 — Nombre' : '01 — Name'}</span>
-                {errors.name && <span className="field__err">{errors.name.message}</span>}
+              <label className="field__label" htmlFor="contact-name">
+                {es ? 'Nombre' : 'Name'}
               </label>
               <input
                 id="contact-name"
                 {...register('name')}
-                className="field__input"
+                className={`field__input${errors.name ? ' field__input--err' : ''}`}
                 placeholder={es ? 'Tu nombre completo' : 'Your full name'}
                 autoComplete="name"
                 onFocus={onFocusField}
               />
+              {errors.name && <span className="field__err">{errors.name.message}</span>}
             </div>
 
             <div className="field">
-              <label className="field__label mono" htmlFor="contact-email">
-                <span>{es ? '02 — Correo' : '02 — Email'}</span>
-                {errors.email && <span className="field__err">{errors.email.message}</span>}
+              <label className="field__label" htmlFor="contact-email">
+                {es ? 'Correo electrónico' : 'Email'}
               </label>
               <input
                 id="contact-email"
                 type="email"
                 {...register('email')}
-                className="field__input"
+                className={`field__input${errors.email ? ' field__input--err' : ''}`}
                 placeholder="tu@correo.com"
                 autoComplete="email"
                 onFocus={onFocusField}
               />
+              {errors.email && <span className="field__err">{errors.email.message}</span>}
             </div>
 
             <input
@@ -202,22 +211,24 @@ export function Contact() {
               tabIndex={-1}
               autoComplete="off"
               aria-hidden="true"
-              style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0, width: 0 }}
+              className="field__honeypot"
             />
 
             <div className="field">
-              <label className="field__label mono" htmlFor="contact-message">
-                <span>{es ? '03 — Mensaje' : '03 — Message'}</span>
-                {errors.message && <span className="field__err">{errors.message.message}</span>}
+              <label className="field__label" htmlFor="contact-message">
+                {es ? 'Mensaje' : 'Message'}
               </label>
               <textarea
                 id="contact-message"
                 {...register('message')}
-                className="field__input"
-                rows={4}
-                placeholder={es ? 'Qué necesitas, para cuándo y con qué presupuesto aproximado.' : 'What you need, by when, and your approximate budget.'}
+                className={`field__input field__textarea${errors.message ? ' field__input--err' : ''}`}
+                rows={5}
+                placeholder={es
+                  ? 'Cuéntame sobre tu proyecto, plazos y objetivos.'
+                  : 'Tell me about your project, timeline, and goals.'}
                 onFocus={onFocusField}
               />
+              {errors.message && <span className="field__err">{errors.message.message}</span>}
             </div>
 
             <button type="submit" disabled={loading} className="btn btn--signal btn--wide" id="contact-submit">
