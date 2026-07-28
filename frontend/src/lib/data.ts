@@ -103,7 +103,7 @@ export const projects: Project[] = [
 export const certifications: Certification[] = [
   {
     id: 'github-essentials',
-    title: 'GitHub Essentials',
+    title: 'GitHub Foundations',
     issuer: 'GitHub',
     year: '2025',
     color: '#3D8BFF',
