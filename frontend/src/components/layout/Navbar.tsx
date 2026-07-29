@@ -1,6 +1,5 @@
 // ============================================================
 // Layout — Navbar
-// Barra de índice: monograma, secciones numeradas y progreso de lectura
 // ============================================================
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll } from 'framer-motion';
@@ -19,11 +18,10 @@ export function Navbar() {
   const { lang, toggleLang } = useLangStore();
   const { theme, toggleTheme } = useThemeStore();
   const { scrollYProgress } = useScroll();
-
   const activeId = useScrollSpy(SECTION_IDS);
 
   useEffect(() => {
-    const handler = () => setStuck(window.scrollY > 24);
+    const handler = () => setStuck(window.scrollY > 16);
     handler();
     window.addEventListener('scroll', handler, { passive: true });
     return () => window.removeEventListener('scroll', handler);
@@ -36,15 +34,14 @@ export function Navbar() {
 
   return (
     <motion.nav
-      initial={{ y: -40, opacity: 0 }}
+      initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={cn('nav', stuck && 'nav--stuck')}
     >
       <div className="nav__inner">
         <button onClick={() => goTo('#hero')} className="nav__mark" aria-label="Ir al inicio">
-          <b>DM</b>
-          <span>Daniel Molina</span>
+          Daniel Molina <span>/ HN</span>
         </button>
 
         <ul className="nav__list">
@@ -57,7 +54,6 @@ export function Navbar() {
                   className={cn('nav__link', on && 'nav__link--on')}
                 >
                   {lang === 'es' ? item.label : item.labelEn}
-                  {on && <motion.span layoutId="nav-underline" className="nav__mark-line" />}
                 </button>
               </li>
             );
@@ -77,7 +73,7 @@ export function Navbar() {
             className="icon-btn"
             aria-label={theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
           >
-            {theme === 'dark' ? <SunMedium size={17} strokeWidth={1.5} /> : <Moon size={17} strokeWidth={1.5} />}
+            {theme === 'dark' ? <SunMedium size={17} strokeWidth={1.75} /> : <Moon size={17} strokeWidth={1.75} />}
           </button>
           <button
             className="icon-btn nav__burger"
@@ -85,7 +81,7 @@ export function Navbar() {
             aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={open}
           >
-            {open ? <X size={18} strokeWidth={1.5} /> : <Menu size={18} strokeWidth={1.5} />}
+            {open ? <X size={18} strokeWidth={1.75} /> : <Menu size={18} strokeWidth={1.75} />}
           </button>
         </div>
       </div>
@@ -99,7 +95,7 @@ export function Navbar() {
             initial={{ height: 0 }}
             animate={{ height: 'auto' }}
             exit={{ height: 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="nav__sheet-inner">
               {NAV_ITEMS.map(item => (

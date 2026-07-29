@@ -16,11 +16,11 @@ export const EMAIL = 'danielmolina3003@gmail.com'; // Debe coincidir con EMAIL_U
 export const CV_URL = '/assets/Curriculum-Vitae_Daniel_Molina.pdf';
 
 export const NAV_ITEMS = [
-  { label: 'Inicio',     labelEn: 'Home',     href: '#hero' },
-  { label: 'Sobre mí',  labelEn: 'About',    href: '#about' },
-  { label: 'Servicios', labelEn: 'Services', href: '#services' },
-  { label: 'Certificaciones', labelEn: 'Certifications', href: '#certifications' },
-  { label: 'Proyectos', labelEn: 'Projects', href: '#projects' },
-  { label: 'DevOps',    labelEn: 'DevOps',   href: '#devops' },
-  { label: 'Contacto',  labelEn: 'Contact',  href: '#contact' },
+  { label: 'Inicio',   labelEn: 'Home',     href: '#hero' },
+  { label: 'About',    labelEn: 'About',    href: '#about' },
+  { label: 'Services', labelEn: 'Services', href: '#services' },
+  { label: 'Certs',    labelEn: 'Certs',    href: '#certifications' },
+  { label: 'Work',     labelEn: 'Work',     href: '#projects' },
+  { label: 'DevOps',   labelEn: 'DevOps',   href: '#devops' },
+  { label: 'Contact',  labelEn: 'Contact',  href: '#contact' },
 ];

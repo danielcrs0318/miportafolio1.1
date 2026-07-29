@@ -1,16 +1,15 @@
 // ============================================================
-// Section — Sobre mí
-// Lead editorial, cifras, disciplinas y trayectoria en texto plano
+// Section — About (estilo Adham: part engineer / part builder)
 // ============================================================
 import { motion } from 'framer-motion';
 import { MapPin, GraduationCap, Briefcase } from 'lucide-react';
 import { SectionHeader } from '../shared/SectionHeader';
 import { useCountUp } from '../../hooks/useCountUp';
 import { useLangStore } from '../../store/langStore';
-import { stats, timeline, skillCategories } from '../../lib/data';
+import { stats, timeline } from '../../lib/data';
 import type { Stat } from '../../types';
 
-const EASE = [0.16, 1, 0.3, 1] as const;
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 function Figure({ value, suffix, label }: Stat) {
   const { count, ref } = useCountUp(value, 1600);
@@ -20,7 +19,7 @@ function Figure({ value, suffix, label }: Stat) {
         {count}
         {suffix && <sup>{suffix}</sup>}
       </span>
-      <span className="figure__l mono">{label}</span>
+      <span className="figure__l">{label}</span>
     </div>
   );
 }
@@ -30,96 +29,91 @@ export function About() {
   const es = lang === 'es';
 
   return (
-    <section id="about" className="band">
+    <section id="about" className="band band--soft">
       <div className="shell">
         <SectionHeader
-          title={es ? 'Sobre mí' : 'About'}
+          title={es ? 'about' : 'about'}
           note={es
-            ? 'Quién está detrás del código, con qué trabajo y cómo llegué hasta aquí.'
-            : 'Who is behind the code, what I work with, and how I got here.'}
+            ? 'Un poco sobre quién soy y cómo trabajo.'
+            : 'A little about who I am and how I work.'}
         />
 
+        <motion.p
+          className="about__lead"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: EASE }}
+        >
+          {es
+            ? 'Disfruto convertir problemas complejos en productos simples, útiles y listos para producción.'
+            : 'I enjoy turning complex problems into simple, useful products that are ready for production.'}
+        </motion.p>
+
         <div className="about__grid">
-          <motion.p
-            className="about__lead"
-            initial={{ opacity: 0, y: 20 }}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.8, ease: EASE }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: EASE }}
           >
-            {es
-              ? 'Escribo código que termina en producción, no en una carpeta de capturas de pantalla.'
-              : 'I write code that ends up in production, not in a folder full of screenshots.'}
-          </motion.p>
+            <h3 className="about__col-title">{es ? 'Parte ingeniero' : 'Part engineer'}</h3>
+            <ul className="about__list">
+              <li>{es ? 'Sistemas fullstack' : 'Fullstack systems'}</li>
+              <li>{es ? 'APIs y autenticación' : 'APIs & authentication'}</li>
+              <li>{es ? 'Bases de datos relacionales' : 'Relational databases'}</li>
+              <li>{es ? 'Integraciones con IA' : 'AI integrations'}</li>
+              <li>{es ? 'Pensar en producción desde el día uno' : 'Production-minded from day one'}</li>
+            </ul>
+          </motion.div>
 
           <motion.div
-            className="about__body"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.8, delay: 0.1, ease: EASE }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.08, ease: EASE }}
           >
-            <p>
-              {es
-                ? 'Soy Ingeniero en Ciencias de la Computación egresado de UNICAH y trabajo desde Siguatepeque, Honduras. Me muevo cómodo en todo el ciclo: interfaz en React y TypeScript, API en Node.js, base de datos en PostgreSQL y el servidor Linux donde todo eso termina corriendo.'
-                : "I'm a Computer Science Engineer from UNICAH, working out of Siguatepeque, Honduras. I move across the whole cycle: React and TypeScript on the interface, Node.js on the API, PostgreSQL for data, and the Linux server where all of it ends up running."}
-            </p>
-            <p>
-              {es
-                ? 'He construido desde landing pages para PYMES hondureñas hasta sistemas con autenticación, auditoría, búsqueda semántica con IA y despliegue contenerizado. Lo que me diferencia no es la cantidad de frameworks, sino que cada proyecto queda listo para el día en que recibe usuarios reales.'
-                : 'I have built everything from landing pages for Honduran small businesses to systems with authentication, auditing, AI semantic search, and containerized deployment. What sets me apart is not the number of frameworks, but that every project is ready for the day it meets real users.'}
-            </p>
-
-            <div className="about__tags">
-              <span className="tag tag--md"><MapPin size={12} strokeWidth={1.5} />Siguatepeque, HN</span>
-              <span className="tag tag--md"><GraduationCap size={12} strokeWidth={1.5} />UNICAH</span>
-              <span className="tag tag--md"><Briefcase size={12} strokeWidth={1.5} />Freelance</span>
-            </div>
+            <h3 className="about__col-title">{es ? 'Parte developer' : 'Part developer'}</h3>
+            <ul className="about__list">
+              <li>React · TypeScript · Node.js</li>
+              <li>PostgreSQL · Prisma</li>
+              <li>Docker · Nginx · Traefik</li>
+              <li>GitHub Actions · Portainer</li>
+              <li>{es ? 'Código limpio y mantenible' : 'Clean, maintainable code'}</li>
+            </ul>
           </motion.div>
         </div>
 
-        <div className="block">
-          <div className="block__label mono">
-            <span>{es ? 'Cifras' : 'Figures'}</span>
-            <span>2026</span>
+        <motion.div
+          className="about__body"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: EASE }}
+        >
+          <p>
+            {es
+              ? 'Soy Ingeniero en Ciencias de la Computación egresado de UNICAH y trabajo desde Siguatepeque, Honduras. Me muevo cómodo en todo el ciclo: interfaz, API, datos y el servidor Linux donde todo termina corriendo.'
+              : "I'm a Computer Science Engineer from UNICAH, working out of Siguatepeque, Honduras. I move across the whole cycle: interface, API, data, and the Linux server where everything ends up running."}
+          </p>
+          <p>
+            {es
+              ? 'He construido desde landing pages para PYMES hasta sistemas con autenticación, auditoría, búsqueda semántica con IA y despliegue contenerizado.'
+              : 'I have built everything from landing pages for small businesses to systems with authentication, auditing, AI semantic search, and containerized deployment.'}
+          </p>
+          <div className="about__tags">
+            <span className="tag"><MapPin size={13} strokeWidth={1.75} />Siguatepeque, HN</span>
+            <span className="tag"><GraduationCap size={13} strokeWidth={1.75} />UNICAH</span>
+            <span className="tag"><Briefcase size={13} strokeWidth={1.75} />Freelance</span>
           </div>
-          <div className="figures">
-            {stats.map(s => <Figure key={s.label} {...s} />)}
-          </div>
+        </motion.div>
+
+        <div className="figures">
+          {stats.map(s => <Figure key={s.label} {...s} />)}
         </div>
 
-        <div className="block">
-          <div className="block__label mono">
-            <span>{es ? 'Herramientas por disciplina' : 'Tools by discipline'}</span>
-            <span>{skillCategories.length}</span>
-          </div>
-          <div className="disciplines">
-            {skillCategories.map(cat => {
-              const Icon = cat.icon;
-              return (
-                <motion.div
-                  key={cat.id}
-                  className="disc-row"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <span className="disc-row__k">
-                    <Icon size={15} strokeWidth={1.5} aria-hidden="true" />
-                    {cat.title}
-                  </span>
-                  <span className="disc-row__v">
-                    {cat.skills.map(s => s.name).join(' · ')}
-                  </span>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="block">
-          <div className="block__label mono">
+        <div>
+          <div className="block__label">
             <span>{es ? 'Trayectoria' : 'Journey'}</span>
             <span>2022 — 2026</span>
           </div>
@@ -128,12 +122,12 @@ export function About() {
               <motion.article
                 key={i}
                 className="jrow"
-                initial={{ opacity: 0, y: 14 }}
+                initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.6, delay: i * 0.05, ease: EASE }}
+                transition={{ duration: 0.5, delay: i * 0.05, ease: EASE }}
               >
-                <span className="jrow__year mono">{item.year}</span>
+                <span className="jrow__year">{item.year}</span>
                 <div>
                   <h3 className="jrow__role">{item.title}</h3>
                   <span className="jrow__org">{item.institution}</span>

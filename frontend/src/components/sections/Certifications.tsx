@@ -1,5 +1,5 @@
 // ============================================================
-// Section — Certificaciones
+// Section — Certifications
 // ============================================================
 import { motion } from 'framer-motion';
 import { LoaderCircle } from 'lucide-react';
@@ -12,13 +12,13 @@ export function Certifications() {
   const es = lang === 'es';
 
   return (
-    <section id="certifications" className="band">
+    <section id="certifications" className="band band--soft">
       <div className="shell">
         <SectionHeader
-          title={es ? 'Certificaciones' : 'Certifications'}
+          title={es ? 'certs' : 'certs'}
           note={es
-            ? 'Formación verificable en control de versiones, seguridad e inteligencia artificial.'
-            : 'Verifiable training in version control, security, and artificial intelligence.'}
+            ? 'Formación en herramientas, seguridad e IA.'
+            : 'Training in tools, security, and AI.'}
         />
 
         <div className="ix">
@@ -30,14 +30,14 @@ export function Certifications() {
               <motion.article
                 key={cert.id}
                 className="ix-row ix-row--pair"
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 14 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ duration: 0.6, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.5, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
               >
                 <div>
                   <div className="ix-head">
-                    <Icon size={17} strokeWidth={1.5} aria-hidden="true" />
+                    <Icon size={18} strokeWidth={1.75} aria-hidden="true" />
                     <h3 className="ix-title">{cert.title}</h3>
                   </div>
                   <span className="ix-kicker">{cert.issuer}</span>
@@ -46,7 +46,7 @@ export function Certifications() {
                 <div className="ix-meta">
                   {inProgress ? (
                     <span className="ix-status">
-                      <LoaderCircle size={13} strokeWidth={1.5} className="animate-spin" aria-hidden="true" />
+                      <LoaderCircle size={14} strokeWidth={1.75} className="animate-spin" aria-hidden="true" />
                       {es ? 'En curso' : 'In progress'}
                     </span>
                   ) : (

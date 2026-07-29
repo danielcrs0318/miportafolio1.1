@@ -6,7 +6,6 @@ import { HelmetProvider, Helmet } from 'react-helmet-async';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
-import { StackReel } from './components/shared/StackReel';
 import { Hero } from './components/sections/Hero';
 import { About } from './components/sections/About';
 import { Services } from './components/sections/Services';
@@ -27,13 +26,10 @@ function App() {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
-  // El idioma correcto es necesario para que la partición de palabras
-  // del texto justificado use el diccionario adecuado
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
 
-  // Despierta Render free apenas carga el portafolio (antes de llegar a Contacto)
   useEffect(() => {
     startEarlyWarmup();
   }, []);
@@ -53,6 +49,7 @@ function App() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={SITE_TITLE} />
         <meta name="twitter:description" content={SITE_DESCRIPTION} />
+        <meta name="theme-color" content={theme === 'dark' ? '#111111' : '#FFFFFF'} />
         <link rel="canonical" href={SITE_URL} />
         <link rel="icon" type="image/png" href={FAVICON_URL} />
         <link rel="apple-touch-icon" href={FAVICON_URL} />
@@ -63,14 +60,12 @@ function App() {
           key="portfolio"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.45 }}
           className="page"
         >
-          <div className="grain" aria-hidden="true" />
           <Navbar />
           <main id="main-content">
             <Hero />
-            <StackReel />
             <About />
             <Services />
             <Certifications />

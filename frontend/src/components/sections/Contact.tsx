@@ -1,6 +1,5 @@
 // ============================================================
-// Section — Contacto
-// Formulario en línea + warmup del backend (Render free tier)
+// Section — Contact
 // ============================================================
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -14,8 +13,9 @@ import { useLangStore } from '../../store/langStore';
 import { GITHUB_URL, LINKEDIN_URL, EMAIL } from '../../lib/constants';
 import { sendContactMessage, wakeBackend } from '../../lib/api';
 import { useBackendWarmup } from '../../hooks/useBackendWarmup';
+import { useThemeStore } from '../../store/themeStore';
 
-const EASE = [0.16, 1, 0.3, 1] as const;
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 const contactSchema = z.object({
   name:    z.string().min(2,  'El nombre debe tener al menos 2 caracteres'),
@@ -28,6 +28,7 @@ type ContactFormData = z.infer<typeof contactSchema>;
 
 export function Contact() {
   const { lang } = useLangStore();
+  const { theme } = useThemeStore();
   const es = lang === 'es';
   const [loading, setLoading] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
@@ -40,13 +41,10 @@ export function Contact() {
     formState: { errors },
   } = useForm<ContactFormData>({ resolver: zodResolver(contactSchema) });
 
-  const onFocusField = () => {
-    void wakeBackend();
-  };
+  const onFocusField = () => { void wakeBackend(); };
 
   const onSubmit = async (data: ContactFormData) => {
     setLoading(true);
-
     if (!apiReady) {
       toast.message(
         es
@@ -57,14 +55,11 @@ export function Contact() {
 
     try {
       const result = await sendContactMessage(data);
-
       if (!result.ok) {
         if (result.status === 429) {
-          toast.error(
-            es
-              ? 'Demasiados intentos. Espera 15 minutos e inténtalo de nuevo.'
-              : 'Too many attempts. Wait 15 minutes and try again.'
-          );
+          toast.error(es
+            ? 'Demasiados intentos. Espera 15 minutos e inténtalo de nuevo.'
+            : 'Too many attempts. Wait 15 minutes and try again.');
           return;
         }
         if (result.status === 400) {
@@ -72,22 +67,15 @@ export function Contact() {
           return;
         }
         if (result.waking) {
-          toast.error(
-            es
-              ? 'El servidor está iniciando. Espera ~30 s e inténtalo de nuevo.'
-              : 'The server is starting. Wait ~30s and try again.'
-          );
+          toast.error(es
+            ? 'El servidor está iniciando. Espera ~30 s e inténtalo de nuevo.'
+            : 'The server is starting. Wait ~30s and try again.');
           return;
         }
-        toast.error(
-          result.message || (es ? 'Error al enviar. Inténtalo de nuevo.' : 'Failed to send. Please try again.')
-        );
+        toast.error(result.message || (es ? 'Error al enviar.' : 'Failed to send.'));
         return;
       }
-
-      toast.success(
-        es ? 'Mensaje enviado. Te responderé pronto.' : 'Message sent. I will get back to you soon.'
-      );
+      toast.success(es ? 'Mensaje enviado. Te responderé pronto.' : 'Message sent. I will get back to you soon.');
       reset();
     } catch {
       toast.error(es ? 'Error al enviar. Inténtalo de nuevo.' : 'Failed to send. Please try again.');
@@ -103,33 +91,33 @@ export function Contact() {
   ];
 
   const serverStatus = waking
-    ? (es ? 'Conectando con el servidor…' : 'Connecting to server…')
+    ? (es ? 'Conectando…' : 'Connecting…')
     : apiReady
       ? (es ? 'Servidor listo' : 'Server ready')
       : null;
 
   return (
     <section id="contact" className="band" ref={sectionRef}>
-      <Toaster position="bottom-right" theme="dark" />
+      <Toaster position="bottom-right" theme={theme === 'dark' ? 'dark' : 'light'} />
       <div className="shell">
         <SectionHeader
-          title={es ? 'Contacto' : 'Contact'}
+          title={es ? 'contact' : 'contact'}
           note={es
-            ? 'Cuéntame qué necesitas construir. Respondo personalmente en menos de 24 horas.'
-            : 'Tell me what you need to build. I answer personally within 24 hours.'}
+            ? 'Cuéntame qué necesitas construir. Respondo en menos de 24 horas.'
+            : 'Tell me what you need to build. I reply within 24 hours.'}
         />
 
         <div className="contact__grid">
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.7, ease: EASE }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.65, ease: EASE }}
           >
             <p className="contact__statement">
               {es
-                ? '¿Tienes un proyecto en mente? Hablemos antes de escribir la primera línea de código.'
-                : 'Have a project in mind? Let\'s talk before writing the first line of code.'}
+                ? '¿Tienes un proyecto en mente? Hablemos antes de escribir la primera línea.'
+                : 'Have a project in mind? Let\'s talk before writing the first line.'}
             </p>
 
             <div className="channels">
@@ -141,16 +129,16 @@ export function Contact() {
                   target={c.external ? '_blank' : undefined}
                   rel={c.external ? 'noopener noreferrer' : undefined}
                 >
-                  <span className="channel__k mono">{c.k}</span>
+                  <span className="channel__k">{c.k}</span>
                   <span className="channel__v">{c.v}</span>
-                  <ArrowUpRight size={14} strokeWidth={1.5} className="channel__go" aria-hidden="true" />
+                  <ArrowUpRight size={14} strokeWidth={1.75} className="channel__go" aria-hidden="true" />
                 </a>
               ))}
             </div>
 
-            <p className="contact__status mono" aria-live="polite">
+            <p className="contact__status" aria-live="polite">
               {waking
-                ? <Loader2 size={12} className="animate-spin" aria-hidden="true" />
+                ? <Loader2 size={13} className="animate-spin" aria-hidden="true" />
                 : <i className="live-dot" aria-hidden="true" />}
               {serverStatus ?? (es ? 'Respuesta en menos de 24 h' : 'Reply within 24 h')}
             </p>
@@ -159,25 +147,23 @@ export function Contact() {
           <motion.form
             className="form"
             onSubmit={handleSubmit(onSubmit)}
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
             noValidate
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.65, delay: 0.08, ease: EASE }}
           >
             <div className="form__head">
               <h3 className="form__title">{es ? 'Enviar un mensaje' : 'Send a message'}</h3>
               <p className="form__hint">
                 {es
                   ? 'Completa los campos y te responderé lo antes posible.'
-                  : 'Fill in the fields and I will get back to you as soon as possible.'}
+                  : 'Fill in the fields and I will get back to you soon.'}
               </p>
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="contact-name">
-                {es ? 'Nombre' : 'Name'}
-              </label>
+              <label className="field__label" htmlFor="contact-name">{es ? 'Nombre' : 'Name'}</label>
               <input
                 id="contact-name"
                 {...register('name')}
@@ -190,9 +176,7 @@ export function Contact() {
             </div>
 
             <div className="field">
-              <label className="field__label" htmlFor="contact-email">
-                {es ? 'Correo electrónico' : 'Email'}
-              </label>
+              <label className="field__label" htmlFor="contact-email">{es ? 'Correo' : 'Email'}</label>
               <input
                 id="contact-email"
                 type="email"
@@ -215,9 +199,7 @@ export function Contact() {
             />
 
             <div className="field">
-              <label className="field__label" htmlFor="contact-message">
-                {es ? 'Mensaje' : 'Message'}
-              </label>
+              <label className="field__label" htmlFor="contact-message">{es ? 'Mensaje' : 'Message'}</label>
               <textarea
                 id="contact-message"
                 {...register('message')}
@@ -231,7 +213,7 @@ export function Contact() {
               {errors.message && <span className="field__err">{errors.message.message}</span>}
             </div>
 
-            <button type="submit" disabled={loading} className="btn btn--signal btn--wide" id="contact-submit">
+            <button type="submit" disabled={loading} className="btn btn--fill btn--wide" id="contact-submit">
               <span>
                 {loading
                   ? (waking || !apiReady
@@ -241,7 +223,7 @@ export function Contact() {
               </span>
               {loading
                 ? <Loader2 size={15} className="animate-spin" />
-                : <ArrowUpRight size={15} strokeWidth={1.5} />}
+                : <ArrowUpRight size={15} strokeWidth={1.75} />}
             </button>
           </motion.form>
         </div>
