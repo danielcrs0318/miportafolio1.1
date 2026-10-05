@@ -1,29 +1,25 @@
 import { useEffect } from 'react';
 import { Moon, Sun } from 'lucide-react';
-import { BrowserRouter, Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Link, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
 import { HomeCard } from './components/HomeCard';
-import { About } from './components/sections/About';
-import { Services } from './components/sections/Services';
-import { Certifications } from './components/sections/Certifications';
-import { Projects } from './components/sections/Projects';
-import { DevOps } from './components/sections/DevOps';
-import { Contact } from './components/sections/Contact';
+import { AboutScreen, ServicesScreen, CertificationsScreen, ProjectsScreen, DevOpsScreen, ContactScreen } from './components/sections/CompactPages';
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL, OG_IMAGE_URL, FAVICON_URL } from './lib/constants';
 import { useLangStore } from './store/langStore';
 import { useThemeStore } from './store/themeStore';
 
 const pages = [
-  { path: '/sobre-mi', es: 'Sobre mi', en: 'About', component: About },
-  { path: '/servicios', es: 'Servicios', en: 'Services', component: Services },
-  { path: '/certificados', es: 'Certificados', en: 'Certificates', component: Certifications },
-  { path: '/proyectos', es: 'Proyectos', en: 'Projects', component: Projects },
-  { path: '/devops', es: 'DevOps', en: 'DevOps', component: DevOps },
-  { path: '/contacto', es: 'Contacto', en: 'Contact', component: Contact },
+  { path: '/sobre-mi', es: 'Sobre mi', en: 'About', component: AboutScreen },
+  { path: '/servicios', es: 'Servicios', en: 'Services', component: ServicesScreen },
+  { path: '/certificados', es: 'Certificados', en: 'Certificates', component: CertificationsScreen },
+  { path: '/proyectos', es: 'Proyectos', en: 'Projects', component: ProjectsScreen },
+  { path: '/devops', es: 'DevOps', en: 'DevOps', component: DevOpsScreen },
+  { path: '/contacto', es: 'Contacto', en: 'Contact', component: ContactScreen },
 ];
 
 function PortfolioRoutes() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { lang, toggleLang } = useLangStore();
   const { theme, toggleTheme } = useThemeStore();
   const page = pages.find(item => item.path === location.pathname);
@@ -70,6 +66,9 @@ function PortfolioRoutes() {
                     </Link>
                   ))}
                 </nav>
+                <select className="detail-nav__select" aria-label={lang === 'es' ? 'Seleccionar pagina' : 'Select page'} value={item.path} onChange={event => navigate(event.target.value)}>
+                  {pages.map(link => <option key={link.path} value={link.path}>{lang === 'es' ? link.es : link.en}</option>)}
+                </select>
                 <button type="button" onClick={toggleLang} className="detail-nav__lang" aria-label={lang === 'es' ? 'Cambiar a ingles' : 'Switch to Spanish'}>
                   {lang.toUpperCase()}
                 </button>
@@ -80,7 +79,6 @@ function PortfolioRoutes() {
               <main id="main-content" className="detail-panel">
                 <item.component />
               </main>
-              <Link to="/" className="detail-back">&lt; {lang === 'es' ? 'Volver al inicio' : 'Back home'}</Link>
             </div>
           } />
         ))}
