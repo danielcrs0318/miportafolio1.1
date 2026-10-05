@@ -1,6 +1,6 @@
 // ============================================================
 // Hook — useCountUp
-// Animación de contador numérico al entrar en viewport
+// Animacion de contador numerico al entrar en viewport
 // ============================================================
 import { useState, useEffect, useRef } from 'react';
 

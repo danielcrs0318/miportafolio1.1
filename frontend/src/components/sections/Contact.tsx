@@ -10,16 +10,16 @@ import { Toaster, toast } from 'sonner';
 import { ArrowUpRight, Loader2 } from 'lucide-react';
 import { SectionHeader } from '../shared/SectionHeader';
 import { useLangStore } from '../../store/langStore';
+import { useThemeStore } from '../../store/themeStore';
 import { GITHUB_URL, LINKEDIN_URL, EMAIL } from '../../lib/constants';
 import { sendContactMessage, wakeBackend } from '../../lib/api';
 import { useBackendWarmup } from '../../hooks/useBackendWarmup';
-import { useThemeStore } from '../../store/themeStore';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const contactSchema = z.object({
   name:    z.string().min(2,  'El nombre debe tener al menos 2 caracteres'),
-  email:   z.string().email('Ingresa un correo electrónico válido'),
+  email:   z.string().email('Ingresa un correo electronico valido'),
   message: z.string().min(10, 'El mensaje debe tener al menos 10 caracteres'),
   website: z.string().optional(),
 });
@@ -58,7 +58,7 @@ export function Contact() {
       if (!result.ok) {
         if (result.status === 429) {
           toast.error(es
-            ? 'Demasiados intentos. Espera 15 minutos e inténtalo de nuevo.'
+            ? 'Demasiados intentos. Espera 15 minutos e intentalo de nuevo.'
             : 'Too many attempts. Wait 15 minutes and try again.');
           return;
         }
@@ -68,17 +68,17 @@ export function Contact() {
         }
         if (result.waking) {
           toast.error(es
-            ? 'El servidor está iniciando. Espera ~30 s e inténtalo de nuevo.'
+            ? 'El servidor esta iniciando. Espera ~30 s e intentalo de nuevo.'
             : 'The server is starting. Wait ~30s and try again.');
           return;
         }
         toast.error(result.message || (es ? 'Error al enviar.' : 'Failed to send.'));
         return;
       }
-      toast.success(es ? 'Mensaje enviado. Te responderé pronto.' : 'Message sent. I will get back to you soon.');
+      toast.success(es ? 'Mensaje enviado. Te respondere pronto.' : 'Message sent. I will get back to you soon.');
       reset();
     } catch {
-      toast.error(es ? 'Error al enviar. Inténtalo de nuevo.' : 'Failed to send. Please try again.');
+      toast.error(es ? 'Error al enviar. Intentalo de nuevo.' : 'Failed to send. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -98,12 +98,12 @@ export function Contact() {
 
   return (
     <section id="contact" className="band" ref={sectionRef}>
-      <Toaster position="bottom-right" theme={theme === 'dark' ? 'dark' : 'light'} />
+      <Toaster position="bottom-right" theme={theme} />
       <div className="shell">
         <SectionHeader
           title={es ? 'contact' : 'contact'}
           note={es
-            ? 'Cuéntame qué necesitas construir. Respondo en menos de 24 horas.'
+            ? 'Cuentame que necesitas construir. Respondo en menos de 24 horas.'
             : 'Tell me what you need to build. I reply within 24 hours.'}
         />
 
@@ -116,7 +116,7 @@ export function Contact() {
           >
             <p className="contact__statement">
               {es
-                ? '¿Tienes un proyecto en mente? Hablemos antes de escribir la primera línea.'
+                ? 'Si tienes un proyecto en mente, hablemos antes de escribir la primera linea.'
                 : 'Have a project in mind? Let\'s talk before writing the first line.'}
             </p>
 
@@ -157,7 +157,7 @@ export function Contact() {
               <h3 className="form__title">{es ? 'Enviar un mensaje' : 'Send a message'}</h3>
               <p className="form__hint">
                 {es
-                  ? 'Completa los campos y te responderé lo antes posible.'
+                  ? 'Completa los campos y te respondere lo antes posible.'
                   : 'Fill in the fields and I will get back to you soon.'}
               </p>
             </div>
@@ -206,7 +206,7 @@ export function Contact() {
                 className={`field__input field__textarea${errors.message ? ' field__input--err' : ''}`}
                 rows={5}
                 placeholder={es
-                  ? 'Cuéntame sobre tu proyecto, plazos y objetivos.'
+                  ? 'Cuentame sobre tu proyecto, plazos y objetivos.'
                   : 'Tell me about your project, timeline, and goals.'}
                 onFocus={onFocusField}
               />

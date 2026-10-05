@@ -64,7 +64,7 @@ export function Navbar() {
           <button
             onClick={toggleLang}
             className="icon-btn icon-btn--text"
-            aria-label={lang === 'es' ? 'Cambiar a inglés' : 'Switch to Spanish'}
+            aria-label={lang === 'es' ? 'Cambiar a ingles' : 'Switch to Spanish'}
           >
             {lang === 'es' ? 'ES' : 'EN'}
           </button>
@@ -78,7 +78,7 @@ export function Navbar() {
           <button
             className="icon-btn nav__burger"
             onClick={() => setOpen(v => !v)}
-            aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
+            aria-label={open ? 'Cerrar menu' : 'Abrir menu'}
             aria-expanded={open}
           >
             {open ? <X size={18} strokeWidth={1.75} /> : <Menu size={18} strokeWidth={1.75} />}

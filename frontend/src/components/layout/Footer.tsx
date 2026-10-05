@@ -18,10 +18,10 @@ export function Footer() {
       <div className="shell">
         <div className="foot__cols">
           <div>
-            <span className="foot__k">{es ? 'Colofón' : 'Colophon'}</span>
+            <span className="foot__k">{es ? 'Colofon' : 'Colophon'}</span>
             <p className="foot__blurb">
               {es
-                ? 'Ingeniero en Ciencias de la Computación. Diseño, desarrollo y pongo en producción sitios y sistemas web, desde Honduras y de forma remota.'
+                ? 'Ingeniero en Ciencias de la Computacion. Diseno, desarrollo y pongo en produccion sitios y sistemas web, desde Honduras y de forma remota.'
                 : 'Computer Science Engineer. I design, build, and ship websites and web systems from Honduras and remotely.'}
             </p>
             <p className="foot__avail">
@@ -31,7 +31,7 @@ export function Footer() {
           </div>
 
           <div>
-            <span className="foot__k">{es ? 'Índice' : 'Index'}</span>
+            <span className="foot__k">{es ? 'Indice' : 'Index'}</span>
             <nav className="foot__list">
               {NAV_ITEMS.map(item => (
                 <a
@@ -52,7 +52,7 @@ export function Footer() {
               <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="uline">GitHub</a>
               <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="uline">LinkedIn</a>
               <a href={`mailto:${EMAIL}`} className="uline">Email</a>
-              <a href={CV_URL} download className="uline">{es ? 'Currículum (PDF)' : 'Résumé (PDF)'}</a>
+              <a href={CV_URL} download className="uline">{es ? 'Curriculum (PDF)' : 'Resume (PDF)'}</a>
             </div>
           </div>
         </div>

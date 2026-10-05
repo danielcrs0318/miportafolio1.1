@@ -1,6 +1,6 @@
 // ============================================================
 // Hook — useScrollSpy
-// Detecta cuál sección está activa basado en el scroll
+// Detecta cual seccion esta activa basado en el scroll
 // ============================================================
 import { useState, useEffect } from 'react';
 

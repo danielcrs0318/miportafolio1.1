@@ -17,7 +17,7 @@ export function Certifications() {
         <SectionHeader
           title={es ? 'certs' : 'certs'}
           note={es
-            ? 'Formación en herramientas, seguridad e IA.'
+            ? 'Formacion en herramientas, seguridad e IA.'
             : 'Training in tools, security, and AI.'}
         />
 

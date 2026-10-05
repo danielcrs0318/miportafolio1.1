@@ -7,55 +7,18 @@ import { Monitor, Rocket, Hourglass, Zap, Settings2, Database, Cpu, Server, Shie
 // ── Projects ─────────────────────────────────────────────────
 export const projects: Project[] = [
   {
-    id: 1,
-    title: 'SprinFlow',
-    description: 'Sistema de gestión de proyectos con metodología Kanban',
-    longDescription:
-      'Plataforma completa de gestión de proyectos que implementa la metodología Kanban con tiempo real via WebSockets. Incluye autenticación robusta, gestión de roles, sprints y un dashboard de métricas de productividad.',
-    stack: ['React', 'Node.js', 'PostgreSQL', 'WebSockets', 'TypeScript', 'Docker'],
-    badge: 'Fullstack System',
-    badgeColor: '#3D8BFF',
-    highlights: [
-      'Tablero Kanban con drag & drop en tiempo real',
-      'Autenticación JWT y sistema de roles',
-      'Gestión de sprints y tareas con prioridades',
-      'Dashboard con métricas de productividad',
-      'WebSockets para actualizaciones en tiempo real',
-    ],
-    github: 'https://github.com/danielcrs0318',
-  },
-  {
-    id: 2,
-    title: 'AgroAI',
-    description: 'Sistema inteligente de recomendaciones agrícolas con IA',
-    longDescription:
-      'Sistema de recomendaciones agrícolas que combina búsqueda semántica con embeddings vectoriales y modelos GPT de OpenAI. Incluye un panel de administración completo, auditoría de acciones y gestión multi-dispositivo de sesiones.',
-    stack: ['React', 'Node.js', 'OpenAI API', 'Pinecone', 'PostgreSQL', 'TypeScript'],
-    badge: 'AI-Powered System',
-    badgeColor: '#3D8BFF',
-    highlights: [
-      'Embeddings vectoriales para búsqueda semántica (Pinecone)',
-      'Integración con OpenAI GPT para recomendaciones inteligentes',
-      'Login con reCAPTCHA v2/v3 para seguridad adicional',
-      'Panel de administración completo',
-      'Auditoría de acciones y log de actividad',
-      'Gestión de sesiones multi-dispositivo',
-    ],
-    github: 'https://github.com/danielcrs0318',
-  },
-  {
     id: 3,
     title: 'MandadosExpress',
     description: 'Landing page para startup de delivery de mandados en Honduras',
     longDescription:
-      'Landing page moderna y completamente responsive para una startup de delivery en Honduras. Diseño mobile-first con 12 secciones completas, paleta dark orange/black y animaciones de scroll suaves.',
+      'Landing page moderna y completamente responsive para una startup de delivery en Honduras. Diseno mobile-first con 12 secciones completas, paleta dark orange/black y animaciones de scroll suaves.',
     stack: ['React 18', 'MUI', 'Framer Motion', 'TypeScript'],
     badge: 'Landing Page | PYME',
     badgeColor: '#3D8BFF',
     highlights: [
-      '12 secciones completamente diseñadas',
+      '12 secciones completamente disenadas',
       'Paleta de colores dark orange/black personalizada',
-      'Diseño mobile-first 100% responsive',
+      'Diseno mobile-first 100% responsive',
       'Animaciones de scroll y hover con Framer Motion',
       'SEO optimizado',
     ],
@@ -65,19 +28,19 @@ export const projects: Project[] = [
   },
   {
     id: 4,
-    title: 'Deco Floristería',
-    description: 'Landing page elegante para floristería hondureña',
+    title: 'Deco Floristeria',
+    description: 'Landing page elegante para floristeria hondurena',
     longDescription:
-      'Landing page elegante y femenina para una floristería en Honduras. Incluye galería de productos animada, formulario de contacto y CTA de WhatsApp, con un diseño floral cálido y personalizado.',
+      'Landing page elegante y femenina para una floristeria en Honduras. Incluye galeria de productos animada, formulario de contacto y CTA de WhatsApp, con un diseno floral calido y personalizado.',
     stack: ['React 18', 'MUI', 'Framer Motion', 'TypeScript'],
     badge: 'Landing Page | PYME',
     badgeColor: '#3D8BFF',
     highlights: [
-      'Tema floral cálido completamente personalizado',
-      'Galería de productos animada',
+      'Tema floral calido completamente personalizado',
+      'Galeria de productos animada',
       'Formulario de contacto integrado',
       'CTA de WhatsApp directo',
-      'Diseño elegante y moderno',
+      'Diseno elegante y moderno',
     ],
     github: 'https://github.com/danielcrs0318/landingDecoFloristeria',
     demo: 'https://landing-deco-floristeria.vercel.app/',
@@ -86,17 +49,17 @@ export const projects: Project[] = [
   {
     id: 5,
     title: 'POS Honduras',
-    description: 'Punto de venta web para retail: ventas, inventario, caja y facturación',
+    description: 'Punto de venta web para retail: ventas, inventario, caja y facturacion',
     longDescription:
-      'Sistema de punto de venta para retail en Honduras. Incluye ventas en mostrador, inventario, caja, clientes, proveedores, reportes, auditoría y facturación fiscal CAI opcional, con soporte multi-sucursal.',
+      'Sistema de punto de venta para retail en Honduras. Incluye ventas en mostrador, inventario, caja, clientes, proveedores, reportes, auditoria y facturacion fiscal CAI opcional, con soporte multi-sucursal.',
     stack: ['React', 'Vite', 'Tailwind CSS', 'NestJS', 'Prisma', 'MySQL', 'Resend'],
     badge: 'Fullstack System | POS',
     badgeColor: '#3D8BFF',
     highlights: [
-      'Ventas rápidas con código de barras y pagos mixtos',
+      'Ventas rapidas con codigo de barras y pagos mixtos',
       'Inventario, compras, clientes y proveedores',
-      'Caja, reportes PDF y auditoría de acciones',
-      'Facturación fiscal CAI opcional (SAR)',
+      'Caja, reportes PDF y auditoria de acciones',
+      'Facturacion fiscal CAI opcional (SAR)',
       'Multi-sucursal con roles (admin, cajero, supervisor)',
     ],
     github: 'https://github.com/danielcrs0318/puntodeventaweb',
@@ -217,10 +180,10 @@ export const skillCategories: SkillCategory[] = [
 export const timeline: TimelineItem[] = [
   {
     year: '2022 – 2026',
-    title: 'Ingeniería en Ciencias de la Computación',
-    institution: 'UNICAH — Universidad Católica de Honduras',
+    title: 'Ingenieria en Ciencias de la Computacion',
+    institution: 'UNICAH — Universidad Catolica de Honduras',
     description:
-      'Formación completa en ingeniería de software, estructuras de datos, algoritmos, sistemas operativos y desarrollo de aplicaciones web y móviles.',
+      'Formacion completa en ingenieria de software, estructuras de datos, algoritmos, sistemas operativos y desarrollo de aplicaciones web y moviles.',
     type: 'education',
   },
   {
@@ -228,31 +191,31 @@ export const timeline: TimelineItem[] = [
     title: 'Desarrollador Fullstack — Proyectos PYME',
     institution: 'Freelance',
     description:
-      'Desarrollo de landing pages para PYMES hondureñas: MandadosExpress y Deco Floristería. Diseño, desarrollo e implementación completa.',
+      'Desarrollo de landing pages para PYMES hondurenas: MandadosExpress y Deco Floristeria. Diseno, desarrollo e implementacion completa.',
     type: 'experience',
   },
   {
     year: '2026',
-    title: 'Sistemas con IA y Gestión de Proyectos',
-    institution: 'Proyectos Universitarios / Personales',
+    title: 'Sistema de punto de venta web',
+    institution: 'Proyecto personal',
     description:
-      'Desarrollo de SprinFlow (Kanban fullstack) y AgroAI (sistema de recomendaciones con OpenAI + Pinecone). Implementación con Docker, Nginx y Traefik.',
+      'Desarrollo de POS Honduras para ventas, inventario, caja y facturacion con soporte multi-sucursal.',
     type: 'experience',
   },
   {
     year: '2026',
-    title: 'Especialización en DevOps y Cloud',
+    title: 'Especializacion en DevOps y Cloud',
     institution: 'Autodidacta',
     description:
-      'Profundización en contenedorización con Docker, CI/CD con GitHub Actions y despliegue con Traefik + Let\'s Encrypt.',
+      'Profundizacion en contenedorizacion con Docker, CI/CD con GitHub Actions y despliegue con Traefik + Let\'s Encrypt.',
     type: 'experience',
   },
 ];
 
 // ── Stats ──────────────────────────────────────────────────────
 export const stats: Stat[] = [
-  { value: 3,  suffix: '',  label: 'Sistemas Fullstack',  icon: Monitor },
+  { value: 1,  suffix: '',  label: 'Sistema Fullstack',  icon: Monitor },
   { value: 2,  suffix: '',  label: 'Landing Pages PYME',  icon: Rocket },
-  { value: 1,  suffix: '+', label: 'Años de Experiencia', icon: Hourglass },
-  { value: 12, suffix: '+', label: 'Tecnologías',         icon: Zap },
+  { value: 1,  suffix: '+', label: 'Ano de experiencia', icon: Hourglass },
+  { value: 12, suffix: '+', label: 'Tecnologias',         icon: Zap },
 ];

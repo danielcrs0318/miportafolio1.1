@@ -29,12 +29,12 @@ export function DevOps() {
         >
           <p className="devops__statement">
             {es
-              ? 'Un proyecto no está terminado cuando compila: está terminado cuando corre en un servidor.'
+              ? 'Un proyecto no esta terminado cuando compila: esta terminado cuando corre en un servidor.'
               : 'A project is not done when it compiles: it is done when it runs on a server.'}
           </p>
           <p>
             {es
-              ? 'Empaqueto en Docker, orquesto con Compose y publico detrás de Nginx y Traefik con certificados automáticos. Abajo puedes recorrer el flujo completo.'
+              ? 'Empaqueto en Docker, orquesto con Compose y publico detras de Nginx y Traefik con certificados automaticos. Abajo puedes recorrer el flujo completo.'
               : 'I package with Docker, orchestrate with Compose, and publish behind Nginx and Traefik with automatic certificates. Walk through the full flow below.'}
           </p>
         </motion.div>

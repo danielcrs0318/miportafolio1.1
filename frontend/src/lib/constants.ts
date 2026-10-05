@@ -6,7 +6,7 @@ export const SITE_URL = 'https://danielmolina.dev';
 export const SITE_NAME = 'Daniel Eduardo Molina Carias';
 export const SITE_TITLE = 'Daniel Molina | Fullstack Developer';
 export const SITE_DESCRIPTION =
-  'Portafolio de Daniel Eduardo Molina Carias — Ingeniero en Ciencias de la Computación. Especialista en desarrollo Fullstack, sistemas con IA y DevOps.';
+  'Portafolio de Daniel Eduardo Molina Carias — Ingeniero en Ciencias de la Computacion. Desarrollo Fullstack, sitios web y DevOps.';
 export const OG_IMAGE_URL = '/assets/og-image.svg';
 export const FAVICON_URL = '/favicon.png';
 
@@ -17,10 +17,10 @@ export const CV_URL = '/assets/Curriculum-Vitae_Daniel_Molina.pdf';
 
 export const NAV_ITEMS = [
   { label: 'Inicio',   labelEn: 'Home',     href: '#hero' },
-  { label: 'About',    labelEn: 'About',    href: '#about' },
-  { label: 'Services', labelEn: 'Services', href: '#services' },
-  { label: 'Certs',    labelEn: 'Certs',    href: '#certifications' },
-  { label: 'Work',     labelEn: 'Work',     href: '#projects' },
+  { label: 'Sobre mi', labelEn: 'About',    href: '#about' },
+  { label: 'Servicios',labelEn: 'Services', href: '#services' },
+  { label: 'Certificados',labelEn: 'Certs', href: '#certifications' },
+  { label: 'Proyectos',labelEn: 'Work',     href: '#projects' },
   { label: 'DevOps',   labelEn: 'DevOps',   href: '#devops' },
-  { label: 'Contact',  labelEn: 'Contact',  href: '#contact' },
+  { label: 'Contacto', labelEn: 'Contact',  href: '#contact' },
 ];

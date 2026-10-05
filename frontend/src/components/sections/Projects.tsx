@@ -3,6 +3,7 @@
 // ============================================================
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowUpRight, X } from 'lucide-react';
 import { SectionHeader } from '../shared/SectionHeader';
 import { useLangStore } from '../../store/langStore';
@@ -127,7 +128,11 @@ function ProjectSheet({ project, onClose }: { project: Project; onClose: () => v
 export function Projects() {
   const { lang } = useLangStore();
   const es = lang === 'es';
+  const location = useLocation();
+  const navigate = useNavigate();
   const [open, setOpen] = useState<Project | null>(null);
+  const requestedId = Number(new URLSearchParams(location.search).get('ver'));
+  const displayedProject = open ?? projects.find(project => project.id === requestedId) ?? null;
 
   return (
     <section id="projects" className="band">
@@ -135,7 +140,7 @@ export function Projects() {
         <SectionHeader
           title={es ? 'work' : 'work'}
           note={es
-            ? 'Algunos de mis proyectos más recientes.'
+            ? 'Algunos de mis proyectos mas recientes.'
             : 'Some of my latest work.'}
         />
 
@@ -234,7 +239,10 @@ export function Projects() {
       </div>
 
       <AnimatePresence>
-        {open && <ProjectSheet project={open} onClose={() => setOpen(null)} />}
+        {displayedProject && <ProjectSheet project={displayedProject} onClose={() => {
+          setOpen(null);
+          if (location.search) navigate(location.pathname, { replace: true });
+        }} />}
       </AnimatePresence>
     </section>
   );

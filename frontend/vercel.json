@@ -3,6 +3,14 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/sobre-mi", "destination": "/index.html" },
+    { "source": "/servicios", "destination": "/index.html" },
+    { "source": "/certificados", "destination": "/index.html" },
+    { "source": "/proyectos", "destination": "/index.html" },
+    { "source": "/devops", "destination": "/index.html" },
+    { "source": "/contacto", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",

@@ -8,8 +8,8 @@ import { pingBackend, wakeBackend } from '../lib/api';
 const KEEPALIVE_MS = 10 * 60 * 1000;
 
 /**
- * Observa la sección de contacto y despierta el API en cuanto es visible.
- * También hace keepalive mientras el usuario interactúa con el formulario.
+ * Observa la seccion de contacto y despierta el API en cuanto es visible.
+ * Tambien hace keepalive mientras el usuario interactua con el formulario.
  */
 export function useBackendWarmup(
   sectionRef: RefObject<HTMLElement | null>

@@ -41,12 +41,12 @@ const STAGES: Stage[] = [
     duration: 4200,
     lines: [
       { text: '$ git add .', kind: 'cmd' },
-      { text: '$ git commit -m "feat: nueva versión del portafolio"', kind: 'cmd' },
+      { text: '$ git commit -m "feat: nueva version del portafolio"', kind: 'cmd' },
       { text: '$ git push origin main', kind: 'cmd' },
       { text: 'Enumerating objects: 24, done.', kind: 'muted' },
       { text: 'To github.com:danielcrs0318/portafolio.git', kind: 'out' },
       { text: '   a1b2c3d..e4f5g6h  main -> main', kind: 'out' },
-      { text: '✓ Workflow "Deploy" disparado automáticamente', kind: 'ok' },
+      { text: '✓ Workflow "Deploy" disparado automaticamente', kind: 'ok' },
     ],
   },
   {
@@ -70,7 +70,7 @@ const STAGES: Stage[] = [
       { text: '        run: |', kind: 'muted' },
       { text: '          docker build -t ghcr.io/daniel/app:latest .', kind: 'cmd' },
       { text: '          docker push ghcr.io/daniel/app:latest', kind: 'cmd' },
-      { text: '      - name: Deploy vía SSH', kind: 'muted' },
+      { text: '      - name: Deploy via SSH', kind: 'muted' },
       { text: '        uses: appleboy/ssh-action@v1', kind: 'muted' },
     ],
   },

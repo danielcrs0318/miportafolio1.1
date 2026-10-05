@@ -34,7 +34,7 @@ export function About() {
         <SectionHeader
           title={es ? 'about' : 'about'}
           note={es
-            ? 'Un poco sobre quién soy y cómo trabajo.'
+            ? 'Un poco sobre quien soy y como trabajo.'
             : 'A little about who I am and how I work.'}
         />
 
@@ -46,7 +46,7 @@ export function About() {
           transition={{ duration: 0.7, ease: EASE }}
         >
           {es
-            ? 'Disfruto convertir problemas complejos en productos simples, útiles y listos para producción.'
+            ? 'Disfruto convertir problemas complejos en productos simples, utiles y listos para produccion.'
             : 'I enjoy turning complex problems into simple, useful products that are ready for production.'}
         </motion.p>
 
@@ -60,10 +60,10 @@ export function About() {
             <h3 className="about__col-title">{es ? 'Parte ingeniero' : 'Part engineer'}</h3>
             <ul className="about__list">
               <li>{es ? 'Sistemas fullstack' : 'Fullstack systems'}</li>
-              <li>{es ? 'APIs y autenticación' : 'APIs & authentication'}</li>
+              <li>{es ? 'APIs y autenticacion' : 'APIs & authentication'}</li>
               <li>{es ? 'Bases de datos relacionales' : 'Relational databases'}</li>
               <li>{es ? 'Integraciones con IA' : 'AI integrations'}</li>
-              <li>{es ? 'Pensar en producción desde el día uno' : 'Production-minded from day one'}</li>
+              <li>{es ? 'Pensar en produccion desde el dia uno' : 'Production-minded from day one'}</li>
             </ul>
           </motion.div>
 
@@ -79,7 +79,7 @@ export function About() {
               <li>PostgreSQL · Prisma</li>
               <li>Docker · Nginx · Traefik</li>
               <li>GitHub Actions · Portainer</li>
-              <li>{es ? 'Código limpio y mantenible' : 'Clean, maintainable code'}</li>
+              <li>{es ? 'Codigo limpio y mantenible' : 'Clean, maintainable code'}</li>
             </ul>
           </motion.div>
         </div>
@@ -93,13 +93,13 @@ export function About() {
         >
           <p>
             {es
-              ? 'Soy Ingeniero en Ciencias de la Computación egresado de UNICAH y trabajo desde Siguatepeque, Honduras. Me muevo cómodo en todo el ciclo: interfaz, API, datos y el servidor Linux donde todo termina corriendo.'
+              ? 'Soy Ingeniero en Ciencias de la Computacion egresado de UNICAH y trabajo desde Siguatepeque, Honduras. Me muevo comodo en todo el ciclo: interfaz, API, datos y el servidor Linux donde todo termina corriendo.'
               : "I'm a Computer Science Engineer from UNICAH, working out of Siguatepeque, Honduras. I move across the whole cycle: interface, API, data, and the Linux server where everything ends up running."}
           </p>
           <p>
             {es
-              ? 'He construido desde landing pages para PYMES hasta sistemas con autenticación, auditoría, búsqueda semántica con IA y despliegue contenerizado.'
-              : 'I have built everything from landing pages for small businesses to systems with authentication, auditing, AI semantic search, and containerized deployment.'}
+              ? 'He construido landing pages para PYMES y un sistema de punto de venta con inventario, caja, reportes y despliegue contenerizado.'
+              : 'I have built landing pages for small businesses and a point-of-sale system with inventory, cash management, reporting, and containerized deployment.'}
           </p>
           <div className="about__tags">
             <span className="tag"><MapPin size={13} strokeWidth={1.75} />Siguatepeque, HN</span>

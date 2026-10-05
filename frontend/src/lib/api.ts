@@ -4,7 +4,7 @@
 
 function resolveApiBase(): string {
   const raw = import.meta.env.VITE_API_URL?.trim();
-  // Vacío o "same" = same-origin (útil con proxy de Vercel)
+  // Vacio o "same" = same-origin (util con proxy de Vercel)
   if (!raw || raw === '/' || raw === 'same') return '';
   return raw.replace(/\/$/, '');
 }
@@ -84,7 +84,7 @@ export async function wakeBackend(force = false): Promise<boolean> {
   return wakePromise;
 }
 
-/** Arranca el wakeup en cuanto carga la página (no espera a Contacto) */
+/** Arranca el wakeup en cuanto carga la pagina (no espera a Contacto) */
 export function startEarlyWarmup(): void {
   if (typeof window === 'undefined') return;
   void wakeBackend();
@@ -102,7 +102,7 @@ export type ContactResult =
   | { ok: false; status: number; message: string; waking?: boolean };
 
 /**
- * Despierta el backend si hace falta y luego envía el formulario.
+ * Despierta el backend si hace falta y luego envia el formulario.
  * Reintenta hasta 2 veces si falla por red / cold start / 5xx.
  */
 export async function sendContactMessage(
@@ -113,7 +113,7 @@ export async function sendContactMessage(
     return {
       ok: false,
       status: 503,
-      message: 'El servidor está iniciando. Inténtalo de nuevo en unos segundos.',
+      message: 'El servidor esta iniciando. Intentalo de nuevo en unos segundos.',
       waking: true,
     };
   }

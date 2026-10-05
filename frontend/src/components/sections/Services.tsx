@@ -19,7 +19,7 @@ const services: Service[] = [
     icon: Layout,
     title: { es: 'Landing pages', en: 'Landing pages' },
     description: {
-      es: 'Páginas rápidas y orientadas a conversión para lanzar un producto, una campaña o una startup.',
+      es: 'Paginas rapidas y orientadas a conversion para lanzar un producto, una campana o una startup.',
       en: 'Fast, conversion-focused pages to launch a product, campaign, or startup.',
     },
   },
@@ -28,7 +28,7 @@ const services: Service[] = [
     icon: Building2,
     title: { es: 'Sitios corporativos', en: 'Corporate websites' },
     description: {
-      es: 'Sitios institucionales con identidad de marca, arquitectura clara y SEO técnico.',
+      es: 'Sitios institucionales con identidad de marca, arquitectura clara y SEO tecnico.',
       en: 'Institutional sites with brand identity, clear architecture, and technical SEO.',
     },
   },
@@ -37,7 +37,7 @@ const services: Service[] = [
     icon: Boxes,
     title: { es: 'Sistemas a medida', en: 'Custom systems' },
     description: {
-      es: 'Aplicaciones fullstack: paneles, e-commerce, autenticación, APIs y roles de usuario.',
+      es: 'Aplicaciones fullstack: paneles, e-commerce, autenticacion, APIs y roles de usuario.',
       en: 'Fullstack apps: dashboards, e-commerce, authentication, APIs, and user roles.',
     },
   },
@@ -46,7 +46,7 @@ const services: Service[] = [
     icon: Container,
     title: { es: 'Despliegue en Linux', en: 'Linux deployment' },
     description: {
-      es: 'Producción con Docker Compose, Nginx, Traefik con SSL y monitoreo en Portainer.io.',
+      es: 'Produccion con Docker Compose, Nginx, Traefik con SSL y monitoreo en Portainer.io.',
       en: 'Production with Docker Compose, Nginx, Traefik with SSL, and Portainer.io monitoring.',
     },
   },
@@ -55,7 +55,7 @@ const services: Service[] = [
     icon: Wrench,
     title: { es: 'Mantenimiento', en: 'Maintenance' },
     description: {
-      es: 'Soporte continuo, correcciones, rendimiento y nuevas funciones sobre proyectos en línea.',
+      es: 'Soporte continuo, correcciones, rendimiento y nuevas funciones sobre proyectos en linea.',
       en: 'Ongoing support, fixes, performance work, and new features on live projects.',
     },
   },

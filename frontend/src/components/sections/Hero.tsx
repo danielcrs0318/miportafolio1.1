@@ -4,7 +4,7 @@
 import { motion } from 'framer-motion';
 import { ArrowDownRight, ArrowUpRight } from 'lucide-react';
 import { useLangStore } from '../../store/langStore';
-import { CV_URL } from '../../lib/constants';
+import { CV_URL, EMAIL, GITHUB_URL, LINKEDIN_URL } from '../../lib/constants';
 import avatarImg from '/assets/fotoperfilCV.jpeg';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -19,22 +19,26 @@ export function Hero() {
   return (
     <section id="hero" className="hero">
       <div className="shell">
+        <div className="hero__window" aria-hidden="true">
+          <span className="hero__dots"><i /><i /><i /></span>
+          <span>daniel@portfolio:~</span>
+          <span>~/inicio</span>
+        </div>
         <div className="hero__intro">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: EASE }}
           >
-            <span className="hero__hello mono">
-              {es ? 'Hola, soy Daniel' : "Hi, I'm Daniel"}
-            </span>
+            <span className="hero__hello mono">&gt; {es ? 'Hola, soy' : "Hi, I'm"}</span>
             <h1 className="hero__name">
-              {es ? 'Diseño y construyo software que llega a producción.' : 'I design and build software that ships to production.'}
+              Daniel<span> Molina</span><b className="hero__cursor" aria-hidden="true">_</b>
             </h1>
+            <p className="hero__position">Fullstack Developer <span>/</span> Software Engineer</p>
             <p className="hero__bio">
               {es
-                ? 'Ingeniero en Ciencias de la Computación en Siguatepeque, Honduras. Fullstack, IA y despliegues reales con Docker.'
-                : 'Computer Science Engineer in Siguatepeque, Honduras. Fullstack, AI, and real Docker deployments.'}
+                ? 'Diseno y construyo software que llega a produccion. Fullstack, IA y despliegues reales desde Siguatepeque, Honduras.'
+                : 'I design and build software that ships. Fullstack, AI, and real deployments from Siguatepeque, Honduras.'}
             </p>
             <div className="hero__actions">
               <button onClick={() => scrollTo('projects')} className="btn btn--fill">
@@ -46,6 +50,11 @@ export function Hero() {
                 <ArrowUpRight size={16} strokeWidth={1.75} />
               </a>
             </div>
+            <div className="hero__socials" aria-label={es ? 'Enlaces profesionales' : 'Professional links'}>
+              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">GitHub</a>
+              <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <a href={`mailto:${EMAIL}`}>Email</a>
+            </div>
           </motion.div>
 
           <motion.div
@@ -55,6 +64,7 @@ export function Hero() {
             transition={{ duration: 0.9, delay: 0.15, ease: EASE }}
           >
             <img src={avatarImg} alt="Daniel Eduardo Molina Carias" />
+            <span className="hero__portrait-tag">DANIEL_MOLINA.JPG</span>
           </motion.div>
         </div>
 
@@ -68,7 +78,7 @@ export function Hero() {
             <h2 className="hero__role-title">{es ? 'ingeniero' : 'engineer'}</h2>
             <p className="hero__role-text">
               {es
-                ? 'Ingeniero en Computación especializado en sistemas fullstack, arquitecturas con IA y productos listos para usuarios reales.'
+                ? 'Ingeniero en Computacion especializado en sistemas fullstack, arquitecturas con IA y productos listos para usuarios reales.'
                 : 'CS engineer focused on fullstack systems, AI architectures, and products ready for real users.'}
             </p>
           </div>
@@ -76,7 +86,7 @@ export function Hero() {
             <h2 className="hero__role-title">{es ? 'developer' : 'developer'}</h2>
             <p className="hero__role-text">
               {es
-                ? 'Escribo código limpio y eficiente, y lo despliego con Docker, Nginx, Traefik y Portainer en servidores Linux.'
+                ? 'Escribo codigo limpio y eficiente, y lo despliego con Docker, Nginx, Traefik y Portainer en servidores Linux.'
                 : 'I write clean, efficient code and ship it with Docker, Nginx, Traefik, and Portainer on Linux servers.'}
             </p>
           </div>
