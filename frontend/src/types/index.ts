@@ -11,6 +11,7 @@ export interface Certification {
   year?: string;
   color: string;
   icon: LucideIcon;
+  logo?: { src: string; alt: string };
   credentialUrl?: string;
   status?: 'completed' | 'in-progress';
   description?: string;
@@ -39,6 +40,7 @@ export interface SkillItem {
 export interface SkillCategory {
   id: string;
   title: string;
+  titleEn?: string;
   icon: LucideIcon;
   skills: SkillItem[];
 }
@@ -48,6 +50,7 @@ export interface TimelineItem {
   title: string;
   institution: string;
   description: string;
+  en?: { title: string; institution: string; description: string };
   type: 'education' | 'experience';
 }
 
@@ -55,6 +58,7 @@ export interface Stat {
   value: number;
   suffix: string;
   label: string;
+  labelEn?: string;
   icon: LucideIcon;
 }
 

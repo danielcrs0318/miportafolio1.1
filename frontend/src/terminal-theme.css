@@ -1,37 +1,41 @@
-/* Blue terminal portfolio: inspired by the compact panel treatment of faav.net. */
+/* Monochrome portfolio: inspired by the compact panel treatment of faav.net. */
 :root {
-  --canvas: #eaf1ff;
-  --bg: #f8fbff;
-  --bg-soft: #edf4ff;
-  --bg-ink: #081426;
-  --text: #102340;
-  --text-dim: #465d7e;
-  --text-mute: #6680a4;
-  --line: rgba(24, 87, 179, .14);
-  --line-strong: rgba(24, 87, 179, .3);
-  --accent: #075bd7;
-  --accent-bright: #0c70f2;
+  --on-accent: #FFFFFF;
+  color-scheme: light;
+  --canvas: #F3F3F3;
+  --bg: #FFFFFF;
+  --bg-soft: #F6F6F6;
+  --bg-ink: #111111;
+  --text: #111111;
+  --text-dim: #505050;
+  --text-mute: #606060;
+  --line: rgba(0, 0, 0, .12);
+  --line-strong: rgba(0, 0, 0, .24);
+  --accent: #111111;
+  --accent-bright: #333333;
   --shell: 1000px;
   --gutter: clamp(1.25rem, 5vw, 3rem);
   --band-y: clamp(2.9rem, 6vw, 4.7rem);
 }
 
 [data-theme='dark'] {
-  --canvas: #050b16;
-  --bg: #080f1c;
-  --bg-soft: #101d31;
-  --bg-ink: #060c17;
-  --text: #e8f2ff;
-  --text-dim: #aabdd6;
-  --text-mute: #7590b3;
-  --line: rgba(104, 154, 225, .16);
-  --line-strong: rgba(104, 154, 225, .32);
-  --accent: #3d8bff;
-  --accent-bright: #70b0ff;
+  --on-accent: #111111;
+  color-scheme: dark;
+  --canvas: #080808;
+  --bg: #121212;
+  --bg-soft: #1B1B1B;
+  --bg-ink: #080808;
+  --text: #F4F4F4;
+  --text-dim: #BBBBBB;
+  --text-mute: #A0A0A0;
+  --line: rgba(255, 255, 255, .13);
+  --line-strong: rgba(255, 255, 255, .26);
+  --accent: #F4F4F4;
+  --accent-bright: #FFFFFF;
 }
 
 body { background: var(--canvas); color: var(--text); }
-::selection { background: var(--accent); color: #fff; }
+::selection { background: var(--accent); color: var(--on-accent); }
 :focus-visible { outline-color: var(--accent-bright); }
 
 .page {
@@ -188,7 +192,7 @@ body { background: var(--canvas); color: var(--text); }
 .ix-desc { font-size: .9rem; }
 .ix-meta { color: var(--accent-bright); font-size: .73rem; }
 .ix-preview { background: #091a35; }
-.ix-preview--placeholder { background: radial-gradient(circle at 80% 20%, rgba(31,123,255,.3), transparent 50%), linear-gradient(140deg, #0b2349, #071120); color: #e8f2ff; }
+.ix-preview--placeholder { background: radial-gradient(circle at 80% 20%, rgba(31,123,255,.3), transparent 50%), linear-gradient(140deg, #0b2349, #071120); color: #F4F4F4; }
 .ix-preview--placeholder small { color: #82baff; }
 .ix-live { border-color: rgba(100,169,255,.4); background: #071629; color: #d8eaff; }
 [data-theme='dark'] .ix-live { background: #071629; }

@@ -48,7 +48,7 @@ function PortfolioRoutes() {
         <meta property="og:description" content={SITE_DESCRIPTION} />
         <meta property="og:image" content={SITE_URL + OG_IMAGE_URL} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="theme-color" content={theme === 'dark' ? '#080b12' : '#eaf1ff'} />
+        <meta name="theme-color" content={theme === 'dark' ? '#080808' : '#F3F3F3'} />
         <link rel="canonical" href={SITE_URL + location.pathname} />
         <link rel="icon" type="image/png" href={FAVICON_URL} />
       </Helmet>

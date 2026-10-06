@@ -75,8 +75,9 @@ export const certifications: Certification[] = [
     title: 'GitHub Foundations',
     issuer: 'GitHub',
     year: '2025',
-    color: '#3D8BFF',
+    color: '#737373',
     icon: GitPullRequest,
+    logo: { src: '/assets/brands/github.svg', alt: 'GitHub' },
     status: 'completed',
   },
   {
@@ -84,8 +85,9 @@ export const certifications: Certification[] = [
     title: 'Fundamentos de Ciberseguridad',
     issuer: 'Cisco',
     year: '2025',
-    color: '#3D8BFF',
+    color: '#737373',
     icon: ShieldCheck,
+    logo: { src: '/assets/brands/cisco.svg', alt: 'Cisco' },
     status: 'completed',
   },
   {
@@ -93,8 +95,9 @@ export const certifications: Certification[] = [
     title: 'Generative AI Leader',
     issuer: 'Google Cloud',
     year: '2026',
-    color: '#3D8BFF',
+    color: '#737373',
     icon: Sparkles,
+    logo: { src: '/assets/brands/google-cloud.svg', alt: 'Google Cloud' },
     status: 'in-progress',
   },
 ];
@@ -130,6 +133,7 @@ export const skillCategories: SkillCategory[] = [
   {
     id: 'databases',
     title: 'Bases de Datos',
+    titleEn: 'Databases',
     icon: Database,
     skills: [
       { name: 'PostgreSQL' },
@@ -141,6 +145,7 @@ export const skillCategories: SkillCategory[] = [
   {
     id: 'ai',
     title: 'IA / ML',
+    titleEn: 'AI / ML',
     icon: Cpu,
     skills: [
       { name: 'OpenAI API' },
@@ -165,6 +170,7 @@ export const skillCategories: SkillCategory[] = [
   {
     id: 'security',
     title: 'Seguridad',
+    titleEn: 'Security',
     icon: Shield,
     skills: [
       { name: 'reCAPTCHA v2/v3' },
@@ -184,6 +190,7 @@ export const timeline: TimelineItem[] = [
     institution: 'UNICAH — Universidad Catolica de Honduras',
     description:
       'Formacion completa en ingenieria de software, estructuras de datos, algoritmos, sistemas operativos y desarrollo de aplicaciones web y moviles.',
+    en: { title: 'Computer Science Engineering', institution: 'UNICAH — Catholic University of Honduras', description: 'Comprehensive training in software engineering, data structures, algorithms, operating systems, and web and mobile development.' },
     type: 'education',
   },
   {
@@ -192,6 +199,7 @@ export const timeline: TimelineItem[] = [
     institution: 'Freelance',
     description:
       'Desarrollo de landing pages para PYMES hondurenas: MandadosExpress y Deco Floristeria. Diseno, desarrollo e implementacion completa.',
+    en: { title: 'Fullstack Developer — Small Businesses', institution: 'Freelance', description: 'Landing pages for Honduran businesses, including MandadosExpress and Deco Floristeria, from design through deployment.' },
     type: 'experience',
   },
   {
@@ -200,6 +208,7 @@ export const timeline: TimelineItem[] = [
     institution: 'Proyecto personal',
     description:
       'Desarrollo de POS Honduras para ventas, inventario, caja y facturacion con soporte multi-sucursal.',
+    en: { title: 'Web Point of Sale System', institution: 'Personal project', description: 'Built POS Honduras for sales, inventory, checkout, and invoicing across multiple branches.' },
     type: 'experience',
   },
   {
@@ -208,14 +217,15 @@ export const timeline: TimelineItem[] = [
     institution: 'Autodidacta',
     description:
       'Profundizacion en contenedorizacion con Docker, CI/CD con GitHub Actions y despliegue con Traefik + Let\'s Encrypt.',
+    en: { title: 'DevOps and Cloud Specialization', institution: 'Self-directed learning', description: 'Focused on Docker containers, CI/CD with GitHub Actions, and deployment with Traefik and Let\'s Encrypt.' },
     type: 'experience',
   },
 ];
 
 // ── Stats ──────────────────────────────────────────────────────
 export const stats: Stat[] = [
-  { value: 1,  suffix: '',  label: 'Sistema Fullstack',  icon: Monitor },
-  { value: 2,  suffix: '',  label: 'Landing Pages PYME',  icon: Rocket },
-  { value: 1,  suffix: '+', label: 'Ano de experiencia', icon: Hourglass },
-  { value: 12, suffix: '+', label: 'Tecnologias',         icon: Zap },
+  { value: 1,  suffix: '',  label: 'Sistema Fullstack', labelEn: 'Fullstack system', icon: Monitor },
+  { value: 2,  suffix: '',  label: 'Landing Pages PYME', labelEn: 'Business landing pages', icon: Rocket },
+  { value: 1,  suffix: '+', label: 'Ano de experiencia', labelEn: 'Year of experience', icon: Hourglass },
+  { value: 12, suffix: '+', label: 'Tecnologias', labelEn: 'Technologies', icon: Zap },
 ];
