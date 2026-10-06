@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Moon, Sun } from 'lucide-react';
+import { Mail, Moon, Sun } from 'lucide-react';
 import { CV_URL, EMAIL, GITHUB_URL, LINKEDIN_URL } from '../lib/constants';
 import { useLangStore } from '../store/langStore';
 import { useThemeStore } from '../store/themeStore';
@@ -60,12 +60,18 @@ export function HomeCard() {
                 </section>
 
                 <section className="home-group" aria-labelledby="home-socials">
-                  <h2 id="home-socials">SOCIALS</h2>
-                  <ul>
-                    <li><a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">GitHub</a></li>
-                    <li><a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-                    <li><a href={'mailto:' + EMAIL}>Email</a></li>
-                    <li><a href={CV_URL} download>{es ? 'Descargar CV' : 'Download CV'}</a></li>
+                  <h2 id="home-socials">{es ? 'REDES' : 'SOCIALS'}</h2>
+                  <ul className="home-socials">
+                    <li><a className="home-socials__icon-link" href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub"><img src="/assets/brands/github.svg" alt="" aria-hidden="true" /></a></li>
+                    <li>
+                      <a className="home-socials__icon-link" href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor" focusable="false" aria-hidden="true">
+                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.35V9h3.414v1.561h.049c.476-.9 1.637-1.85 3.37-1.85 3.6 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065a2.064 2.064 0 1 1 4.128 0c0 1.139-.92 2.065-2.065 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                      </a>
+                    </li>
+                    <li><a className="home-socials__icon-link" href={'mailto:' + EMAIL} aria-label={es ? 'Enviar correo electronico' : 'Send email'} title={es ? 'Correo' : 'Email'}><Mail size={21} strokeWidth={1.8} aria-hidden="true" /></a></li>
+                    <li className="home-socials__cv"><a href={CV_URL} download>{es ? 'Descargar CV' : 'Download CV'}</a></li>
                   </ul>
                 </section>
               </div>

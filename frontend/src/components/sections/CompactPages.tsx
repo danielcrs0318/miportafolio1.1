@@ -25,21 +25,14 @@ export function AboutScreen() {
   const es = useLangStore(state => state.lang === 'es');
   const [selected, setSelected] = useState(0);
   const [selectedSkill, setSelectedSkill] = useState(0);
-  const [mobileView, setMobileView] = useState<'profile' | 'journey'>('profile');
   const item = timeline[selected];
   const milestone = es ? item : item.en ?? item;
   const journeyMotion = useContentMotion(selected);
   const skillMotion = useContentMotion(selectedSkill);
-  const paneMotion = useContentMotion(mobileView);
-  const journeyPaneMotion = useContentMotion(mobileView);
   return <Screen className="screen screen--about">
     <ScreenHead number="01" title={es ? 'Sobre mi' : 'About me'} subtitle={es ? 'Ingenieria, producto y despliegue en una misma practica.' : 'Engineering, product, and deployment in one practice.'} />
-    <div className="about-screen__switch" role="group" aria-label={es ? 'Ver seccion' : 'View section'}>
-      <button type="button" className={mobileView === 'profile' ? 'is-active' : ''} onClick={() => setMobileView('profile')} aria-pressed={mobileView === 'profile'}>{es ? 'Perfil' : 'Profile'}</button>
-      <button type="button" className={mobileView === 'journey' ? 'is-active' : ''} onClick={() => setMobileView('journey')} aria-pressed={mobileView === 'journey'}>{es ? 'Trayectoria' : 'Journey'}</button>
-    </div>
     <ScreenBody className="screen-body about-screen">
-      <div ref={paneMotion} className={'about-screen__profile' + (mobileView === 'journey' ? ' about-screen__mobile-hide' : '')}>
+      <div className="about-screen__profile">
         <p className="screen-lead">{es ? 'Convierto problemas complejos en productos simples, utiles y listos para produccion.' : 'I turn complex problems into simple, useful products ready for production.'}</p>
         <p className="screen-copy">{es ? 'Soy Ingeniero en Ciencias de la Computacion de UNICAH. Trabajo desde Siguatepeque, Honduras, en interfaces, APIs, datos y servidores Linux.' : 'I am a Computer Science Engineer from UNICAH. Based in Siguatepeque, Honduras, I work across interfaces, APIs, data, and Linux servers.'}</p>
         <div className="screen-stats">
@@ -50,7 +43,7 @@ export function AboutScreen() {
         </div>
         <p ref={skillMotion} className="screen-skill-detail">{skillCategories[selectedSkill].skills.map(skill => skill.name).join(' · ')}</p>
       </div>
-      <div ref={journeyPaneMotion} className={'screen-feature' + (mobileView === 'profile' ? ' about-screen__mobile-hide' : '')}>
+      <div className="screen-feature">
         <span className="screen-eyebrow">{es ? 'TRAYECTORIA' : 'JOURNEY'}</span>
         <div className="screen-options" role="group" aria-label={es ? 'Seleccionar etapa' : 'Select milestone'}>
           {timeline.map((entry, index) => <button type="button" key={entry.title} className={selected === index ? 'is-active' : ''} onClick={() => setSelected(index)} aria-pressed={selected === index}>{String(index + 1).padStart(2, '0')}</button>)}

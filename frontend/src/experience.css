@@ -226,6 +226,94 @@
   .screen--about .about-screen { grid-template-rows: auto minmax(0, 1fr); }
 }
 
+/* Let content-led pages grow naturally on narrow screens instead of squeezing them into one viewport. */
+@media (max-width: 800px) {
+  .detail-page:has(:is(.screen--about, .screen--services, .screen--projects, .screen--devops)) {
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+  }
+  .detail-page:has(:is(.screen--about, .screen--services, .screen--projects, .screen--devops)) .detail-nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--canvas);
+  }
+  .detail-panel#main-content:has(:is(.screen--about, .screen--services, .screen--projects, .screen--devops)) {
+    flex: 0 0 auto;
+    min-height: calc(100svh - 80px);
+    overflow: visible;
+  }
+  .detail-panel :is(.screen--about, .screen--services, .screen--projects, .screen--devops) {
+    height: auto;
+  }
+  .detail-panel :is(.screen--about, .screen--services, .screen--projects, .screen--devops) > .screen-body {
+    flex: 0 0 auto;
+    min-height: 0;
+  }
+  .screen--services .service-screen {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+    gap: 14px;
+    padding-top: 20px;
+  }
+  .screen--services .service-card,
+  .screen--services .service-card:nth-child(4),
+  .screen--services .service-card:nth-child(5) { grid-column: auto; }
+  .screen--services .service-card { min-height: 170px; padding: 18px; }
+  .screen--projects .project-screen { grid-template-rows: auto; }
+  .screen--projects .project-screen__media { min-height: 240px; }
+  .screen--devops .devops-terminal { height: auto; }
+}
+
+@media (max-width: 620px) {
+  .detail-panel :is(.screen--about, .screen--services, .screen--projects, .screen--devops) > .screen-body { padding-top: 22px; }
+  .screen--about .about-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 28px;
+  }
+  .screen--about .about-screen__profile, .screen--about .screen-feature { height: auto; padding: 0; }
+  .screen--about .about-screen > :not(.about-screen__mobile-hide) { height: auto; }
+  .screen--about .screen-feature { padding-top: 24px; }
+  .screen--about .about-screen__profile .screen-copy { margin-top: 16px; }
+  .screen--about .screen-stats { gap: 12px; margin-top: 22px; padding-top: 16px; }
+  .screen--about .screen-skills { gap: 8px; margin-top: 22px; }
+  .screen--about .screen-skills button { padding: 6px 8px; font-size: .7rem; }
+  .screen--about .screen-skill-detail { min-height: 0; margin-top: 12px; padding: 4px 0 4px 12px; font-size: .72rem; }
+  .screen--about .screen-options { gap: 8px; margin: 14px 0; }
+  .screen--about .screen-feature .screen-selected { padding: 12px 0 12px 14px; }
+  .screen--services .service-screen { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .screen--services .service-card { min-height: 0; padding: 20px; }
+  .screen--services .service-card h2 { margin: 10px 0 8px; font-size: 1.1rem; }
+  .screen--services .service-card p { font-size: .87rem; line-height: 1.48; }
+  .screen--services .service-card__number, .screen--services .service-card__tech { font-size: .68rem; }
+  .screen--services .service-card__tech { padding-top: 16px; }
+  .screen--projects .project-picker { gap: 8px; padding-top: 18px; }
+  .screen--projects .project-picker button { padding: 7px 9px; font-size: .73rem; }
+  .screen--projects .project-screen { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto; gap: 22px; }
+  .screen--projects .project-screen__media { min-height: 0; aspect-ratio: 16 / 10; }
+  .screen--projects .project-screen__detail { padding-bottom: 8px; }
+  .screen--projects .project-screen__detail h2 { margin: 9px 0; font-size: 1.65rem; }
+  .screen--projects .project-screen__detail p { font-size: .87rem; line-height: 1.5; }
+  .screen--projects .project-screen__stack { gap: 7px; margin: 16px 0; }
+  .screen--projects .project-screen__actions { gap: 8px; }
+  .screen--devops .devops-screen { padding-top: 22px; }
+  .screen--devops .devops-terminal__workspace { display: flex; flex-direction: column; }
+  .screen--devops .devops-terminal__steps { gap: 5px; padding: 18px 16px; }
+  .screen--devops .devops-terminal__steps button { min-height: 39px; padding: 8px 10px; font-size: .82rem; }
+  .screen--devops .devops-terminal__progress { margin-top: 12px; padding-top: 0; }
+  .screen--devops .devops-terminal__output { justify-content: flex-start; padding: 22px 16px 26px; }
+  .screen--devops .devops-terminal__phase { margin-top: 16px; }
+  .screen--devops .devops-terminal__output h2 { margin: 8px 0; font-size: 1.55rem; }
+  .screen--devops .devops-terminal__output p { font-size: .86rem; line-height: 1.45; }
+  .screen--devops .devops-terminal__output code { margin-top: 16px; padding: 10px; font-size: .72rem; }
+  .screen--devops .devops-terminal__log { min-height: 42px; margin-top: 14px; gap: 5px; font-size: .68rem; }
+  .screen--devops .devops-terminal__log span:not(:last-child) { display: block; }
+  .screen--devops .devops-terminal__ready { margin-top: 14px; font-size: .68rem; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .home-card, .home-group, .devops-terminal__ready span, .devops-terminal__auto > span, .devops-terminal__log span, .contact-screen__availability > span { animation: none !important; }
   .service-card, .cert-screen__item, .cert-screen__logo, .cert-screen__item::after,
