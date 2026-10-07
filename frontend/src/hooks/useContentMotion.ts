@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react';
-import { useAnimate, useReducedMotion } from 'framer-motion';
+import { useAnimate } from 'framer-motion';
+import { usePrefersReducedMotion } from './usePrefersReducedMotion';
 
 // Animate existing content instead of remounting controls, preserving focus and form state.
 export function useContentMotion(selection: string | number) {
   const [scope, animate] = useAnimate();
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const previous = useRef(selection);
   useEffect(() => {
     if (!scope.current) return;

@@ -1,19 +1,20 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Screen, ScreenBody } from '../ScreenMotion';
-import { useContentMotion } from '../../hooks/useContentMotion';
+import { JourneyTerminal } from '../JourneyTerminal';
+import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 import type { Certification } from '../../types';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowUpRight, Check, Loader2, Terminal } from 'lucide-react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, ArrowRight, ArrowUpRight, Loader2, Terminal } from 'lucide-react';
 import { Toaster, toast } from 'sonner';
-import { certifications, projects, skillCategories, stats, timeline } from '../../lib/data';
+import { certifications, projects, stats } from '../../lib/data';
 import { EMAIL, GITHUB_URL, LINKEDIN_URL } from '../../lib/constants';
 import { sendContactMessage, wakeBackend } from '../../lib/api';
 import { useLangStore } from '../../store/langStore';
 import { useThemeStore } from '../../store/themeStore';
 
 function ScreenHead({ number, title, subtitle }: { number: string; title: string; subtitle: string }) {
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   return <motion.header className="screen-head" variants={{ hidden: { opacity: reduced ? 1 : 0, y: reduced ? 0 : 8 }, visible: { opacity: 1, y: 0, transition: { duration: reduced ? 0 : 0.3 } } }}>
     <span className="screen-head__number">/ {number}</span>
     <h1>{title}</h1>
@@ -21,39 +22,59 @@ function ScreenHead({ number, title, subtitle }: { number: string; title: string
   </motion.header>;
 }
 
+const featuredWork = [
+  {
+    number: '01',
+    title: { es: 'Sitios para negocios', en: 'Sites for businesses' },
+    detail: { es: 'MandadosExpress y Deco Floristeria: experiencias claras, adaptadas a movil y con contacto directo.', en: 'MandadosExpress and Deco Floristeria: clear, mobile-ready experiences with direct contact.' },
+    href: '/proyectos?ver=3',
+    action: { es: 'Ver proyectos', en: 'View projects' },
+  },
+  {
+    number: '02',
+    title: { es: 'Sistemas de negocio', en: 'Business systems' },
+    detail: { es: 'POS Honduras: ventas, inventario, caja y roles de usuario en una sola aplicacion.', en: 'POS Honduras: sales, inventory, cash management, and user roles in one application.' },
+    href: '/proyectos?ver=5',
+    action: { es: 'Ver el sistema', en: 'View the system' },
+  },
+  {
+    number: '03',
+    title: { es: 'Entrega a produccion', en: 'Production delivery' },
+    detail: { es: 'Un proceso de integracion y despliegue con pruebas, contenedores, HTTPS y verificacion.', en: 'An integration and deployment process with tests, containers, HTTPS, and verification.' },
+    href: '/devops',
+    action: { es: 'Ver pipeline', en: 'View pipeline' },
+  },
+];
+
 export function AboutScreen() {
   const es = useLangStore(state => state.lang === 'es');
-  const [selected, setSelected] = useState(0);
-  const [selectedSkill, setSelectedSkill] = useState(0);
-  const item = timeline[selected];
-  const milestone = es ? item : item.en ?? item;
-  const journeyMotion = useContentMotion(selected);
-  const skillMotion = useContentMotion(selectedSkill);
   return <Screen className="screen screen--about">
     <ScreenHead number="01" title={es ? 'Sobre mi' : 'About me'} subtitle={es ? 'Ingenieria, producto y despliegue en una misma practica.' : 'Engineering, product, and deployment in one practice.'} />
     <ScreenBody className="screen-body about-screen">
       <div className="about-screen__profile">
-        <p className="screen-lead">{es ? 'Convierto problemas complejos en productos simples, utiles y listos para produccion.' : 'I turn complex problems into simple, useful products ready for production.'}</p>
-        <p className="screen-copy">{es ? 'Soy Ingeniero en Ciencias de la Computacion de UNICAH. Trabajo desde Siguatepeque, Honduras, en interfaces, APIs, datos y servidores Linux.' : 'I am a Computer Science Engineer from UNICAH. Based in Siguatepeque, Honduras, I work across interfaces, APIs, data, and Linux servers.'}</p>
+        <div className="about-screen__story">
+          <p className="screen-lead">{es ? 'Convierto problemas complejos en productos simples, utiles y listos para produccion.' : 'I turn complex problems into simple, useful products ready for production.'}</p>
+          <p className="screen-copy">{es ? 'Soy Ingeniero en Ciencias de la Computacion de UNICAH. Trabajo desde Siguatepeque, Honduras, en interfaces, APIs, datos y servidores Linux.' : 'I am a Computer Science Engineer from UNICAH. Based in Siguatepeque, Honduras, I work across interfaces, APIs, data, and Linux servers.'}</p>
+        </div>
         <div className="screen-stats">
           {stats.map(stat => <div key={stat.label}><strong>{stat.value}{stat.suffix}</strong><span>{es ? stat.label : stat.labelEn ?? stat.label}</span></div>)}
         </div>
-        <div className="screen-skills" aria-label={es ? 'Tecnologias' : 'Technologies'}>
-          {skillCategories.map((category, index) => <button type="button" key={category.id} className={selectedSkill === index ? 'is-active' : ''} onClick={() => setSelectedSkill(index)} aria-pressed={selectedSkill === index}>{es ? category.title : category.titleEn ?? category.title}</button>)}
-        </div>
-        <p ref={skillMotion} className="screen-skill-detail">{skillCategories[selectedSkill].skills.map(skill => skill.name).join(' · ')}</p>
       </div>
-      <div className="screen-feature">
-        <span className="screen-eyebrow">{es ? 'TRAYECTORIA' : 'JOURNEY'}</span>
-        <div className="screen-options" role="group" aria-label={es ? 'Seleccionar etapa' : 'Select milestone'}>
-          {timeline.map((entry, index) => <button type="button" key={entry.title} className={selected === index ? 'is-active' : ''} onClick={() => setSelected(index)} aria-pressed={selected === index}>{String(index + 1).padStart(2, '0')}</button>)}
+      <JourneyTerminal es={es} />
+      <section className="about-screen__work" aria-labelledby="about-work-title">
+        <div className="about-screen__work-heading">
+          <h2 id="about-work-title">{es ? 'TRABAJO APLICADO' : 'WORK IN PRACTICE'}</h2>
+          <p>{es ? 'Ejemplos concretos de lo que construyo y entrego.' : 'Concrete examples of what I build and deliver.'}</p>
         </div>
-        <article ref={journeyMotion} className="screen-selected">
-          <span className="screen-selected__meta">{item.year} / {milestone.institution}</span>
-          <h2>{milestone.title}</h2>
-          <p>{milestone.description}</p>
-        </article>
-      </div>
+        <div className="about-screen__work-list">
+          {featuredWork.map(item => <article className="about-screen__work-item" key={item.number}>
+            <span className="about-screen__work-number">{item.number}</span>
+            <h3>{es ? item.title.es : item.title.en}</h3>
+            <p>{es ? item.detail.es : item.detail.en}</p>
+            <Link to={item.href}>{es ? item.action.es : item.action.en} <ArrowUpRight size={15} aria-hidden="true" /></Link>
+          </article>)}
+        </div>
+      </section>
     </ScreenBody>
   </Screen>;
 }
@@ -68,7 +89,7 @@ const services = [
 
 export function ServicesScreen() {
   const lang = useLangStore(state => state.lang);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   return <Screen className="screen screen--services">
     <ScreenHead number="02" title={lang === 'es' ? 'Servicios' : 'Services'} subtitle={lang === 'es' ? 'Soluciones concretas para llevar una idea a produccion.' : 'Practical ways to bring an idea into production.'} />
     <ScreenBody className="screen-body service-screen">
@@ -93,7 +114,7 @@ function CertificateLogo({ cert }: { cert: Certification }) {
 
 export function CertificationsScreen() {
   const es = useLangStore(state => state.lang === 'es');
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const [selected, setSelected] = useState<number | null>(null);
   return <Screen className="screen screen--certifications">
     <ScreenHead number="03" title={es ? 'Certificados' : 'Certificates'} subtitle={es ? 'Formacion continua en desarrollo, seguridad e IA.' : 'Continuous learning in development, security, and AI.'} />
@@ -116,85 +137,105 @@ export function CertificationsScreen() {
 
 export function ProjectsScreen() {
   const es = useLangStore(state => state.lang === 'es');
+  const reduced = usePrefersReducedMotion();
   const [params, setParams] = useSearchParams();
-  const [showScope, setShowScope] = useState(false);
+  const [visibleLine, setVisibleLine] = useState(0);
   const selectedId = Number(params.get('ver'));
   const project = projects.find(item => item.id === selectedId) ?? projects[0];
-  const imageMotion = useContentMotion(project.id);
-  const projectMotion = useContentMotion(`${project.id}-${showScope}`);
-  const selectProject = (id: number) => { setParams({ ver: String(id) }); setShowScope(false); };
+  const projectIndex = projects.findIndex(item => item.id === project.id);
+  const step = reduced ? 3 : visibleLine;
+  const changeProject = (offset: number) => {
+    const next = projects[(projectIndex + offset + projects.length) % projects.length];
+    setVisibleLine(0);
+    setParams({ ver: String(next.id) }, { replace: true });
+  };
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      if (!reduced && visibleLine < 3) {
+        setVisibleLine(value => value + 1);
+      } else {
+        const index = projects.findIndex(item => item.id === project.id);
+        setVisibleLine(0);
+        setParams({ ver: String(projects[(index + 1) % projects.length].id) }, { replace: true });
+      }
+    }, !reduced && visibleLine < 3 ? 620 : 5400);
+    return () => window.clearTimeout(timer);
+  }, [project.id, reduced, setParams, visibleLine]);
+
   return <Screen className="screen screen--projects">
     <ScreenHead number="04" title={es ? 'Proyectos' : 'Projects'} subtitle={es ? 'Productos publicados y sistemas construidos de principio a fin.' : 'Published products and systems built end to end.'} />
-    <div className="project-picker" role="group" aria-label={es ? 'Seleccionar proyecto' : 'Select project'}>
-      {projects.map((entry, index) => <button key={entry.id} type="button" onClick={() => selectProject(entry.id)} className={project.id === entry.id ? 'is-active' : ''} aria-pressed={project.id === entry.id}><span>0{index + 1}</span> {entry.title}</button>)}
-    </div>
-    <ScreenBody className={'screen-body project-screen' + (showScope ? ' project-screen--scope' : '')}>
-      <div ref={imageMotion} className="project-screen__media">
-        <img src={project.image} alt={es ? 'Vista previa de ' + project.title : 'Preview of ' + project.title} />
+    <ScreenBody className="screen-body projects-terminal-screen">
+      <div className="project-terminal">
+        <div className="devops-terminal__bar">
+          <div className="devops-terminal__dots" aria-hidden="true"><i/><i/><i/></div>
+          <span><Terminal size={14} aria-hidden="true"/> projects — zsh</span>
+          <span className="devops-terminal__auto"><span aria-hidden="true" />AUTO</span>
+        </div>
+        <div className="project-terminal__body">
+          <div className="project-terminal__command"><span>daniel@macbook ~/portfolio/projects %</span> ./showcase.sh --project={project.id}</div>
+          <div className="project-terminal__sequence" aria-live="polite">
+            <span className={step >= 1 ? 'is-visible' : ''}><b>›</b> {es ? 'Localizando proyecto' : 'Locating project'}: {project.title}</span>
+            <span className={step >= 2 ? 'is-visible' : ''}><b>›</b> {es ? 'Cargando captura y recursos...' : 'Loading preview and assets...'}</span>
+            <span className={step >= 3 ? 'is-visible' : ''}><b>✓</b> {es ? 'Vista previa lista.' : 'Preview ready.'}</span>
+          </div>
+          <div className="project-terminal__workspace">
+            <div className="project-terminal__media">
+              <motion.img key={project.id} src={project.image} alt={es ? 'Vista previa de ' + project.title : 'Preview of ' + project.title}
+                initial={false} animate={{ opacity: step >= 2 ? 1 : 0, scale: step >= 2 ? 1 : 0.985 }} transition={{ duration: reduced ? 0 : 0.35 }} />
+              <span className="project-terminal__media-caption">preview/{project.id}.png</span>
+            </div>
+            <article className="project-terminal__detail" aria-live="polite">
+              <span className="project-terminal__eyebrow">PROJECT {String(projectIndex + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}</span>
+              <h2>{project.title}</h2>
+              <p>{project.longDescription}</p>
+              <div className="project-terminal__stack">{project.stack.map(tech => <span key={tech}>{tech}</span>)}</div>
+              <div className="project-terminal__actions">
+                {project.demo && <a href={project.demo} target="_blank" rel="noopener noreferrer">{es ? 'Ver sitio' : 'Live site'} <ArrowUpRight size={15} /></a>}
+                {project.github && <a href={project.github} target="_blank" rel="noopener noreferrer">GitHub <ArrowUpRight size={15} /></a>}
+              </div>
+            </article>
+          </div>
+          <div className="project-terminal__footer">
+            <div className="project-terminal__progress" role="progressbar" aria-label={es ? 'Progreso del proyecto' : 'Project loading progress'} aria-valuemin={0} aria-valuemax={3} aria-valuenow={step}><span style={{ transform: `scaleX(${step / 3})` }} /></div>
+            <div className="project-terminal__controls">
+              <span>{String(projectIndex + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}</span>
+              <button type="button" onClick={() => changeProject(-1)} aria-label={es ? 'Proyecto anterior' : 'Previous project'}><ArrowLeft size={16} /></button>
+              <button type="button" onClick={() => changeProject(1)} aria-label={es ? 'Proyecto siguiente' : 'Next project'}><ArrowRight size={16} /></button>
+            </div>
+          </div>
+        </div>
       </div>
-      <article className="project-screen__detail">
-        <div ref={projectMotion} className="project-screen__copy">
-        <span className="screen-selected__meta">{project.badge}</span>
-        <h2>{project.title}</h2>
-        <p>{showScope ? project.highlights.join(' · ') : project.longDescription}</p>
-        <div className="project-screen__stack">{project.stack.map(tech => <span key={tech}>{tech}</span>)}</div>
-        </div>
-        <div className="project-screen__actions">
-          <button type="button" onClick={() => setShowScope(value => !value)}>{showScope ? (es ? 'Resumen' : 'Summary') : (es ? 'Alcance' : 'Scope')}</button>
-          {project.demo && <a href={project.demo} target="_blank" rel="noopener noreferrer">{es ? 'Ver sitio' : 'Live site'} <ArrowUpRight size={15} /></a>}
-          {project.github && <a href={project.github} target="_blank" rel="noopener noreferrer">GitHub <ArrowUpRight size={15} /></a>}
-        </div>
-      </article>
     </ScreenBody>
   </Screen>;
 }
 
-const stages = [
-  { name: 'GitHub', es: 'El codigo se versiona en GitHub. Cada cambio queda revisable y preparado para integrar.', en: 'Code is versioned on GitHub. Every change is reviewable and ready to integrate.', command: 'git push origin main', logs: { es: ['Conectando con el repositorio...', 'Cambios enviados y versionados.'], en: ['Connecting to repository...', 'Changes pushed and versioned.'] } },
-  { name: 'Actions', es: 'GitHub Actions automatiza la integracion y prepara el despliegue sin pasos manuales repetidos.', en: 'GitHub Actions automates integration and prepares deployment without repeated manual steps.', command: 'gh workflow run deploy.yml', logs: { es: ['Ejecutando pruebas y compilacion...', 'Workflow completado sin errores.'], en: ['Running tests and build...', 'Workflow finished without errors.'] } },
-  { name: 'Docker', es: 'Docker Compose empaqueta los servicios y mantiene entornos consistentes entre desarrollo y produccion.', en: 'Docker Compose packages services and keeps development and production environments consistent.', command: 'docker compose up -d --build', logs: { es: ['Creando imagenes y servicios...', 'Contenedores iniciados.'], en: ['Building images and services...', 'Containers started.'] } },
-  { name: 'Traefik', es: 'Traefik y Nginx enrutan el trafico, gestionan HTTPS y publican las aplicaciones de forma segura.', en: 'Traefik and Nginx route traffic, manage HTTPS, and serve applications securely.', command: 'traefik check --configFile=traefik.yml', logs: { es: ['Verificando rutas y certificados...', 'HTTPS activo y trafico enrutado.'], en: ['Checking routes and certificates...', 'HTTPS active and traffic routed.'] } },
-  { name: 'Portainer', es: 'Portainer permite observar contenedores, revisar su estado y mantener la operacion diaria.', en: 'Portainer makes it easy to observe containers, check health, and manage daily operations.', command: 'docker ps --format "{{.Status}}"', logs: { es: ['Consultando estado de contenedores...', 'Servicios saludables y disponibles.'], en: ['Checking container status...', 'Services healthy and available.'] } },
+const pipelineSteps = [
+  { command: 'git push origin main', result: { es: 'Cambios enviados y versionados.', en: 'Changes pushed and versioned.' } },
+  { command: 'gh workflow run deploy.yml', result: { es: 'Pruebas y compilacion completadas.', en: 'Tests and build completed.' } },
+  { command: 'docker compose up -d --build', result: { es: 'Imagenes creadas y contenedores iniciados.', en: 'Images built and containers started.' } },
+  { command: 'traefik check --configFile=traefik.yml', result: { es: 'HTTPS activo y trafico enrutado.', en: 'HTTPS active and traffic routed.' } },
+  { command: 'docker ps --format "{{.Status}}"', result: { es: 'Servicios saludables y disponibles.', en: 'Services healthy and available.' } },
 ];
+const pipelinePath = '~/portfolio';
 
 export function DevOpsScreen() {
   const es = useLangStore(state => state.lang === 'es');
-  const [selected, setSelected] = useState(0);
-  const [completed, setCompleted] = useState(0);
-  const [visibleLines, setVisibleLines] = useState(0);
-  const [cycleDone, setCycleDone] = useState(false);
-  const stage = stages[selected];
-  const detailMotion = useContentMotion(selected);
+  const [visibleCount, setVisibleCount] = useState(0);
+  const lines = pipelineSteps.flatMap(stage => [
+    { kind: 'command', text: stage.command },
+    { kind: 'success', text: stage.result[es ? 'es' : 'en'] },
+  ]);
+  lines.push({ kind: 'success', text: es ? 'Pipeline completado. Servicios disponibles.' : 'Pipeline complete. Services available.' });
+  const complete = visibleCount === lines.length;
+  const progress = visibleCount / lines.length;
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      if (cycleDone) {
-        setSelected(0);
-        setCompleted(0);
-        setVisibleLines(0);
-        setCycleDone(false);
-      } else if (visibleLines < stage.logs.es.length) {
-        setVisibleLines(lines => lines + 1);
-      } else if (selected < stages.length - 1) {
-        setCompleted(selected + 1);
-        setSelected(index => index + 1);
-        setVisibleLines(0);
-      } else {
-        setCompleted(stages.length);
-        setCycleDone(true);
-      }
-    }, cycleDone ? 1800 : visibleLines === 0 ? 650 : visibleLines === 1 ? 700 : 950);
+      setVisibleCount(count => count >= lines.length ? 0 : count + 1);
+    }, complete ? 2400 : 620);
     return () => window.clearTimeout(timer);
-  }, [cycleDone, selected, visibleLines, stage.logs.es.length]);
-
-  const selectStage = (index: number) => {
-    setSelected(index);
-    setCompleted(index);
-    setVisibleLines(0);
-    setCycleDone(false);
-  };
-  const statusLabel = cycleDone ? (es ? 'Secuencia completada' : 'Sequence complete')
-    : (es ? 'Simulacion en curso' : 'Simulation running');
+  }, [complete, visibleCount, lines.length]);
 
   return <Screen className="screen screen--devops">
     <ScreenHead number="05" title="DevOps" subtitle={es ? 'Del repositorio al servidor, con un proceso claro y repetible.' : 'From repository to server with a clear, repeatable process.'} />
@@ -202,27 +243,39 @@ export function DevOpsScreen() {
       <div className="devops-terminal">
         <div className="devops-terminal__bar">
           <div className="devops-terminal__dots" aria-hidden="true"><i/><i/><i/></div>
-          <span><Terminal size={14} aria-hidden="true"/> daniel@deploy:~</span>
+          <span><Terminal size={14} aria-hidden="true"/> deploy — zsh</span>
           <span className="devops-terminal__auto"><span aria-hidden="true" />AUTO</span>
         </div>
-        <div className="devops-terminal__workspace">
-          <div className="devops-terminal__steps" role="group" aria-label={es ? 'Seleccionar etapa' : 'Select stage'}>
-            <span className="devops-terminal__prompt">$ {es ? 'pipeline · 5 etapas' : 'pipeline · 5 stages'}</span>
-            {stages.map((entry, index) => <button type="button" key={entry.name} className={(selected === index ? 'is-active ' : '') + (completed > index ? 'is-complete' : '')} onClick={() => selectStage(index)} aria-pressed={selected === index}>
-              <span className="devops-terminal__step-index">0{index + 1}</span><span>{entry.name}</span>{completed > index && <Check size={14} aria-hidden="true"/>}
-            </button>)}
-            <div className="devops-terminal__progress" aria-hidden="true">{stages.map((entry, index) => <span key={entry.name} className={completed > index ? 'is-complete' : selected === index ? 'is-current' : ''} />)}</div>
+        <div className="devops-terminal__output">
+          <div className="devops-terminal__heading">
+            <span className="devops-terminal__prompt"><span>daniel@macbook {pipelinePath} %</span> ./pipeline.sh --deploy</span>
+            <span className={complete ? 'is-complete' : ''}>{complete ? (es ? 'FINALIZADO' : 'COMPLETE') : (es ? 'EN EJECUCION' : 'RUNNING')}</span>
           </div>
-          <div ref={detailMotion} className="devops-terminal__output">
-            <span className="devops-terminal__prompt">$ ./pipeline.sh --stage=0{selected + 1}</span>
-            <span className="devops-terminal__phase">[{es ? 'ETAPA' : 'STAGE'} 0{selected + 1}/0{stages.length}]</span>
-            <h2 aria-live="polite">{stage.name}</h2>
-            <p>{es ? stage.es : stage.en}</p>
-            <code>&gt; {stage.command}</code>
-            <div className="devops-terminal__log" aria-label={es ? 'Salida de la simulacion' : 'Simulation output'}>
-              {stage.logs[es ? 'es' : 'en'].slice(0, visibleLines).map((line, index) => <span key={index}><b>{index === 0 ? '›' : '✓'}</b> {line}</span>)}
+          <div className="devops-terminal__workspace">
+            <div className="devops-terminal__log" aria-label={es ? 'Salida del pipeline' : 'Pipeline output'}>
+              {lines.map((line, index) => <span key={index} className={`devops-terminal__line devops-terminal__line--${line.kind}${index < visibleCount ? ' is-visible' : ''}`} aria-hidden={index >= visibleCount}>
+                {line.kind === 'command'
+                  ? <><span className="devops-terminal__base-path">{pipelinePath} %</span> <span className="devops-terminal__command-text">{line.text}</span></>
+                  : <><b aria-hidden="true">✓</b> {line.text}</>}
+              </span>)}
             </div>
-            <span className="devops-terminal__ready" aria-live="polite"><span aria-hidden="true"/> {statusLabel}</span>
+            <div className="devops-terminal__claude" role="img" aria-label={es ? 'Claude Code pixelado' : 'Pixelated Claude Code'}>
+              <svg className="claude-code-sprite" viewBox="0 0 32 32" shapeRendering="crispEdges" aria-hidden="true">
+                <g fill="#D97757">
+                  <path d="M6 4h20v5h3v6h-3v6H6v-6H3V9h3zM6 21h3v8H6zM11 21h3v8h-3zM19 21h3v8h-3zM24 21h3v8h-3z" />
+                </g>
+                <g className="claude-code-sprite__eyes" fill="#090d11">
+                  <path d="M8 10h3v2h2v2h-2v2H8v-2h3v-2H8z" />
+                  <path d="M8 10h3v2h2v2h-2v2H8v-2h3v-2H8z" transform="translate(32 0) scale(-1 1)" />
+                </g>
+              </svg>
+            </div>
+          </div>
+          <div className="devops-terminal__footer">
+            <div className="devops-terminal__progress" role="progressbar" aria-label={es ? 'Progreso del pipeline' : 'Pipeline progress'} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)}>
+              <span style={{ transform: `scaleX(${progress})` }} />
+            </div>
+            <span className={'devops-terminal__ready' + (complete ? ' is-complete' : '')} aria-live="polite"><span aria-hidden="true"/> {complete ? (es ? 'Despliegue completado' : 'Deployment complete') : (es ? 'Despliegue automatico en curso' : 'Automatic deployment running')}</span>
           </div>
         </div>
       </div>
@@ -232,7 +285,7 @@ export function DevOpsScreen() {
 
 export function ContactScreen() {
   const es = useLangStore(state => state.lang === 'es');
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const theme = useThemeStore(state => state.theme);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
