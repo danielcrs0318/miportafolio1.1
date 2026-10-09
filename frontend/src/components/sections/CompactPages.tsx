@@ -1,25 +1,53 @@
-import { useEffect, useState, type FormEvent } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { Screen, ScreenBody } from '../ScreenMotion';
 import { JourneyTerminal } from '../JourneyTerminal';
-import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 import type { Certification } from '../../types';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, ArrowUpRight, Loader2, Terminal } from 'lucide-react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { ArrowUpRight, Award, Building2, Folder, Layers3, Loader2, Mail, PanelsTopLeft, Rocket, Server, Terminal, UserRound, Wrench, X, type LucideIcon } from 'lucide-react';
 import { Toaster, toast } from 'sonner';
-import { certifications, projects, stats } from '../../lib/data';
+import { certifications, projects } from '../../lib/data';
 import { EMAIL, GITHUB_URL, LINKEDIN_URL } from '../../lib/constants';
 import { sendContactMessage, wakeBackend } from '../../lib/api';
 import { useLangStore } from '../../store/langStore';
 import { useThemeStore } from '../../store/themeStore';
+import avatar from '/assets/fotoperfilCV.jpeg';
 
 function ScreenHead({ number, title, subtitle }: { number: string; title: string; subtitle: string }) {
-  const reduced = usePrefersReducedMotion();
-  return <motion.header className="screen-head" variants={{ hidden: { opacity: reduced ? 1 : 0, y: reduced ? 0 : 8 }, visible: { opacity: 1, y: 0, transition: { duration: reduced ? 0 : 0.3 } } }}>
-    <span className="screen-head__number">/ {number}</span>
-    <h1>{title}</h1>
-    <p>{subtitle}</p>
-  </motion.header>;
+  const icons: Record<string, LucideIcon> = { '01': UserRound, '02': Layers3, '03': Award, '04': Folder, '05': Terminal, '06': Mail };
+  const Icon = icons[number] ?? Folder;
+  return <header className="screen-head">
+    <span className={`screen-head__app-icon screen-head__app-icon--${number}`} aria-hidden="true"><Icon size={25} strokeWidth={1.8} /></span>
+    <div className="screen-head__copy">
+      <span className="screen-head__number">PORTFOLIO / {number}</span>
+      <h1>{title}</h1>
+      <p>{subtitle}</p>
+    </div>
+  </header>;
+}
+
+type FinderOption = { id: string; label: string; icon: LucideIcon };
+
+function FinderSidebar({ title, options, selected, onSelect }: { title: string; options: FinderOption[]; selected: string; onSelect: (id: string) => void }) {
+  return <aside className="mac-finder__sidebar" aria-label={title}>
+    <h2>{title}</h2>
+    {options.map(option => <button key={option.id} type="button" className={selected === option.id ? 'is-active' : ''} onClick={() => onSelect(option.id)} aria-pressed={selected === option.id}>
+      <option.icon size={15} strokeWidth={1.9} aria-hidden="true" />{option.label}
+    </button>)}
+  </aside>;
+}
+
+function FinderQuickLook({ title, children, onClose }: { title: string; children: ReactNode; onClose: () => void }) {
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [onClose]);
+  return <div className="mac-quicklook" onPointerDown={event => { if (event.target === event.currentTarget) onClose(); }}>
+    <section className="mac-quicklook__card" role="dialog" aria-modal="true" aria-label={title}>
+      <button type="button" className="mac-quicklook__close" onClick={onClose} aria-label="Cerrar" autoFocus><X size={16} /></button>
+      {children}
+    </section>
+  </div>;
 }
 
 const featuredWork = [
@@ -52,12 +80,10 @@ export function AboutScreen() {
     <ScreenHead number="01" title={es ? 'Sobre mi' : 'About me'} subtitle={es ? 'Ingenieria, producto y despliegue en una misma practica.' : 'Engineering, product, and deployment in one practice.'} />
     <ScreenBody className="screen-body about-screen">
       <div className="about-screen__profile">
+        <div className="mac-about__head"><img className="mac-about__avatar" src={avatar} alt="Retrato de Daniel Molina" width="828" height="1149" decoding="async" /><div className="mac-about__identity"><h2>Daniel <span>Molina</span></h2><p>{es ? 'Ingeniero en Ciencias de la Computacion · Fullstack, IA y DevOps' : 'Computer Science Engineer · Fullstack, AI and DevOps'}</p></div></div>
         <div className="about-screen__story">
           <p className="screen-lead">{es ? 'Convierto problemas complejos en productos simples, utiles y listos para produccion.' : 'I turn complex problems into simple, useful products ready for production.'}</p>
           <p className="screen-copy">{es ? 'Soy Ingeniero en Ciencias de la Computacion de UNICAH. Trabajo desde Siguatepeque, Honduras, en interfaces, APIs, datos y servidores Linux.' : 'I am a Computer Science Engineer from UNICAH. Based in Siguatepeque, Honduras, I work across interfaces, APIs, data, and Linux servers.'}</p>
-        </div>
-        <div className="screen-stats">
-          {stats.map(stat => <div key={stat.label}><strong>{stat.value}{stat.suffix}</strong><span>{es ? stat.label : stat.labelEn ?? stat.label}</span></div>)}
         </div>
       </div>
       <JourneyTerminal es={es} />
@@ -80,26 +106,41 @@ export function AboutScreen() {
 }
 
 const services = [
-  { title: { es: 'Landing pages', en: 'Landing pages' }, desc: { es: 'Paginas rapidas y orientadas a conversion para lanzar un producto, una campana o una startup.', en: 'Fast, conversion-focused pages to launch a product, campaign, or startup.' }, tech: 'React / TypeScript / SEO' },
-  { title: { es: 'Sitios corporativos', en: 'Corporate websites' }, desc: { es: 'Sitios institucionales con identidad de marca, arquitectura clara y SEO tecnico.', en: 'Institutional sites with brand identity, clear architecture, and technical SEO.' }, tech: 'Diseno / Contenido / SEO' },
-  { title: { es: 'Sistemas a medida', en: 'Custom systems' }, desc: { es: 'Aplicaciones fullstack con paneles, comercio, autenticacion, APIs y roles de usuario.', en: 'Fullstack apps with dashboards, commerce, authentication, APIs, and user roles.' }, tech: 'Frontend / API / Datos' },
-  { title: { es: 'Despliegue en Linux', en: 'Linux deployment' }, desc: { es: 'Produccion con Docker Compose, Nginx, Traefik con SSL y monitoreo en Portainer.', en: 'Production with Docker Compose, Nginx, Traefik with SSL, and Portainer monitoring.' }, tech: 'Docker / Traefik / CI-CD' },
-  { title: { es: 'Mantenimiento', en: 'Maintenance' }, desc: { es: 'Soporte continuo, correcciones, rendimiento y nuevas funciones sobre proyectos en linea.', en: 'Ongoing support, fixes, performance work, and new features on live projects.' }, tech: 'Soporte / Mejora continua' },
+  { category: 'web', icon: Rocket, title: { es: 'Landing pages', en: 'Landing pages' }, desc: { es: 'Paginas rapidas y orientadas a conversion para lanzar un producto, una campana o una startup.', en: 'Fast, conversion-focused pages to launch a product, campaign, or startup.' }, tech: 'React / TypeScript / SEO' },
+  { category: 'web', icon: Building2, title: { es: 'Sitios corporativos', en: 'Corporate websites' }, desc: { es: 'Sitios institucionales con identidad de marca, arquitectura clara y SEO tecnico.', en: 'Institutional sites with brand identity, clear architecture, and technical SEO.' }, tech: 'Diseno / Contenido / SEO' },
+  { category: 'systems', icon: PanelsTopLeft, title: { es: 'Sistemas a medida', en: 'Custom systems' }, desc: { es: 'Aplicaciones fullstack con paneles, comercio, autenticacion, APIs y roles de usuario.', en: 'Fullstack apps with dashboards, commerce, authentication, APIs, and user roles.' }, tech: 'Frontend / API / Datos' },
+  { category: 'infra', icon: Server, title: { es: 'Despliegue en Linux', en: 'Linux deployment' }, desc: { es: 'Produccion con Docker Compose, Nginx, Traefik con SSL y monitoreo en Portainer.', en: 'Production with Docker Compose, Nginx, Traefik with SSL, and Portainer monitoring.' }, tech: 'Docker / Traefik / CI-CD' },
+  { category: 'infra', icon: Wrench, title: { es: 'Mantenimiento', en: 'Maintenance' }, desc: { es: 'Soporte continuo, correcciones, rendimiento y nuevas funciones sobre proyectos en linea.', en: 'Ongoing support, fixes, performance work, and new features on live projects.' }, tech: 'Soporte / Mejora continua' },
 ];
 
 export function ServicesScreen() {
   const lang = useLangStore(state => state.lang);
-  const reduced = usePrefersReducedMotion();
+  const [filter, setFilter] = useState('all');
+  const [selected, setSelected] = useState<(typeof services)[number] | null>(null);
+  const options: FinderOption[] = [
+    { id: 'all', label: lang === 'es' ? 'Todos' : 'All', icon: Layers3 },
+    { id: 'web', label: 'Web', icon: Rocket },
+    { id: 'systems', label: lang === 'es' ? 'Sistemas' : 'Systems', icon: PanelsTopLeft },
+    { id: 'infra', label: lang === 'es' ? 'Infraestructura' : 'Infrastructure', icon: Server },
+  ];
   return <Screen className="screen screen--services">
     <ScreenHead number="02" title={lang === 'es' ? 'Servicios' : 'Services'} subtitle={lang === 'es' ? 'Soluciones concretas para llevar una idea a produccion.' : 'Practical ways to bring an idea into production.'} />
-    <ScreenBody className="screen-body service-screen">
-      {services.map((service, index) => <motion.article className="service-card" key={service.title.en}
-        variants={{ hidden: { opacity: reduced ? 1 : 0, y: reduced ? 0 : 8 }, visible: { opacity: 1, y: 0, transition: { duration: reduced ? 0 : 0.3 } } }}>
-        <span className="service-card__number">0{index + 1} / 0{services.length}</span>
-        <h2>{service.title[lang]}</h2>
-        <p>{service.desc[lang]}</p>
-        <span className="service-card__tech">{service.tech}</span>
-      </motion.article>)}
+    <ScreenBody className="screen-body service-screen mac-finder">
+      <FinderSidebar title={lang === 'es' ? 'Favoritos' : 'Favorites'} options={options} selected={filter} onSelect={setFilter} />
+      <div className="mac-finder__main">
+        <div className="mac-finder__grid mac-finder__grid--services">
+          {services.filter(service => filter === 'all' || service.category === filter).map(service => <button type="button" className="service-card mac-finder__tile" key={service.title.en} onClick={() => setSelected(service)}>
+            <span className="service-card__icon" aria-hidden="true"><service.icon size={29} strokeWidth={1.7} /></span>
+            <h2>{service.title[lang]}</h2>
+            <p>{service.desc[lang]}</p>
+            <span className="service-card__tech">{service.tech}</span>
+          </button>)}
+        </div>
+        {selected && <FinderQuickLook title={selected.title[lang]} onClose={() => setSelected(null)}>
+          <div className="mac-quicklook__hero mac-quicklook__hero--service"><selected.icon size={45} strokeWidth={1.6} /></div>
+          <div className="mac-quicklook__content"><h2>{selected.title[lang]}</h2><p>{selected.desc[lang]}</p><div className="mac-quicklook__chips">{selected.tech.split(' / ').map(tech => <span key={tech}>{tech}</span>)}</div><Link to="/contacto" className="mac-quicklook__primary">{lang === 'es' ? 'Hablemos de tu proyecto' : 'Discuss your project'} <ArrowUpRight size={15} /></Link></div>
+        </FinderQuickLook>}
+      </div>
     </ScreenBody>
   </Screen>;
 }
@@ -114,97 +155,68 @@ function CertificateLogo({ cert }: { cert: Certification }) {
 
 export function CertificationsScreen() {
   const es = useLangStore(state => state.lang === 'es');
-  const reduced = usePrefersReducedMotion();
-  const [selected, setSelected] = useState<number | null>(null);
+  const [filter, setFilter] = useState('all');
+  const [selected, setSelected] = useState<string | null>(null);
+  const active = certifications.find(cert => cert.id === selected);
+  const options: FinderOption[] = [
+    { id: 'all', label: es ? 'Todos' : 'All', icon: Award },
+    { id: 'completed', label: es ? 'Completados' : 'Completed', icon: Folder },
+    { id: 'in-progress', label: es ? 'En progreso' : 'In progress', icon: Rocket },
+  ];
   return <Screen className="screen screen--certifications">
     <ScreenHead number="03" title={es ? 'Certificados' : 'Certificates'} subtitle={es ? 'Formacion continua en desarrollo, seguridad e IA.' : 'Continuous learning in development, security, and AI.'} />
-    <ScreenBody className="screen-body cert-screen">
-      {certifications.map((cert, index) => {
-        return <motion.button type="button" className={'cert-screen__item' + (selected === index ? ' is-selected' : '')} key={cert.id}
-          aria-pressed={selected === index} aria-label={`${cert.title}, ${cert.issuer}, ${cert.year}, ${cert.status === 'completed' ? (es ? 'Completado' : 'Completed') : (es ? 'En progreso' : 'In progress')}`}
-          onClick={() => setSelected(value => value === index ? null : index)}
-          whileTap={reduced ? undefined : { scale: 0.985 }}
-          variants={{ hidden: { opacity: reduced ? 1 : 0 }, visible: { opacity: 1, transition: { duration: reduced ? 0 : 0.3 } } }}>
-          <span className="cert-screen__index">0{index + 1}</span>
-          <CertificateLogo cert={cert} />
-          <div><h2>{cert.title}</h2><p>{cert.issuer} / {cert.year}</p></div>
-          <span className="cert-screen__status">{cert.status === 'completed' ? (es ? 'Completado' : 'Completed') : (es ? 'En progreso' : 'In progress')}</span>
-        </motion.button>;
-      })}
+    <ScreenBody className="screen-body cert-screen mac-finder">
+      <FinderSidebar title={es ? 'Favoritos' : 'Favorites'} options={options} selected={filter} onSelect={setFilter} />
+      <div className="mac-finder__main">
+        <div className="mac-finder__grid mac-finder__grid--certs">
+          {certifications.filter(cert => filter === 'all' || cert.status === filter).map(cert => <button type="button" className="cert-screen__item mac-finder__tile" key={cert.id}
+            onClick={() => setSelected(cert.id)} aria-label={`${cert.title}, ${cert.issuer}, ${cert.year}, ${cert.status === 'completed' ? (es ? 'Completado' : 'Completed') : (es ? 'En progreso' : 'In progress')}`}>
+            <CertificateLogo cert={cert} />
+            <h2>{cert.title}</h2>
+            <p>{cert.issuer} / {cert.year}</p>
+            <span className="cert-screen__status">{cert.status === 'completed' ? (es ? 'Completado' : 'Completed') : (es ? 'En progreso' : 'In progress')}</span>
+          </button>)}
+        </div>
+        {active && <FinderQuickLook title={active.title} onClose={() => setSelected(null)}>
+          <div className="mac-quicklook__hero mac-quicklook__hero--cert"><CertificateLogo cert={active} /></div>
+          <div className="mac-quicklook__content"><h2>{active.title}</h2><p>{active.issuer} · {active.year}</p><div className="mac-quicklook__chips"><span>{active.status === 'completed' ? (es ? 'Completado' : 'Completed') : (es ? 'En progreso' : 'In progress')}</span></div></div>
+        </FinderQuickLook>}
+      </div>
     </ScreenBody>
   </Screen>;
 }
 
 export function ProjectsScreen() {
   const es = useLangStore(state => state.lang === 'es');
-  const reduced = usePrefersReducedMotion();
   const [params, setParams] = useSearchParams();
-  const [visibleLine, setVisibleLine] = useState(0);
+  const [filter, setFilter] = useState('all');
   const selectedId = Number(params.get('ver'));
-  const project = projects.find(item => item.id === selectedId) ?? projects[0];
-  const projectIndex = projects.findIndex(item => item.id === project.id);
-  const step = reduced ? 3 : visibleLine;
-  const changeProject = (offset: number) => {
-    const next = projects[(projectIndex + offset + projects.length) % projects.length];
-    setVisibleLine(0);
-    setParams({ ver: String(next.id) }, { replace: true });
-  };
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      if (!reduced && visibleLine < 3) {
-        setVisibleLine(value => value + 1);
-      } else {
-        const index = projects.findIndex(item => item.id === project.id);
-        setVisibleLine(0);
-        setParams({ ver: String(projects[(index + 1) % projects.length].id) }, { replace: true });
-      }
-    }, !reduced && visibleLine < 3 ? 620 : 5400);
-    return () => window.clearTimeout(timer);
-  }, [project.id, reduced, setParams, visibleLine]);
+  const selected = projects.find(item => item.id === selectedId);
+  const closeLook = () => setParams({}, { replace: true });
+  const options: FinderOption[] = [
+    { id: 'all', label: es ? 'Todos' : 'All', icon: Layers3 },
+    { id: 'landing', label: 'Landing pages', icon: PanelsTopLeft },
+    { id: 'system', label: es ? 'Sistemas' : 'Systems', icon: Server },
+  ];
 
   return <Screen className="screen screen--projects">
     <ScreenHead number="04" title={es ? 'Proyectos' : 'Projects'} subtitle={es ? 'Productos publicados y sistemas construidos de principio a fin.' : 'Published products and systems built end to end.'} />
-    <ScreenBody className="screen-body projects-terminal-screen">
-      <div className="project-terminal">
-        <div className="devops-terminal__bar">
-          <div className="devops-terminal__dots" aria-hidden="true"><i/><i/><i/></div>
-          <span><Terminal size={14} aria-hidden="true"/> projects — zsh</span>
-          <span className="devops-terminal__auto"><span aria-hidden="true" />AUTO</span>
+    <ScreenBody className="screen-body projects-finder-screen mac-finder">
+      <FinderSidebar title={es ? 'Favoritos' : 'Favorites'} options={options} selected={filter} onSelect={setFilter} />
+      <div className="mac-finder__main">
+        <div className="mac-finder__grid mac-finder__grid--projects">
+          {projects.filter(project => filter === 'all' || (filter === 'landing' ? project.id !== 5 : project.id === 5)).map(project => <button type="button" className="mac-finder__tile mac-project-tile" key={project.id} onClick={() => setParams({ ver: String(project.id) }, { replace: true })}>
+            <span className="mac-project-tile__thumb"><img src={project.image} alt="" loading="lazy" /></span>
+            <strong>{project.title}</strong><small>{project.badge}</small>
+          </button>)}
         </div>
-        <div className="project-terminal__body">
-          <div className="project-terminal__command"><span>daniel@macbook ~/portfolio/projects %</span> ./showcase.sh --project={project.id}</div>
-          <div className="project-terminal__sequence" aria-live="polite">
-            <span className={step >= 1 ? 'is-visible' : ''}><b>›</b> {es ? 'Localizando proyecto' : 'Locating project'}: {project.title}</span>
-            <span className={step >= 2 ? 'is-visible' : ''}><b>›</b> {es ? 'Cargando captura y recursos...' : 'Loading preview and assets...'}</span>
-            <span className={step >= 3 ? 'is-visible' : ''}><b>✓</b> {es ? 'Vista previa lista.' : 'Preview ready.'}</span>
+        {selected && <FinderQuickLook title={selected.title} onClose={closeLook}>
+          <div className="mac-quicklook__hero mac-quicklook__hero--project"><img src={selected.image} alt={es ? `Vista previa de ${selected.title}` : `Preview of ${selected.title}`} /></div>
+          <div className="mac-quicklook__content"><h2>{selected.title}</h2><p>{selected.longDescription}</p>
+            <div className="mac-quicklook__chips">{selected.stack.map(tech => <span key={tech}>{tech}</span>)}</div>
+            <div className="mac-quicklook__actions">{selected.demo && <a className="mac-quicklook__primary" href={selected.demo} target="_blank" rel="noopener noreferrer">{es ? 'Ver proyecto' : 'View project'} <ArrowUpRight size={15} /></a>}{selected.github && <a href={selected.github} target="_blank" rel="noopener noreferrer">GitHub <ArrowUpRight size={15} /></a>}<button type="button" onClick={closeLook}>{es ? 'Cerrar' : 'Close'}</button></div>
           </div>
-          <div className="project-terminal__workspace">
-            <div className="project-terminal__media">
-              <motion.img key={project.id} src={project.image} alt={es ? 'Vista previa de ' + project.title : 'Preview of ' + project.title}
-                initial={false} animate={{ opacity: step >= 2 ? 1 : 0, scale: step >= 2 ? 1 : 0.985 }} transition={{ duration: reduced ? 0 : 0.35 }} />
-              <span className="project-terminal__media-caption">preview/{project.id}.png</span>
-            </div>
-            <article className="project-terminal__detail" aria-live="polite">
-              <span className="project-terminal__eyebrow">PROJECT {String(projectIndex + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}</span>
-              <h2>{project.title}</h2>
-              <p>{project.longDescription}</p>
-              <div className="project-terminal__stack">{project.stack.map(tech => <span key={tech}>{tech}</span>)}</div>
-              <div className="project-terminal__actions">
-                {project.demo && <a href={project.demo} target="_blank" rel="noopener noreferrer">{es ? 'Ver sitio' : 'Live site'} <ArrowUpRight size={15} /></a>}
-                {project.github && <a href={project.github} target="_blank" rel="noopener noreferrer">GitHub <ArrowUpRight size={15} /></a>}
-              </div>
-            </article>
-          </div>
-          <div className="project-terminal__footer">
-            <div className="project-terminal__progress" role="progressbar" aria-label={es ? 'Progreso del proyecto' : 'Project loading progress'} aria-valuemin={0} aria-valuemax={3} aria-valuenow={step}><span style={{ transform: `scaleX(${step / 3})` }} /></div>
-            <div className="project-terminal__controls">
-              <span>{String(projectIndex + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}</span>
-              <button type="button" onClick={() => changeProject(-1)} aria-label={es ? 'Proyecto anterior' : 'Previous project'}><ArrowLeft size={16} /></button>
-              <button type="button" onClick={() => changeProject(1)} aria-label={es ? 'Proyecto siguiente' : 'Next project'}><ArrowRight size={16} /></button>
-            </div>
-          </div>
-        </div>
+        </FinderQuickLook>}
       </div>
     </ScreenBody>
   </Screen>;
@@ -241,11 +253,6 @@ export function DevOpsScreen() {
     <ScreenHead number="05" title="DevOps" subtitle={es ? 'Del repositorio al servidor, con un proceso claro y repetible.' : 'From repository to server with a clear, repeatable process.'} />
     <ScreenBody className="screen-body devops-screen">
       <div className="devops-terminal">
-        <div className="devops-terminal__bar">
-          <div className="devops-terminal__dots" aria-hidden="true"><i/><i/><i/></div>
-          <span><Terminal size={14} aria-hidden="true"/> deploy — zsh</span>
-          <span className="devops-terminal__auto"><span aria-hidden="true" />AUTO</span>
-        </div>
         <div className="devops-terminal__output">
           <div className="devops-terminal__heading">
             <span className="devops-terminal__prompt"><span>daniel@macbook {pipelinePath} %</span> ./pipeline.sh --deploy</span>
@@ -259,17 +266,7 @@ export function DevOpsScreen() {
                   : <><b aria-hidden="true">✓</b> {line.text}</>}
               </span>)}
             </div>
-            <div className="devops-terminal__claude" role="img" aria-label={es ? 'Claude Code pixelado' : 'Pixelated Claude Code'}>
-              <svg className="claude-code-sprite" viewBox="0 0 32 32" shapeRendering="crispEdges" aria-hidden="true">
-                <g fill="#D97757">
-                  <path d="M6 4h20v5h3v6h-3v6H6v-6H3V9h3zM6 21h3v8H6zM11 21h3v8h-3zM19 21h3v8h-3zM24 21h3v8h-3z" />
-                </g>
-                <g className="claude-code-sprite__eyes" fill="#090d11">
-                  <path d="M8 10h3v2h2v2h-2v2H8v-2h3v-2H8z" />
-                  <path d="M8 10h3v2h2v2h-2v2H8v-2h3v-2H8z" transform="translate(32 0) scale(-1 1)" />
-                </g>
-              </svg>
-            </div>
+            <div className="devops-terminal__ubuntu"><img src="/assets/brands/ubuntu-pixel.png" alt={es ? 'Logo de Ubuntu pixelado con su nombre' : 'Pixelated Ubuntu logo and wordmark'} width="1254" height="1254" decoding="async" /></div>
           </div>
           <div className="devops-terminal__footer">
             <div className="devops-terminal__progress" role="progressbar" aria-label={es ? 'Progreso del pipeline' : 'Pipeline progress'} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)}>
@@ -285,14 +282,13 @@ export function DevOpsScreen() {
 
 export function ContactScreen() {
   const es = useLangStore(state => state.lang === 'es');
-  const reduced = usePrefersReducedMotion();
   const theme = useThemeStore(state => state.theme);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [website, setWebsite] = useState('');
-  const navigate = useNavigate();
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -302,10 +298,11 @@ export function ContactScreen() {
     }
     setLoading(true);
     try {
-      const result = await sendContactMessage({ name: name.trim(), email: email.trim(), message: message.trim(), website });
+      const fullMessage = subject.trim() ? `${es ? 'Asunto' : 'Subject'}: ${subject.trim()}\n\n${message.trim()}` : message.trim();
+      const result = await sendContactMessage({ name: name.trim(), email: email.trim(), message: fullMessage, website });
       if (result.ok) {
         toast.success(es ? 'Mensaje enviado. Te respondere pronto.' : 'Message sent. I will get back to you soon.');
-        setName(''); setEmail(''); setMessage(''); setWebsite('');
+        setName(''); setEmail(''); setSubject(''); setMessage(''); setWebsite('');
       } else {
         toast.error(result.message);
       }
@@ -319,24 +316,17 @@ export function ContactScreen() {
   return <Screen className="screen screen--contact">
     <Toaster position="bottom-right" theme={theme} />
     <ScreenHead number="06" title={es ? 'Contacto' : 'Contact'} subtitle={es ? 'Cuentame que necesitas construir. Respondo en menos de 24 horas.' : 'Tell me what you need to build. I reply within 24 hours.'} />
-    <ScreenBody className="screen-body contact-screen">
-      <motion.div className="contact-screen__intro" variants={{ hidden: { opacity: reduced ? 1 : 0, y: reduced ? 0 : 8 }, visible: { opacity: 1, y: 0, transition: { duration: reduced ? 0 : .3 } } }}>
-        <span className="contact-screen__availability"><span aria-hidden="true" />{es ? 'Disponible para nuevos proyectos' : 'Available for new projects'}</span>
-        <p className="screen-lead">{es ? 'Hagamos que tu idea llegue a produccion.' : 'Let us bring your idea into production.'}</p>
-        <div className="contact-screen__channels">
-          <a href={'mailto:' + EMAIL}>Email <span>{EMAIL}</span><ArrowUpRight size={15} /></a>
-          <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">GitHub <span>danielcrs0318</span><ArrowUpRight size={15} /></a>
-          <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">LinkedIn <span>daniel-molina</span><ArrowUpRight size={15} /></a>
-        </div>
-        <button type="button" className="contact-screen__back" onClick={() => navigate('/proyectos')}>{es ? 'Ver proyectos' : 'View projects'} <ArrowUpRight size={15} /></button>
-      </motion.div>
-      <motion.form variants={{ hidden: { opacity: reduced ? 1 : 0, y: reduced ? 0 : 8 }, visible: { opacity: 1, y: 0, transition: { duration: reduced ? 0 : .3, delay: reduced ? 0 : .05 } } }} aria-busy={loading} className="contact-screen__form" onSubmit={onSubmit} onFocus={() => { void wakeBackend(); }}>
-        <label htmlFor="screen-name">{es ? 'Nombre' : 'Name'}<input id="screen-name" value={name} onChange={event => setName(event.target.value)} autoComplete="name" required minLength={2} /></label>
-        <label htmlFor="screen-email">{es ? 'Correo' : 'Email'}<input id="screen-email" value={email} onChange={event => setEmail(event.target.value)} autoComplete="email" type="email" required /></label>
-        <label htmlFor="screen-message">{es ? 'Mensaje' : 'Message'}<textarea id="screen-message" value={message} onChange={event => setMessage(event.target.value)} rows={4} required minLength={10} /></label>
+    <ScreenBody className="screen-body contact-screen mac-mail">
+      <form aria-busy={loading} className="contact-screen__form" onSubmit={onSubmit} onFocus={() => { void wakeBackend(); }}>
+        <div className="mac-mail__field"><span>{es ? 'Para:' : 'To:'}</span><a href={'mailto:' + EMAIL}>{EMAIL}</a></div>
+        <label className="mac-mail__field" htmlFor="screen-name"><span>{es ? 'Nombre:' : 'Name:'}</span><input id="screen-name" value={name} onChange={event => setName(event.target.value)} autoComplete="name" required minLength={2} /></label>
+        <label className="mac-mail__field" htmlFor="screen-email"><span>{es ? 'De:' : 'From:'}</span><input id="screen-email" value={email} onChange={event => setEmail(event.target.value)} autoComplete="email" type="email" required /></label>
+        <label className="mac-mail__field" htmlFor="screen-subject"><span>{es ? 'Asunto:' : 'Subject:'}</span><input id="screen-subject" value={subject} onChange={event => setSubject(event.target.value)} placeholder={es ? 'Hablemos de tu proyecto' : 'Let us talk about your project'} /></label>
+        <label className="mac-mail__message" htmlFor="screen-message"><span className="sr-only">{es ? 'Mensaje' : 'Message'}</span><textarea id="screen-message" value={message} onChange={event => setMessage(event.target.value)} rows={5} placeholder={es ? 'Cuentame que necesitas construir…' : 'Tell me what you need to build…'} required minLength={10} /></label>
         <input className="screen-honeypot" value={website} onChange={event => setWebsite(event.target.value)} tabIndex={-1} autoComplete="off" aria-hidden="true" />
-        <button type="submit" disabled={loading}>{loading ? <Loader2 className="animate-spin" size={17} /> : null}{loading ? (es ? 'Enviando...' : 'Sending...') : (es ? 'Enviar mensaje' : 'Send message')} <ArrowUpRight size={16} /></button>
-      </motion.form>
+        <div className="mac-mail__footer"><div className="mac-mail__links"><a href={GITHUB_URL} target="_blank" rel="noopener noreferrer"><img src="/assets/brands/github.svg" alt="" />GitHub</a><a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.35V9h3.414v1.561h.049c.476-.9 1.637-1.85 3.37-1.85 3.6 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065a2.064 2.064 0 1 1 4.128 0c0 1.139-.92 2.065-2.065 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>LinkedIn</a></div>
+          <button type="submit" disabled={loading}>{loading ? <Loader2 className="animate-spin" size={17} /> : null}{loading ? (es ? 'Enviando...' : 'Sending...') : (es ? 'Enviar' : 'Send')} ↑</button></div>
+      </form>
     </ScreenBody>
   </Screen>;
 }

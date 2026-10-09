@@ -99,11 +99,9 @@
 .devops-terminal__ready.is-complete span { background: #89e6a8; box-shadow: 0 0 12px #89e6a870; }
 .devops-terminal__workspace { display: grid; grid-template-columns: minmax(0, 1fr) clamp(100px, 13vw, 158px); align-items: center; gap: clamp(12px, 2vw, 28px); flex: 1 1 auto; min-height: 0; }
 .devops-terminal__workspace .devops-terminal__log { flex: none; }
-.devops-terminal__claude { display: grid; place-items: center; width: 100%; aspect-ratio: 1; pointer-events: none; }
-.claude-code-sprite { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 8px 10px #d9775730); animation: claude-code-idle 3.1s steps(5, end) infinite; }
-.claude-code-sprite__eyes { transform-box: fill-box; transform-origin: center; animation: claude-code-blink 5.8s steps(1, end) infinite; }
-@keyframes claude-code-idle { 0%, 100% { transform: translateY(2px); } 50% { transform: translateY(-3px); } }
-@keyframes claude-code-blink { 0%, 45%, 49%, 100% { transform: scaleY(1); } 46%, 48% { transform: scaleY(.12); } }
+.devops-terminal__ubuntu { display: grid; place-items: center; width: 100%; aspect-ratio: 1; pointer-events: none; }
+.devops-terminal__ubuntu img { display: block; width: 100%; height: auto; object-fit: contain; image-rendering: pixelated; filter: drop-shadow(0 7px 9px #e9542026); animation: ubuntu-pixel-idle 3.2s steps(4, end) infinite; }
+@keyframes ubuntu-pixel-idle { 0%, 100% { transform: translateY(2px); } 50% { transform: translateY(-3px); } }
 
 .screen--projects .projects-terminal-screen { display: block; padding-top: clamp(12px, 2vh, 22px); }
 .project-terminal { display: flex; flex-direction: column; width: 100%; height: 100%; min-height: 0; overflow: hidden; border: 1px solid #55616d; border-radius: 14px; background: #0b1014; color: #e8edf2; box-shadow: 0 26px 58px #00000070, 0 8px 20px #00000035, 0 0 0 1px #ffffff18, inset 0 1px 0 #ffffff1a; }
@@ -457,17 +455,17 @@
   .screen--projects .project-terminal__detail h2 { font-size: 1.55rem; }
   .screen--projects .project-terminal__detail p { font-size: .82rem; }
   .screen--devops .devops-terminal__workspace { grid-template-columns: minmax(0, 1fr); gap: 0; }
-  .screen--devops .devops-terminal__claude { grid-row: 1; justify-self: end; width: 76px; margin-top: 12px; }
+  .screen--devops .devops-terminal__ubuntu { grid-row: 1; justify-self: end; width: 92px; margin-top: 8px; }
   .screen--devops .devops-terminal__log { grid-row: 2; padding-top: 10px; }
 }
 
 @media (max-width: 360px) {
-  .screen--devops .devops-terminal__claude { width: 64px; margin-top: 9px; }
+  .screen--devops .devops-terminal__ubuntu { width: 78px; margin-top: 7px; }
   .screen--projects .project-terminal__body { padding: 12px; }
   .screen--projects .project-terminal__detail h2 { font-size: 1.4rem; }
   .screen--projects .project-terminal__stack { margin: 10px 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .project-terminal__sequence > span, .project-terminal__progress span, .claude-code-sprite { animation: none !important; transition: none !important; }
+  .project-terminal__sequence > span, .project-terminal__progress span, .devops-terminal__ubuntu img { animation: none !important; transition: none !important; }
 }

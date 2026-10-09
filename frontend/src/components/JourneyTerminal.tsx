@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Pause, Play, Terminal } from 'lucide-react';
+import { Pause, Play } from 'lucide-react';
 import { timeline } from '../lib/data';
 import { useContentMotion } from '../hooks/useContentMotion';
 
@@ -30,19 +30,17 @@ export function JourneyTerminal({ es }: { es: boolean }) {
 
   return <section className="screen-feature journey" aria-label={es ? 'Trayectoria' : 'Journey'}>
     <div className="journey-terminal">
-      <div className="journey-terminal__bar">
-        <div className="journey-terminal__dots" aria-hidden="true"><i /><i /><i /></div>
-        <span><Terminal size={14} aria-hidden="true" /> daniel — zsh</span>
-        <button type="button" onClick={() => setPaused(value => !value)}
-          aria-label={paused ? (es ? 'Reanudar trayectoria' : 'Resume journey') : (es ? 'Pausar trayectoria' : 'Pause journey')}
-          title={paused ? (es ? 'Reanudar' : 'Resume') : (es ? 'Pausar' : 'Pause')}>
-          {paused ? <Play size={15} aria-hidden="true" /> : <Pause size={15} aria-hidden="true" />}
-        </button>
-      </div>
       <div className="journey-terminal__body">
         <div className="journey-terminal__command">
           <code><span className="journey-terminal__shell">daniel@macbook ~ %</span> <span className="journey-terminal__command-text">{es ? 'trayectoria --actual' : 'journey --current'}</span></code>
-          <span className={paused ? 'is-paused' : ''}>{paused ? (es ? 'PAUSA' : 'PAUSED') : 'AUTO'}</span>
+          <div className="journey-terminal__controls">
+            <span className={paused ? 'is-paused' : ''}>{paused ? (es ? 'PAUSA' : 'PAUSED') : 'AUTO'}</span>
+            <button type="button" onClick={() => setPaused(value => !value)}
+              aria-label={paused ? (es ? 'Reanudar trayectoria' : 'Resume journey') : (es ? 'Pausar trayectoria' : 'Pause journey')}
+              title={paused ? (es ? 'Reanudar' : 'Resume') : (es ? 'Pausar' : 'Pause')}>
+              {paused ? <Play size={15} aria-hidden="true" /> : <Pause size={15} aria-hidden="true" />}
+            </button>
+          </div>
         </div>
         <article ref={contentMotion} className="journey-terminal__output" id="journey-terminal-output">
           <span className="journey-terminal__meta">{item.year} / {milestone.institution}</span>

@@ -1,0 +1,297 @@
+/* Values and interaction timing from portafolio-macos.html, adapted to the real portfolio data. */
+.mac-shell {
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", "Segoe UI", Roboto, sans-serif;
+  --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  --terminal-mono: var(--mono);
+  --mac-text: #f4f6fa;
+  --mac-muted: #9aa3b5;
+  --mac-line: rgba(255,255,255,.09);
+  --mac-window: rgba(26,29,40,.72);
+  --mac-bar: rgba(10,12,20,.55);
+  --mac-dock: rgba(255,255,255,.12);
+  --mac-control: rgba(255,255,255,.06);
+  --mac-control-hover: rgba(255,255,255,.10);
+  --mac-sidebar: rgba(255,255,255,.04);
+  --mac-solid: #1a1d28;
+  --mac-accent: #22d3ee;
+  --mac-accent-2: #8b5cf6;
+  --mac-shadow: 0 24px 60px -12px rgba(0,0,0,.65), 0 0 0 .5px rgba(255,255,255,.12);
+  font: 14px/1.4 var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+[data-theme='light'] .mac-shell {
+  --mac-text: #1d1d1f;
+  --mac-muted: #6e6e73;
+  --mac-line: rgba(0,0,0,.09);
+  --mac-window: rgba(250,251,253,.78);
+  --mac-bar: rgba(246,248,252,.6);
+  --mac-dock: rgba(255,255,255,.45);
+  --mac-control: rgba(0,0,0,.04);
+  --mac-control-hover: rgba(0,0,0,.07);
+  --mac-sidebar: rgba(0,0,0,.035);
+  --mac-solid: #fafbfd;
+  --mac-accent: #0891b2;
+  --mac-accent-2: #7c3aed;
+  --mac-shadow: 0 24px 60px -14px rgba(30,40,70,.35), 0 0 0 .5px rgba(0,0,0,.14);
+}
+.mac-shell button, .mac-shell input, .mac-shell textarea { font-family: var(--sans); }
+.mac-shell :is(.home-card__name, .home-card__signature, .home-group li a, .screen-head h1, .screen-lead, .about-screen__work-item h3, .service-card h2, .cert-screen__item h2) { font-family: var(--sans); }
+.mac-shell :is(.home-group h2, .screen-head__number, .about-screen__work-heading h2, .about-screen__work-number, .about-screen__work-item a, .service-card__tech, .cert-screen__item p, .cert-screen__status) { font-family: var(--sans); }
+.mac-shell .mac-window--home :is(.home-card__lead, .home-card__handle, .home-card__name, .home-card__signature, .home-group, .home-group *, .home-card__footer *) { font-family: var(--sans) !important; }
+
+/* The reference wallpaper is static, with soft gradients and a fine noise layer. */
+.mac-shell .mac-wallpaper { background: #080b12; }
+.mac-shell .mac-wallpaper::before {
+  inset: 0;
+  background: radial-gradient(60% 55% at 15% 20%, rgba(139,92,246,.45), transparent 70%), radial-gradient(55% 50% at 85% 25%, rgba(34,211,238,.32), transparent 70%), radial-gradient(70% 60% at 60% 95%, rgba(59,70,200,.35), transparent 70%);
+  animation: none !important;
+}
+.mac-shell .mac-wallpaper::after {
+  inset: 0;
+  opacity: .07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='2'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+  animation: none !important;
+}
+[data-theme='light'] .mac-shell .mac-wallpaper { background: #e9edf5; }
+[data-theme='light'] .mac-shell .mac-wallpaper::before { background: radial-gradient(60% 55% at 15% 20%, rgba(167,139,250,.55), transparent 70%), radial-gradient(55% 50% at 85% 25%, rgba(103,232,249,.55), transparent 70%), radial-gradient(70% 60% at 60% 95%, rgba(147,197,253,.6), transparent 70%); }
+.mac-shell .mac-menubar { height: 30px; padding: 0 12px; font: 13px/1 var(--sans); }
+.mac-shell .mac-menubar button { padding: 2px 9px; cursor: pointer; }
+.mac-shell .mac-menubar button:hover { background: var(--mac-control-hover); }
+.mac-shell .mac-menubar__apple { display: block; width: 14px; height: 14px; fill: currentColor; }
+.mac-shell .mac-menubar__app { margin-inline: 2px 5px; font-weight: 700; }
+.mac-shell .mac-menubar__clock { min-width: 0; font-size: 13px; }
+.mac-shell .mac-desktop__widget { bottom: 120px; width: 230px; padding: 16px 18px; border: 0; border-radius: 20px; }
+.mac-shell .mac-desktop__widget strong { font: 300 34px/1.1 var(--sans); letter-spacing: -.02em; }
+.mac-shell .mac-window { border: 0; border-radius: 14px; background: var(--mac-window); box-shadow: var(--mac-shadow); transition: none; }
+.mac-shell .mac-window--open { opacity: 1; visibility: visible; transform: none; pointer-events: auto; animation: mac-window-launch 340ms cubic-bezier(.18,.86,.22,1) both; }
+.mac-shell .mac-window--minimized { opacity: 1; visibility: visible; transform: none; pointer-events: none; animation: mac-window-to-dock 300ms cubic-bezier(.55,.06,.68,.19) both; }
+.mac-shell .mac-window--closed { opacity: 1; visibility: visible; transform: none; pointer-events: none; animation: mac-window-close 230ms cubic-bezier(.4,0,1,1) both; }
+@keyframes mac-window-launch {
+  from { opacity: 0; transform: translate3d(var(--mac-dock-x,0px),var(--mac-dock-y,240px),0) scale(.16,.12); }
+  72% { opacity: 1; transform: translate3d(0,0,0) scale(1.02,.985); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes mac-window-to-dock {
+  from { opacity: 1; visibility: visible; transform: none; }
+  to { opacity: 0; visibility: hidden; transform: translate3d(var(--mac-dock-x,0px),var(--mac-dock-y,240px),0) scale(.16,.12); }
+}
+@keyframes mac-window-close {
+  from { opacity: 1; visibility: visible; transform: none; }
+  to { opacity: 0; visibility: hidden; transform: translate3d(0,10px,0) scale(.88); }
+}
+.mac-shell .mac-window-slot.is-dragging { will-change: transform; }
+.mac-shell .mac-window-slot.is-dragging .mac-window { background: var(--mac-solid); backdrop-filter: none; -webkit-backdrop-filter: none; }
+.mac-shell .mac-window__titlebar { flex-basis: 44px; min-height: 44px; gap: 12px; padding: 0 14px; }
+.mac-shell .mac-window__title { font: 600 13px/1 var(--sans); }
+.mac-shell .mac-window__body { position: relative; user-select: text; }
+.mac-shell .mac-window__body::-webkit-scrollbar { width: 10px; }
+.mac-shell .mac-window__body::-webkit-scrollbar-thumb { border: 3px solid transparent; background: var(--mac-line); background-clip: content-box; }
+.mac-shell .mac-dock { gap: 10px; padding: 8px 10px; border: 0; border-radius: 24px; box-shadow: 0 0 0 .5px var(--mac-line), 0 18px 40px -10px rgba(0,0,0,.5); }
+.mac-shell .mac-dock__item { width: 54px; height: 54px; transition: transform .12s ease-out, margin .12s ease-out !important; }
+.mac-shell .mac-dock.is-magnifying .mac-dock__item { transition: none !important; }
+.mac-shell .mac-dock__icon { box-shadow: 0 6px 14px rgba(0,0,0,.35), inset 0 0 0 .5px rgba(255,255,255,.25); }
+.mac-shell .mac-dock__icon svg { width: 56%; height: 56%; stroke-width: 1.8; }
+.mac-shell .mac-dock__item.is-bouncing { animation: mac-reference-bounce .5s ease-out 2 !important; }
+@keyframes mac-reference-bounce { 40% { translate: 0 -18px; } }
+.mac-shell .mac-dock__tip { bottom: calc(100% + 12px); padding: 4px 11px; background: var(--mac-solid); font: 12.5px/1 var(--sans); }
+.mac-shell .mac-spotlight { background: rgba(0,0,0,.25); }
+.mac-shell .mac-spotlight__panel { border-radius: 18px; background: var(--mac-window); animation: mac-reference-pop .18s cubic-bezier(.22,.9,.3,1) both; }
+@keyframes mac-reference-pop { from { opacity: 0; transform: scale(.96); } }
+
+/* Every section uses the same desktop window size. */
+@media (min-width: 801px) {
+  .mac-shell .mac-window-slot,
+  .mac-shell .mac-window-slot:has(.mac-window--home) { width: min(900px, 100%); height: min(540px, 100%); }
+  .mac-shell .mac-window-slot.is-maximized { width: 100%; height: 100%; }
+}
+
+/* Home keeps the portrait on desktop while using the same compact window. */
+.mac-shell .mac-window--home .card-home#main-content { padding: 20px 24px; overflow: auto; }
+.mac-shell .mac-window--home .home-card-wrap { width: min(100%, 820px); height: 100%; max-height: none; }
+.mac-shell .mac-window--home .home-card__layout { grid-template-columns: minmax(0, .95fr) minmax(0, 1fr); gap: 28px; }
+.mac-shell .mac-window--home .home-card__information { padding: 0; }
+.mac-shell .mac-window--home .home-card__intro { margin: 7px 0 4px; font-size: 13px; }
+.mac-shell .mac-window--home .home-card__content { justify-content: space-between; gap: 7px; }
+.mac-shell .mac-window--home .home-group h2 { margin-bottom: 4px; padding-bottom: 4px; }
+.mac-shell .mac-window--home .home-group li a { min-height: 21px; padding: 2px 0 2px 17px; font-size: 13px; line-height: 1.25; }
+
+/* The reference puts the application heading in the titlebar, not in a second header. */
+.mac-shell .screen-head { position: absolute !important; width: 1px !important; height: 1px !important; min-height: 0 !important; padding: 0 !important; overflow: hidden !important; clip-path: inset(50%); white-space: nowrap; border: 0 !important; }
+.mac-shell .mac-window__body .detail-page, .mac-shell .mac-window__body .detail-panel#main-content, .mac-shell .screen { height: 100%; min-height: 0; padding: 0; overflow: hidden; }
+.mac-shell .screen-body { height: 100%; min-height: 0; padding: 0; overflow: auto; }
+
+/* About follows the reference's portrait, large name and lead. */
+.mac-shell .screen--about .about-screen { display: block; padding: 22px 24px; }
+.mac-shell .screen--about .about-screen__profile { width: 100%; padding: 0; }
+.mac-shell .mac-about__head { display: flex; align-items: center; gap: 18px; min-width: 0; }
+.mac-shell .mac-about__identity { min-width: 0; }
+.mac-shell .mac-about__avatar { display: block; flex: 0 0 92px; width: 92px; height: 112px; border: .5px solid var(--mac-line); border-radius: 12px; background: #eee; object-fit: cover; object-position: center 21%; box-shadow: 0 8px 24px rgba(0,0,0,.2); }
+.mac-shell .mac-about__head h2 { color: var(--mac-text); font: 700 32px/1.1 var(--sans); letter-spacing: -.03em; }
+.mac-shell .mac-about__head h2 span { background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--mac-text); -webkit-text-fill-color: currentColor; }
+.mac-shell .mac-about__head p { margin-top: 6px; color: var(--mac-muted); font: 14.5px/1.55 var(--sans); }
+.mac-shell .screen--about .about-screen__story { margin-top: 16px; }
+.mac-shell .screen--about .screen-lead { color: var(--mac-text); font: 500 14.5px/1.55 var(--sans); letter-spacing: 0; }
+.mac-shell .screen--about .screen-copy { margin-top: 9px; color: var(--mac-muted); font: 14px/1.55 var(--sans); }
+.mac-shell .screen--about .screen-feature { display: block; margin-top: 20px; padding: 0; border: 0; }
+.mac-shell .screen--about .journey-terminal { border: .5px solid var(--mac-line); border-radius: 12px; background: #0b0e16; }
+.mac-shell .screen--about .journey-terminal__body { padding: 14px 16px; }
+.mac-shell .screen--about .journey-terminal__output { min-height: 94px; padding: 12px 0; }
+.mac-shell .screen--about .journey-terminal__output h2 { font: 600 18px/1.2 var(--sans); }
+.mac-shell .screen--about .journey-terminal__log span { animation: mac-reference-type .4s forwards !important; }
+.mac-shell .screen--about .about-screen__work { display: block; margin-top: 20px; padding-top: 18px; border-top: .5px solid var(--mac-line); }
+.mac-shell .screen--about .about-screen__work-list { gap: 10px; }
+.mac-shell .screen--about .about-screen__work-item { min-width: 0; padding: 0 12px; }
+.mac-shell .screen--about .about-screen__work-item:first-child { padding-left: 0; }
+.mac-shell .screen--about .about-screen__work-item :is(h3,p,a) { overflow-wrap: break-word; }
+
+/* Finder: the same sidebar, card grid, hover lift and Quick Look as the HTML example. */
+.mac-shell .screen-body.mac-finder { position: relative; display: flex; align-items: stretch !important; overflow: hidden; }
+.mac-shell .screen--services .service-screen.mac-finder, .mac-shell .screen--certifications .cert-screen.mac-finder, .mac-shell .screen--projects .projects-finder-screen.mac-finder { padding: 0; }
+.mac-shell .mac-finder__sidebar { display: flex; flex: 0 0 176px; flex-direction: column; gap: 1px; min-width: 0; padding: 12px 8px; overflow: auto; border-right: .5px solid var(--mac-line); background: var(--mac-sidebar); }
+.mac-shell .mac-finder__sidebar h2 { padding: 6px 10px; color: var(--mac-muted); font: 600 11px/1.2 var(--sans); }
+.mac-shell .mac-finder__sidebar button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 6px 10px; border: 0; border-radius: 7px; background: none; color: var(--mac-text); text-align: left; font: 13px/1.25 var(--sans); }
+.mac-shell .mac-finder__sidebar button:hover { background: var(--mac-control); }
+.mac-shell .mac-finder__sidebar button.is-active { background: var(--mac-accent); color: #04121a; font-weight: 600; }
+.mac-shell .mac-finder__main { position: static; flex: 1 1 auto; min-width: 0; padding: 22px 24px; overflow: auto; }
+.mac-shell .mac-finder__grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); gap: 14px; align-content: start; }
+.mac-shell .mac-finder__tile { display: flex; flex-direction: column; min-width: 0; padding: 0; overflow: hidden; border: .5px solid var(--mac-line); border-radius: 12px; background: var(--mac-control); color: var(--mac-text); box-shadow: none; text-align: left; cursor: pointer; transition: transform .2s cubic-bezier(.22,.9,.3,1), background .2s !important; }
+.mac-shell .mac-finder__tile:hover { transform: translateY(-3px); translate: none; border-color: var(--mac-line); background: var(--mac-control-hover); box-shadow: none; }
+.mac-shell .mac-finder__tile:active { transform: translateY(-1px) scale(.99); }
+.mac-shell .mac-finder__tile:focus-visible { outline: 2px solid var(--mac-accent); outline-offset: 2px; }
+.mac-shell .service-card.mac-finder__tile { display: flex; align-items: stretch; gap: 0; height: 190px; min-height: 0; padding: 0; }
+.mac-shell .screen--services .service-card.mac-finder__tile,
+.mac-shell .screen--services .service-card.mac-finder__tile:nth-child(4),
+.mac-shell .screen--services .service-card.mac-finder__tile:nth-child(5) { display: flex; align-items: stretch; grid-column: auto; min-height: 0; padding: 0; overflow: hidden; }
+.mac-shell .service-card.mac-finder__tile .service-card__icon { display: grid; place-items: center; flex: 0 0 68px; width: 100%; height: 68px; border-radius: 0; color: #fff; }
+.mac-shell .service-card.mac-finder__tile h2 { margin: 10px 12px 0; font: 600 13px/1.2 var(--sans); }
+.mac-shell .service-card.mac-finder__tile p { flex: 1; margin: 5px 12px 0; color: var(--mac-muted); font: 12px/1.35 var(--sans); }
+.mac-shell .service-card.mac-finder__tile .service-card__tech { align-self: stretch; margin: 5px 12px 12px; color: var(--mac-muted); font: 11px/1.2 var(--sans); }
+.mac-shell .cert-screen__item.mac-finder__tile { display: flex; align-items: stretch; gap: 0; min-height: 0; height: 220px; padding: 0; }
+.mac-shell .screen--certifications .cert-screen__item.mac-finder__tile { display: flex; grid-template-columns: none; grid-template-rows: none; gap: 0; min-height: 0; padding: 0; overflow: hidden; }
+.mac-shell .cert-screen__item.mac-finder__tile .cert-screen__logo { display: grid; place-items: center; width: 100%; height: 104px; margin: 0; border: 0; border-radius: 0; background: #fff; }
+.mac-shell .cert-screen__item.mac-finder__tile .cert-screen__logo img { max-width: 72px; max-height: 72px; object-fit: contain; }
+.mac-shell .cert-screen__item.mac-finder__tile .cert-screen__logo--wide img { max-width: 125px; }
+.mac-shell .cert-screen__item.mac-finder__tile h2 { margin: 10px 12px 0; font: 600 13px/1.2 var(--sans); }
+.mac-shell .cert-screen__item.mac-finder__tile p { margin: 5px 12px 0; color: var(--mac-muted); font: 12px/1.2 var(--sans); }
+.mac-shell .cert-screen__item.mac-finder__tile .cert-screen__status { align-self: flex-start; margin: auto 12px 11px; padding: 4px 8px; border: .5px solid var(--mac-line); border-radius: 99px; color: var(--mac-text); background: var(--mac-control); font: 11px/1 var(--sans); }
+.mac-shell .mac-project-tile { height: 154px; }
+.mac-shell .mac-project-tile__thumb { display: block; width: 100%; height: 96px; overflow: hidden; background: var(--mac-control); }
+.mac-shell .mac-project-tile__thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.mac-shell .mac-project-tile strong { display: block; margin: 10px 12px 0; font: 600 13px/1.2 var(--sans); }
+.mac-shell .mac-project-tile small { display: block; margin: 4px 12px 12px; color: var(--mac-muted); font: 12px/1.2 var(--sans); }
+.mac-shell .mac-quicklook { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; padding: 20px; overflow: auto; background: rgba(0,0,0,.35); backdrop-filter: blur(6px); animation: mac-reference-fade .2s both; }
+@keyframes mac-reference-fade { from { opacity: 0; } }
+.mac-shell .mac-quicklook__card { position: relative; width: min(440px,100%); max-height: 100%; overflow: auto; border-radius: 16px; background: var(--mac-solid); box-shadow: var(--mac-shadow); }
+.mac-shell .mac-quicklook__close { position: absolute; top: 9px; right: 9px; z-index: 2; display: grid; place-items: center; width: 29px; height: 29px; border-radius: 7px; background: var(--mac-solid); color: var(--mac-text); }
+.mac-shell .mac-quicklook__hero { display: grid; place-items: center; height: 130px; overflow: hidden; color: #fff; background: linear-gradient(135deg,var(--mac-accent),var(--mac-accent-2)); }
+.mac-shell .mac-quicklook__hero--cert { background: #fff; }
+.mac-shell .mac-quicklook__hero--cert .cert-screen__logo { width: 100px; height: 100px; }
+.mac-shell .mac-quicklook__hero--cert img { width: 100%; height: 100%; object-fit: contain; }
+.mac-shell .mac-quicklook__hero--project img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.mac-shell .mac-quicklook__content { padding: 18px 20px 20px; }
+.mac-shell .mac-quicklook__content h2 { color: var(--mac-text); font: 600 18px/1.2 var(--sans); }
+.mac-shell .mac-quicklook__content p { margin-top: 6px; color: var(--mac-muted); font: 14px/1.5 var(--sans); }
+.mac-shell .mac-quicklook__chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.mac-shell .mac-quicklook__chips span { padding: 4px 10px; border: .5px solid var(--mac-line); border-radius: 99px; background: var(--mac-control); color: var(--mac-text); font: 500 12px/1.2 var(--sans); }
+.mac-shell .mac-quicklook__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.mac-shell .mac-quicklook__actions :is(a,button), .mac-shell .mac-quicklook__primary { display: inline-flex; align-items: center; gap: 6px; margin-top: 18px; padding: 7px 14px; border: .5px solid var(--mac-line); border-radius: 8px; background: var(--mac-control); color: var(--mac-text); font: 500 13px/1.2 var(--sans); }
+.mac-shell .mac-quicklook__actions :is(a,button) { margin-top: 0; }
+.mac-shell .mac-quicklook__actions .mac-quicklook__primary, .mac-shell .mac-quicklook__primary { border-color: transparent; background: linear-gradient(180deg,var(--mac-accent),color-mix(in srgb,var(--mac-accent) 80%,#000)); color: #04121a; font-weight: 600; }
+
+/* Terminal lines use the same four-tenths-second type entrance as the reference. */
+.mac-shell .mac-window--terminal .mac-window__body { background: #0b0e16; }
+.mac-shell .mac-window--terminal .devops-terminal { background: #0b0e16; }
+.mac-shell .mac-window--terminal .devops-terminal__output { padding: 18px 20px; }
+.mac-shell .mac-window--terminal .devops-terminal__log { align-content: start; color: #d6e2f0; font: 13px/1.75 var(--mono); }
+.mac-shell .mac-window--terminal .devops-terminal__line.is-visible { animation: mac-reference-type .4s forwards !important; }
+@keyframes mac-reference-type { from { opacity: 0; transform: translateX(-4px); } to { opacity: 1; transform: none; } }
+.mac-shell .mac-window--terminal .devops-terminal__base-path { color: #28c840; }
+.mac-shell .mac-window--terminal .devops-terminal__command-text { color: var(--mac-accent); animation: none !important; }
+
+/* Mail matches the reference's flat recipient rows and compose area. */
+.mac-shell .screen-body.mac-mail { display: block; overflow: auto; }
+.mac-shell .mac-mail .contact-screen__form { display: flex; flex-direction: column; gap: 0; width: 100%; min-height: 100%; padding: 8px 24px 22px; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.mac-shell .mac-mail .contact-screen__form:focus-within { border: 0; box-shadow: none; }
+.mac-shell .mac-mail__field { display: flex !important; align-items: center; gap: 10px !important; flex: 0 0 40px; width: 100%; padding: 9px 0; border-bottom: .5px solid var(--mac-line); color: var(--mac-text); font: 14px/1.3 var(--sans) !important; }
+.mac-shell .mac-mail__field > span { flex: 0 0 70px; width: 70px; color: var(--mac-muted); font: 13px/1.2 var(--sans); }
+.mac-shell .mac-mail__field :is(input,a) { flex: 1; min-width: 0; width: auto; padding: 0; border: 0; border-radius: 0; background: none; color: var(--mac-text); font: 14px/1.2 var(--sans); outline: 0; }
+.mac-shell .mac-mail__field input:focus { border: 0; box-shadow: none; }
+.mac-shell .mac-mail__message { display: block !important; flex: 1 1 auto; min-height: 130px; }
+.mac-shell .mac-mail__message textarea { width: 100%; min-height: 130px; height: 100%; padding: 14px 0; border: 0; border-radius: 0; background: none; color: var(--mac-text); font: 14px/1.5 var(--sans); resize: vertical; outline: 0; }
+.mac-shell .mac-mail__message textarea:focus { border: 0; box-shadow: none; }
+.mac-shell .mac-mail__footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex: 0 0 auto; margin-top: 6px; }
+.mac-shell .mac-mail__links { display: flex; flex-wrap: wrap; gap: 8px; }
+.mac-shell .mac-mail__links a { display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px; border: .5px solid var(--mac-line); border-radius: 8px; background: var(--mac-control); color: var(--mac-text); font: 500 13px/1.2 var(--sans); }
+.mac-shell .mac-mail__links :is(img,svg) { width: 16px; height: 16px; }
+.mac-shell .mac-mail .contact-screen__form button[type='submit'] { min-width: 0; min-height: 33px; padding: 7px 14px; border: 0; border-radius: 8px; background: linear-gradient(180deg,var(--mac-accent),color-mix(in srgb,var(--mac-accent) 80%,#000)); color: #04121a; box-shadow: none; font: 600 13px/1.2 var(--sans); }
+.mac-shell .mac-mail .contact-screen__form button[type='submit']:hover { filter: brightness(1.08); }
+.mac-shell .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (max-width: 800px) {
+  .mac-shell .mac-window-slot,
+  .mac-shell .mac-window-slot:has(.mac-window--home) { width: 100%; height: 100%; transform: none; }
+  .mac-shell .mac-window__body .detail-page, .mac-shell .mac-window__body .detail-panel#main-content, .mac-shell .screen { height: 100%; min-height: 0; }
+  .mac-shell .screen-body { height: 100%; min-height: 0; }
+}
+@media (max-width: 720px) {
+  .mac-shell .mac-menubar { height: 27px; padding-inline: 7px; font-size: 11px; }
+  .mac-shell .mac-menubar__clock { font-size: 10px; }
+  .mac-shell .mac-desktop { inset-block-start: 27px; }
+  .mac-shell .mac-window { border-radius: 0 0 18px 18px; }
+  .mac-shell .mac-window__titlebar { flex-basis: 36px; min-height: 36px; }
+  .mac-shell .mac-dock { gap: 6px; padding: 6px 8px; }
+  .mac-shell .mac-dock__item { width: clamp(34px,10.7vw,44px); height: clamp(34px,10.7vw,44px); }
+  .mac-shell .mac-window--home .card-home#main-content { display: block; height: auto; min-height: 100%; padding: 20px; overflow: visible; }
+  .mac-shell .mac-window--home .home-card-wrap,
+  .mac-shell .mac-window--home .home-card { width: 100%; height: auto; min-height: 0; }
+  .mac-shell .mac-window--home .home-card__layout { display: block; height: auto; }
+  .mac-shell .mac-window--home .home-card__visual { display: none; }
+  .mac-shell .mac-window--home .home-card__information { height: auto; }
+  .mac-shell .mac-window--home .home-card__intro { display: block; margin: 12px 0 0; color: var(--mac-muted); font-size: 14px; line-height: 1.5; }
+  .mac-shell .mac-window--home .home-card__content { flex: none; gap: 18px; padding-top: 18px; }
+  .mac-shell .mac-window--home .home-group:first-child { padding-right: 0; }
+  .mac-shell .mac-window--home .home-group li a { min-height: 27px; font-size: 14px; }
+  .mac-shell .mac-window--home .home-card__footer { margin-top: 20px; }
+  .mac-shell .screen--about .about-screen { padding: 18px 20px 24px; }
+  .mac-shell .mac-about__head h2 { font-size: 26px; }
+  .mac-shell .mac-about__avatar { flex-basis: 74px; width: 74px; height: 91px; }
+  .mac-shell .screen--about .about-screen__work-list { grid-template-columns: 1fr; gap: 12px; }
+  .mac-shell .screen--about .about-screen__work-item,
+  .mac-shell .screen--about .about-screen__work-item:first-child { padding: 0 0 12px; border-left: 0; border-bottom: .5px solid var(--mac-line); }
+  .mac-shell .screen-body.mac-finder { flex-direction: column; }
+  .mac-shell .mac-finder__sidebar { flex: 0 0 auto; flex-direction: row; align-items: center; gap: 2px; width: 100%; padding: 8px; overflow-x: auto; overflow-y: hidden; border-right: 0; border-bottom: .5px solid var(--mac-line); }
+  .mac-shell .mac-finder__sidebar h2 { display: none; }
+  .mac-shell .mac-finder__sidebar button { width: auto; flex: 0 0 auto; white-space: nowrap; }
+  .mac-shell .mac-finder__main { padding: 18px 20px; }
+  .mac-shell .mac-finder__grid { grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); }
+  .mac-shell .mac-mail .contact-screen__form { padding: 8px 20px 22px; }
+}
+@media (max-width: 420px) {
+  .mac-shell .mac-window--home .card-home#main-content { padding: 18px 16px 24px; }
+  .mac-shell .mac-window--home .home-card__content { gap: 15px; }
+  .mac-shell .mac-window--home .home-group li a { min-height: 25px; font-size: 13px; }
+  .mac-shell .mac-about__head { gap: 12px; }
+  .mac-shell .mac-about__avatar { flex-basis: 68px; width: 68px; height: 84px; }
+  .mac-shell .mac-about__head h2 { font-size: 24px; }
+  .mac-shell .mac-about__head p { font-size: 12px; }
+  .mac-shell .mac-finder__main { padding: 14px; }
+  .mac-shell .mac-finder__sidebar { flex-wrap: wrap; overflow-x: hidden; }
+  .mac-shell .mac-finder__sidebar button { padding: 6px 8px; font-size: 12px; }
+  .mac-shell .mac-finder__grid { grid-template-columns: minmax(0,1fr); }
+  .mac-shell .service-card.mac-finder__tile { height: 198px; }
+  .mac-shell .mac-mail .contact-screen__form { padding-inline: 14px; }
+  .mac-shell .mac-mail__footer { flex-wrap: wrap; }
+}
+
+/* These short animations are triggered by opening an app or preview, as in the supplied HTML. */
+@media (prefers-reduced-motion: reduce) {
+  .mac-shell .mac-window--open { animation: mac-window-launch 340ms cubic-bezier(.18,.86,.22,1) both !important; }
+  .mac-shell .mac-window--minimized { animation: mac-window-to-dock 300ms cubic-bezier(.55,.06,.68,.19) both !important; }
+  .mac-shell .mac-window--closed { animation: mac-window-close 230ms cubic-bezier(.4,0,1,1) both !important; }
+  .mac-shell .mac-quicklook { animation: mac-reference-fade .2s both !important; }
+  .mac-shell .mac-spotlight__panel { animation: mac-reference-pop .18s cubic-bezier(.22,.9,.3,1) both !important; }
+  .mac-shell .mac-finder__tile { transition: transform .2s cubic-bezier(.22,.9,.3,1), background .2s !important; }
+  .mac-shell .mac-window--terminal .devops-terminal__line.is-visible,
+  .mac-shell .screen--about .journey-terminal__log span { animation: mac-reference-type .4s forwards !important; }
+}

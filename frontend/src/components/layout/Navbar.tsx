@@ -3,10 +3,9 @@
 // ============================================================
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll } from 'framer-motion';
-import { Menu, X, SunMedium, Moon } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useScrollSpy } from '../../hooks/useScrollSpy';
 import { useLangStore } from '../../store/langStore';
-import { useThemeStore } from '../../store/themeStore';
 import { NAV_ITEMS } from '../../lib/constants';
 import { cn } from '../../lib/utils';
 
@@ -16,7 +15,6 @@ export function Navbar() {
   const [stuck, setStuck] = useState(false);
   const [open, setOpen] = useState(false);
   const { lang, toggleLang } = useLangStore();
-  const { theme, toggleTheme } = useThemeStore();
   const { scrollYProgress } = useScroll();
   const activeId = useScrollSpy(SECTION_IDS);
 
@@ -67,13 +65,6 @@ export function Navbar() {
             aria-label={lang === 'es' ? 'Cambiar a ingles' : 'Switch to Spanish'}
           >
             {lang === 'es' ? 'ES' : 'EN'}
-          </button>
-          <button
-            onClick={toggleTheme}
-            className="icon-btn"
-            aria-label={theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
-          >
-            {theme === 'dark' ? <SunMedium size={17} strokeWidth={1.75} /> : <Moon size={17} strokeWidth={1.75} />}
           </button>
           <button
             className="icon-btn nav__burger"

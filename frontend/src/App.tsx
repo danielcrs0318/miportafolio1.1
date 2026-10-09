@@ -1,13 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import { ArrowUpRight, Menu, Moon, Sun, X } from 'lucide-react';
-import { BrowserRouter, Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
-import { MotionConfig } from 'framer-motion';
 import { HomeCard } from './components/HomeCard';
+import { MacDesktop } from './components/MacDesktop';
 import { AboutScreen, ServicesScreen, CertificationsScreen, ProjectsScreen, DevOpsScreen, ContactScreen } from './components/sections/CompactPages';
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL, OG_IMAGE_URL, FAVICON_URL } from './lib/constants';
 import { useLangStore } from './store/langStore';
-import { useThemeStore } from './store/themeStore';
 
 const pages = [
   { path: '/sobre-mi', es: 'Sobre mi', en: 'About', component: AboutScreen },
@@ -21,42 +19,16 @@ const pages = [
 function PortfolioRoutes() {
   const location = useLocation();
   const { lang, toggleLang } = useLangStore();
-  const { theme, toggleTheme } = useThemeStore();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const mobileMenuRef = useRef<HTMLDivElement>(null);
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const page = pages.find(item => item.path === location.pathname);
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-theme', 'dark');
     document.documentElement.lang = lang;
-  }, [lang, theme]);
+  }, [lang]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [location.pathname]);
-
-  useEffect(() => {
-    if (!menuOpen) return;
-    const closeOutside = (event: PointerEvent) => {
-      if (!mobileMenuRef.current?.contains(event.target as Node)) setMenuOpen(false);
-    };
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setMenuOpen(false);
-        menuButtonRef.current?.focus();
-      }
-    };
-    const closeOnDesktop = () => { if (window.innerWidth > 900) setMenuOpen(false); };
-    document.addEventListener('pointerdown', closeOutside);
-    document.addEventListener('keydown', closeOnEscape);
-    window.addEventListener('resize', closeOnDesktop);
-    return () => {
-      document.removeEventListener('pointerdown', closeOutside);
-      document.removeEventListener('keydown', closeOnEscape);
-      window.removeEventListener('resize', closeOnDesktop);
-    };
-  }, [menuOpen]);
 
   const title = page ? (lang === 'es' ? page.es : page.en) + ' | Daniel Molina' : SITE_TITLE;
 
@@ -73,61 +45,29 @@ function PortfolioRoutes() {
         <meta property="og:description" content={SITE_DESCRIPTION} />
         <meta property="og:image" content={SITE_URL + OG_IMAGE_URL} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="theme-color" content={theme === 'dark' ? '#080808' : '#F3F3F3'} />
+        <meta name="theme-color" content="#11111d" />
         <link rel="canonical" href={SITE_URL + location.pathname} />
         <link rel="icon" type="image/png" href={FAVICON_URL} />
       </Helmet>
-      <Routes>
-        <Route path="/" element={<HomeCard />} />
-        {pages.map(item => (
-          <Route key={item.path} path={item.path} element={
-            <div className="detail-page">
-              <header className="detail-nav">
-                <Link to="/" className="detail-nav__brand">&lt; Daniel Molina</Link>
-                <nav className="detail-nav__links" aria-label={lang === 'es' ? 'Paginas' : 'Pages'}>
-                  {pages.map(link => (
-                    <Link key={link.path} to={link.path} aria-current={link.path === item.path ? 'page' : undefined}>
-                      {lang === 'es' ? link.es : link.en}
-                    </Link>
-                  ))}
-                </nav>
-                <div className="detail-nav__mobile" ref={mobileMenuRef}>
-                  <button ref={menuButtonRef} type="button" className="detail-nav__mobile-trigger" aria-expanded={menuOpen} aria-controls="detail-mobile-menu"
-                    aria-label={menuOpen ? (lang === 'es' ? 'Cerrar menu' : 'Close menu') : (lang === 'es' ? 'Abrir menu' : 'Open menu')}
-                    onClick={() => setMenuOpen(value => !value)}>
-                    {menuOpen ? <X size={17} strokeWidth={1.8} aria-hidden="true" /> : <Menu size={17} strokeWidth={1.8} aria-hidden="true" />}
-                    <span>{lang === 'es' ? 'Menu' : 'Menu'}</span>
-                  </button>
-                  {menuOpen && <nav id="detail-mobile-menu" className="detail-nav__mobile-panel" aria-label={lang === 'es' ? 'Paginas del portafolio' : 'Portfolio pages'}>
-                    <div className="detail-nav__mobile-caption"><span>{lang === 'es' ? 'EXPLORAR' : 'EXPLORE'}</span><span>01 — 06</span></div>
-                    <div className="detail-nav__mobile-grid">
-                      {pages.map((link, index) => <Link key={link.path} to={link.path} aria-current={link.path === item.path ? 'page' : undefined} onClick={() => setMenuOpen(false)}>
-                        <span className="detail-nav__mobile-index">0{index + 1}</span>
-                        <span className="detail-nav__mobile-name">{lang === 'es' ? link.es : link.en}</span>
-                        <ArrowUpRight size={15} strokeWidth={1.7} aria-hidden="true" />
-                      </Link>)}
-                    </div>
-                  </nav>}
-                </div>
-                <button type="button" onClick={toggleLang} className="detail-nav__lang" aria-label={lang === 'es' ? 'Cambiar a ingles' : 'Switch to Spanish'}>
-                  {lang.toUpperCase()}
-                </button>
-                <button type="button" onClick={toggleTheme} className="detail-nav__theme" aria-label={theme === 'dark' ? (lang === 'es' ? 'Cambiar a tema claro' : 'Switch to light theme') : (lang === 'es' ? 'Cambiar a tema oscuro' : 'Switch to dark theme')}>
-                  {theme === 'dark' ? <Sun size={18} strokeWidth={1.8} /> : <Moon size={18} strokeWidth={1.8} />}
-                </button>
-              </header>
+      <MacDesktop currentPath={location.pathname} lang={lang} onLang={toggleLang}>
+        <Routes>
+          <Route path="/" element={<HomeCard />} />
+          {pages.map(item => (
+            <Route key={item.path} path={item.path} element={
+              <div className="detail-page">
               <main id="main-content" className="detail-panel">
                 <item.component />
               </main>
-            </div>
-          } />
-        ))}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+              </div>
+            } />
+          ))}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </MacDesktop>
     </>
   );
 }
 
 export default function App() {
-  return <HelmetProvider><MotionConfig reducedMotion="never"><BrowserRouter><PortfolioRoutes /></BrowserRouter></MotionConfig></HelmetProvider>;
+  return <HelmetProvider><BrowserRouter><PortfolioRoutes /></BrowserRouter></HelmetProvider>;
 }
